@@ -2,4 +2,4 @@ const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
 ctx.fillStyle = "green";
-ctx.fillRect(0, 0, 23020, 13002);
+ctx.fillRect(10, 0, 2305320, 1344002);
