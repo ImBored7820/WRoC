@@ -1,72 +1,34 @@
-let canvas;
-let ctx;
-
-const refreshRate = () => {
-    drawMap();
+var canvas;
+var ctx;
+var mapCanvas;
+var mapCtx;
+var tileWidth = 20;
+var tileHeight = 20;
+var rows = 20;
+var cols = 20;
+var tileColors = {
+    0: "black",
+    1: "gray",
+    2: "brown",
+    3: "lightgray"
+};
+var map = [
+    [0,2,1]
+];
+var drawMap = function () {
+// TODO FIGURE OUT 2D MAP
+};
+var refreshRate = function () {
+    ctx.drawImage(mapCanvas, 0, 0);
     window.requestAnimationFrame(refreshRate);
-}
-
-window.onload = () => {
+};
+window.onload = function () {
     canvas = document.getElementById("canvas");
     ctx = canvas.getContext("2d");
+    mapCanvas = document.createElement("canvas");
+    mapCanvas.width = cols * tileWidth;
+    mapCanvas.height = rows * tileHeight;
+    mapCtx = mapCanvas.getContext("2d");
+    drawMap();
     window.requestAnimationFrame(refreshRate);
-}
-
-const tileWidth = 20;
-const tileHeight = 20;
-
-const rows = 20;
-const cols = 20;
-
-const map = [
-    0,2,2,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
-    0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
-    0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0, // Center
-    0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0, // Center 
-    0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,3,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,3,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,3,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,0,0,0,0,0,0,0,3,3,3,3,3,3,3,3,0,0,0,0,
-]
-
-const drawMap = () => {
-    for (let currentRow = 0; currentRow < rows; currentRow++) {
-        for (let currentCol = 0; currentCol < cols; currentCol++) {
-
-            let arrayIndex = currentRow * rows + currentCol;
-
-            if (map[arrayIndex] === 0) {
-                ctx.fillStyle = "black";
-                ctx.fillRect(currentCol * tileWidth, currentRow * tileHeight, tileWidth, tileHeight);
-            }
-            else if (map[arrayIndex] === 1)
-            {
-                ctx.fillStyle = "gray";
-                ctx.fillRect(currentCol * tileWidth, currentRow * tileHeight, tileWidth, tileHeight);
-            }
-            else if (map[arrayIndex] === 2)
-            {
-                ctx.fillStyle = "brown";
-                ctx.fillRect(currentCol * tileWidth, currentRow * tileHeight, tileWidth, tileHeight);
-            }
-            else if (map[arrayIndex] === 3)
-            {
-                ctx.fillStyle = "lightgray";
-                ctx.fillRect(currentCol * tileWidth, currentRow * tileHeight, tileWidth, tileHeight);
-            }    
-
-        }
-    }
-}
+};
