@@ -1,12 +1,28 @@
 export class Player {
-    //x:  number;
-    //y: number;
-    //speed: number ;
     // TODO Player should move
-    draw(ctx) {
-        ctx.fillStyle = "red";
-        ctx.beginPath();
-        //ctx.arc(this.x, this.y, 10, 0, 360);
-        ctx.fill();
+    x = 0;
+    y = 0;
+    speed = 3;
+    movementKeys() {
+        const keys = new Set();
+        window.addEventListener("keydown", e => keys.add(e.key.toLowerCase()));
+        window.addEventListener("keyup", e => keys.delete(e.key.toLowerCase()));
+        this.keys = keys; // store on instance so update() can read it
     }
+    update() {
+        if (this.keys.has("w"))
+            this.y -= this.speed;
+        if (this.keys.has("s"))
+            this.y += this.speed;
+        if (this.keys.has("a"))
+            this.x -= this.speed;
+        if (this.keys.has("d"))
+            this.x += this.speed;
+    }
+    draw(ctx) {
+        const sprite = new Image();
+        sprite.src = "sprite.png";
+        ctx.drawImage(sprite, this.x, this.y, 80, 80);
+    }
+    keys = new Set();
 }
