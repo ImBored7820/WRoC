@@ -33,12 +33,14 @@ const map = [
     0,0,0,0,0,0,0,0,3,3,3,3,3,3,3,3,0,0,0,0,
 ]
 
-export function drawMap(mapCtx: CanvasRenderingContext2D) {
+export function drawMap(mapCtx: CanvasRenderingContext2D | null) {
     for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
             const index = row * cols + col;
 
+            // @ts-ignore
             mapCtx.fillStyle = tileColors[map[index]];
+            // @ts-ignore
             mapCtx.fillRect(col * tileWidth, row * tileHeight, tileWidth, tileHeight);
         }
     }
