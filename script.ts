@@ -1,6 +1,6 @@
 // Import all other ts files
-import {drawMap} from "./map";
-import {Player} from "./player"; // TODO Finish Player class and add it here
+import {drawMap} from "./game/map";
+import {Player} from "./game/player"; // TODO Finish Player class and add it here
 
 function onStart() {
     const canvas = document.getElementById("canvas") as HTMLCanvasElement;
