@@ -1,4 +1,4 @@
-// Import all other ts files
+// Import all other ts files as js so it works ig
 import {drawMap} from "./game/map.js";
 import {Player} from "./game/player.js"; // TODO Finish Player class and add it here
 
