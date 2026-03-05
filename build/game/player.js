@@ -1,13 +1,12 @@
 export class Player {
-    // TODO Player should move
-    x = 0;
-    y = 0;
-    speed = 3;
+    x = 300;
+    y = 300;
+    speed = 10;
+    sprite = new Image();
+    keys = new Set();
     movementKeys() {
-        const keys = new Set();
-        window.addEventListener("keydown", e => keys.add(e.key.toLowerCase()));
-        window.addEventListener("keyup", e => keys.delete(e.key.toLowerCase()));
-        this.keys = keys; // store on instance so update() can read it
+        window.addEventListener("keydown", e => this.keys.add(e.key.toLowerCase()));
+        window.addEventListener("keyup", e => this.keys.delete(e.key.toLowerCase()));
     }
     update() {
         if (this.keys.has("w"))
@@ -20,9 +19,7 @@ export class Player {
             this.x += this.speed;
     }
     draw(ctx) {
-        const sprite = new Image();
-        sprite.src = "sprite.png";
-        ctx.drawImage(sprite, this.x, this.y, 80, 80);
+        this.sprite.src = "sprite.png";
+        ctx.drawImage(this.sprite, this.x, this.y, 100, 100);
     }
-    keys = new Set();
 }

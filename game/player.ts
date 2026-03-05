@@ -1,16 +1,14 @@
 export class Player {
+    x: number = 300;
+    y: number = 300;
+    speed: number = 10;
+    private sprite: HTMLImageElement = new Image();
+    private keys: Set<string> = new Set();
 
-   // TODO Player should move
-    x: number = 0;
-    y: number = 0;
-    speed: number = 3;
 
     movementKeys() {
-        const keys = new Set<string>();
-        window.addEventListener("keydown", e => keys.add(e.key.toLowerCase()));
-        window.addEventListener("keyup",   e => keys.delete(e.key.toLowerCase()));
-
-        this.keys = keys;   // store on instance so update() can read it
+        window.addEventListener("keydown", e => this.keys.add(e.key.toLowerCase()));
+        window.addEventListener("keyup",   e => this.keys.delete(e.key.toLowerCase()));
     }
 
     update() {
@@ -21,12 +19,9 @@ export class Player {
     }
 
     draw(ctx: CanvasRenderingContext2D) {
-        const sprite = new Image();
-        sprite.src = "sprite.png";
-        ctx.drawImage(sprite, this.x, this.y, 80, 80);
+        this.sprite.src = "sprite.png";
+        ctx.drawImage(this.sprite, this.x, this.y, 100, 100);
     }
-
-    private keys: Set<string> = new Set();
 }
 
 
