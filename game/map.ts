@@ -9,8 +9,8 @@
  */
 
 // Export makes the file public so other files can see it
-export const pixelWidth = 20; // How wide each pixel is
-export const pixelHeight = 20; // How tall each pixel is
+export const pixelWidth = 25; // How wide each pixel is
+export const pixelHeight = 25; // How tall each pixel is
 // 30x30 = 900 pixels
 const rows = 30; // How many rows of pixels there are
 const cols = 30; // How many columns of pixels there are

@@ -20,10 +20,10 @@ import {Player} from "./game/player.js";
 function onStart() {
     const canvas = document.getElementById("canvas") as HTMLCanvasElement;
     const ctx = canvas.getContext("2d");
-    const pixelMap = document.createElement("canvas"); // map from map.ts
-    const mapCtx = pixelMap.getContext("2d");
 
-    /* Tests */ const map = new Image(); map.src = "./assets/bg.png"; /* Tests */
+    const map = document.createElement("canvas"); // map from map.ts
+    const mapCtx = map.getContext("2d"); // Gets drawn into memory for faster
+                                                                             // loading times
 
     const player = new Player(); // Creates a new player then enables checking
     player.movementKeys(); // if movement keys are pressed
@@ -33,8 +33,8 @@ function onStart() {
     function resize() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        pixelMap.width = canvas.width;
-        pixelMap.height = canvas.height;
+        map.width = canvas.width;
+        map.height = canvas.height;
         drawMap(mapCtx);
     }
 
@@ -53,7 +53,7 @@ function onStart() {
         ctx.save();
         ctx.translate(camX, camY); // Implements the previous map moving logic
                                    // into the canvas
-        ctx.drawImage(pixelMap, 0, 0);
+        ctx.drawImage(map, 0, 0);
 
         player.update();
         player.draw(ctx);
