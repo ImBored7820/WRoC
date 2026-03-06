@@ -27,7 +27,14 @@ const grayTile = [
     0,0,0,0,0,
 ]
 
-
+function drawTile(mapCtx: CanvasRenderingContext2D | null) {
+    for(let row = 0; row < rows; row++) {
+        for(let col = 0; col < cols; col++) {
+            const index = row * cols + col;
+            //mapCtx.draw
+        }
+    }
+}
 
 
 

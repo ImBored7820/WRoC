@@ -22,3 +22,11 @@ const grayTile = [
     1, 1, 1, 1, 1,
     0, 0, 0, 0, 0,
 ];
+function drawTile(mapCtx) {
+    for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+            const index = row * cols + col;
+            //mapCtx.draw
+        }
+    }
+}
