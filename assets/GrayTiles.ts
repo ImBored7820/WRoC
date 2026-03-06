@@ -6,8 +6,7 @@
  * Description: Describe what the file does
  * Info: WRoC | GrayTiles.ts | WebStorm
  */
-
-export const tileWidth = 20;
+const tileWidth = 20;
 const tileHeight = 20;
 
 const rows = 5;
@@ -27,11 +26,14 @@ const grayTile = [
     0,0,0,0,0,
 ]
 
-function drawTile(mapCtx: CanvasRenderingContext2D | null) {
+export function drawTile(mapCtx: CanvasRenderingContext2D | null) {
     for(let row = 0; row < rows; row++) {
         for(let col = 0; col < cols; col++) {
+            if (!mapCtx) return;
             const index = row * cols + col;
-            //mapCtx.draw
+            // @ts-ignore
+            mapCtx.fillStyle = pixelColors[grayTile[index]];
+            mapCtx.fillRect(col * tileWidth, row * tileHeight, tileWidth, tileHeight);
         }
     }
 }

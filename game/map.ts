@@ -8,7 +8,7 @@
  * TODO This will become either just a file for 1 room OR a file for 1 quadrant
  */
 
-import {tileWidth} from "../assets/GrayTiles.js";
+import {drawTile} from "../assets/GrayTiles.js";
 
 // Export makes the file public so other files can see it
 export const pixelWidth = 25; // How wide each pixel is
