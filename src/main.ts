@@ -43,7 +43,6 @@ function onStart() {
 
     function refreshRate(){
         if (!ctx) return; // Safety check, TypeScript thing
-        player.update();
         // Logic for the "camera", moves the map instead of the player, creating
         // a visual effect of a camera following the player around
         const camX = (canvas.width / 2) - player.x;
@@ -66,6 +65,6 @@ function onStart() {
     window.requestAnimationFrame(refreshRate);
 }
 
-window.addEventListener("DOMContentLoaded", onStart); // Once html is parsed,
+window.addEventListener("DOMContentLoaded", onStart); // Once HTML is parsed,
                                                             // loads objects
 
