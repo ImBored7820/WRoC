@@ -10,7 +10,7 @@
 export class Player {
     x: number = 300; // These coordinates center the player in the room
     y: number = 300;
-    speed: number = 5; // How fast it seems the player is moving
+    speed: number = 8; // How fast it seems the player is moving
     private sprite: HTMLImageElement = new Image();
     private keys: Set<string> = new Set(); // Set of
 

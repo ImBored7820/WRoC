@@ -1,7 +1,7 @@
 export class Player {
     x = 300;
     y = 300;
-    speed = 5;
+    speed = 8;
     sprite = new Image();
     keys = new Set();
     movementKeys() {
