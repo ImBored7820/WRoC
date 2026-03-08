@@ -41,7 +41,6 @@ function onStart() {
     resize(); // This is for the first time, on load it "resizes" the canvas"
 
     function refreshRate(){
-        if (!ctx) return; // Safety check, TypeScript thing
         // Logic for the "camera", moves the map instead of the player, creating
         // a visual effect of a camera following the player around
         const camX = (canvas.width / 2) - player.x;

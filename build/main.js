@@ -17,8 +17,6 @@ function onStart() {
     window.addEventListener("resize", resize);
     resize();
     function refreshRate() {
-        if (!ctx)
-            return;
         const camX = (canvas.width / 2) - player.x;
         const camY = (canvas.height / 2) - player.y;
         ctx.clearRect(0, 0, canvas.width, canvas.height);

@@ -41,8 +41,6 @@ const map = [
     0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0,
 ];
 export function drawMap(mapCtx) {
-    if (!mapCtx)
-        return;
     for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
             const index = row * cols + col;
