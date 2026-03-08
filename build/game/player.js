@@ -1,41 +1,62 @@
+var SubStats;
+(function (SubStats) {
+    SubStats[SubStats["Speed"] = 8] = "Speed";
+    SubStats[SubStats["Health"] = 100] = "Health";
+    SubStats[SubStats["Stamina"] = 100] = "Stamina";
+})(SubStats || (SubStats = {}));
 export class Player {
-    x = 300;
-    y = 300;
-    speed = 8;
+    x;
+    y;
+    mind;
+    body;
+    soul;
     sprite = new Image();
     keys = new Set();
+    constructor(x, y, MBS) {
+        this.x = x;
+        this.y = y;
+        if (MBS && MBS < 100)
+            MBS = 111;
+        else if (!MBS)
+            MBS = 111;
+        let mbsToString = MBS.toString();
+        let temp = mbsToString.split('').map(Number);
+        this.mind = temp[0];
+        this.body = temp[1];
+        this.soul = temp[2];
+        this.sprite.src = "./assets/sprite.png";
+    }
     movementKeys() {
         window.addEventListener("keydown", e => this.keys.add(e.key));
         window.addEventListener("keyup", e => this.keys.delete(e.key));
     }
     update() {
         if (this.keys.has("w"))
-            this.y -= this.speed;
+            this.y -= SubStats.Speed;
         if (this.keys.has("W"))
-            this.y -= this.speed + 3;
+            this.y -= SubStats.Speed + this.body / 2;
         if (this.keys.has("ArrowUp"))
-            this.y -= this.speed;
+            this.y -= SubStats.Speed;
         if (this.keys.has("s"))
-            this.y += this.speed;
+            this.y += SubStats.Speed;
         if (this.keys.has("S"))
-            this.y += this.speed + 3;
+            this.y += SubStats.Speed + this.body / 2;
         if (this.keys.has("ArrowDown"))
-            this.y += this.speed;
+            this.y += SubStats.Speed;
         if (this.keys.has("a"))
-            this.x -= this.speed;
+            this.x -= SubStats.Speed;
         if (this.keys.has("A"))
-            this.x -= this.speed + 3;
+            this.x -= SubStats.Speed + this.body / 2;
         if (this.keys.has("ArrowLeft"))
-            this.x -= this.speed;
+            this.x -= SubStats.Speed;
         if (this.keys.has("d"))
-            this.x += this.speed;
+            this.x += SubStats.Speed;
         if (this.keys.has("D"))
-            this.x += this.speed + 3;
+            this.x += SubStats.Speed + this.body / 2;
         if (this.keys.has("ArrowRight"))
-            this.x += this.speed;
+            this.x += SubStats.Speed;
     }
     draw(ctx) {
-        this.sprite.src = "./assets/sprite.png";
         ctx.drawImage(this.sprite, this.x, this.y, 75, 75);
     }
 }

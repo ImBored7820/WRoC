@@ -1,9 +1,12 @@
 export declare class Player {
     x: number;
     y: number;
-    speed: number;
+    mind: number;
+    body: number;
+    soul: number;
     private sprite;
     private keys;
+    constructor(x: number, y: number, MBS?: number);
     movementKeys(): void;
     update(): void;
     draw(ctx: CanvasRenderingContext2D): void;

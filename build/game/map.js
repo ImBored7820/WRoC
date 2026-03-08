@@ -40,6 +40,12 @@ const map = [
     0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0,
 ];
+export function checkCollision(x, y) {
+    let isAWall = false;
+    if ((map[x] || map[y]) == 0)
+        isAWall = true;
+    return isAWall;
+}
 export function drawMap(mapCtx) {
     for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {

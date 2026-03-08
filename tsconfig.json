@@ -44,8 +44,8 @@
     // Custom (Mosh) * See my notes for Checkpoint 2 for ts (hour 4-5)
     "removeComments": true, // Removes comments from the output
     "noEmitOnError": true, // If error it tells you there's an error and doesnt build
-    "noUnusedParameters": true, // Helps remove unused params
-    "noUnusedLocals": true, // Same but for functions/objects
+    //"noUnusedParameters": true, // Helps remove unused params
+    //"noUnusedLocals": true, // Same but for functions/objects
     "noImplicitReturns": true, // Cant return any
     "strictNullChecks": false, // Allows null and undefined
   }

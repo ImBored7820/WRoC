@@ -5,7 +5,7 @@ function onStart() {
     const ctx = canvas.getContext("2d");
     const map = document.createElement("canvas");
     const mapCtx = map.getContext("2d");
-    const player = new Player();
+    const player = new Player(210, 210);
     player.movementKeys();
     function resize() {
         canvas.width = window.innerWidth;

@@ -98,6 +98,17 @@ const map = [
     0,0,0,0,0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0,0,0,
 ]
 
+// TODO Make this work
+export function checkCollision(x: number, y: number): boolean {
+    let isAWall = false;
+
+    // Check if its a certain color
+    if((map[x] || map[y]) == 0)
+        isAWall = true;
+
+    return isAWall
+}
+
 export function drawMap(mapCtx: CanvasRenderingContext2D | null) {
     // So this for loop basically goes and makes the map from 1D -> 2D
     for (let row = 0; row < rows; row++) {

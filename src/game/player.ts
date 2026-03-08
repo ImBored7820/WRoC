@@ -6,13 +6,43 @@
  * and monitors for pressed keys to then move the player with the associated
  * keys (WASD & Arrow keys)
  */
+//import {checkCollision} from "./map";
+
+// These are all influenced by body, and to an extent mind & soul
+// They should not be changed, but a new player classes stats can enhance them
+enum SubStats {
+    Speed = 8, // How fast it seems the player is moving
+    Health = 100,
+    Stamina = 100,
+}
 
 export class Player {
-    x: number = 300; // These coordinates center the player in the room
-    y: number = 300;
-    speed: number = 8; // How fast it seems the player is moving
+    x: number;
+    y: number;
+    mind: number;
+    body: number;
+    soul: number;
     private sprite: HTMLImageElement = new Image();
     private keys: Set<string> = new Set(); // Set of
+
+    public constructor(x: number, y: number, MBS?: number) {
+        this.x = x;
+        this.y = y;
+
+        if (MBS && MBS < 100)
+            MBS = 111;
+        else if(!MBS)
+            MBS = 111;
+
+        let  mbsToString = MBS.toString();
+        let temp = mbsToString.split('').map(Number);
+        this.mind = temp[0];
+        this.body = temp[1];
+        this.soul = temp[2];
+
+        // Preload sprite once instead of setting src every draw call
+        this.sprite.src = "./assets/sprite.png";
+    }
 
     movementKeys() {
         // These are monitoring for key presses, whatever key is pressed is
@@ -33,25 +63,25 @@ export class Player {
      constantly move that direction
      */
     update() {
-        if (this.keys.has("w")) this.y -= this.speed;
-        if (this.keys.has("W")) this.y -= this.speed + 3;
-        if (this.keys.has("ArrowUp")) this.y -= this.speed;
+        if (this.keys.has("w")) this.y -= SubStats.Speed;
 
-        if (this.keys.has("s")) this.y += this.speed;
-        if (this.keys.has("S")) this.y += this.speed + 3;
-        if (this.keys.has("ArrowDown")) this.y += this.speed;
+        if (this.keys.has("W")) this.y -= SubStats.Speed + this.body/2;
+        if (this.keys.has("ArrowUp")) this.y -= SubStats.Speed;
 
-        if (this.keys.has("a")) this.x -= this.speed;
-        if (this.keys.has("A")) this.x -= this.speed + 3;
-        if (this.keys.has("ArrowLeft")) this.x -= this.speed;
+        if (this.keys.has("s")) this.y += SubStats.Speed;
+        if (this.keys.has("S")) this.y += SubStats.Speed + this.body/2;
+        if (this.keys.has("ArrowDown")) this.y += SubStats.Speed;
 
-        if (this.keys.has("d")) this.x += this.speed;
-        if (this.keys.has("D")) this.x += this.speed + 3;
-        if (this.keys.has("ArrowRight")) this.x += this.speed;
+        if (this.keys.has("a")) this.x -= SubStats.Speed;
+        if (this.keys.has("A")) this.x -= SubStats.Speed + this.body/2;
+        if (this.keys.has("ArrowLeft")) this.x -= SubStats.Speed;
+
+        if (this.keys.has("d")) this.x += SubStats.Speed;
+        if (this.keys.has("D")) this.x += SubStats.Speed + this.body/2;
+        if (this.keys.has("ArrowRight")) this.x += SubStats.Speed;
     }
-    // Draws the temporary sprite onto the canvas at the center
+    // Draws the sprite onto the canvas at the center
     draw(ctx: CanvasRenderingContext2D) {
-        this.sprite.src = "./assets/sprite.png";
         ctx.drawImage(this.sprite, this.x, this.y, 75, 75);
     }
 }

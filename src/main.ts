@@ -24,7 +24,7 @@ function onStart() {
     const map = document.createElement("canvas"); // map from map.ts
     const mapCtx = map.getContext("2d"); // Gets drawn into memory for faster
                                                                              // loading times
-    const player = new Player(); // Creates a new player then enables checking
+    const player = new Player(210, 210); // Creates a new player then enables checking
     player.movementKeys(); // if movement keys are pressed
 
     // So the purpose of this function is to make a canvas that fits the screen
