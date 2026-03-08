@@ -52,7 +52,7 @@ export class Player {
     // Draws the temporary sprite onto the canvas at the center
     draw(ctx: CanvasRenderingContext2D) {
         this.sprite.src = "./assets/sprite.png";
-        ctx.drawImage(this.sprite, this.x, this.y, 100, 100);
+        ctx.drawImage(this.sprite, this.x, this.y, 75, 75);
     }
 }
 

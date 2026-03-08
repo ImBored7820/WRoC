@@ -1,5 +1,5 @@
-export const pixelWidth = 25;
-export const pixelHeight = 25;
+export const pixelWidth = 16;
+export const pixelHeight = 16;
 const rows = 30;
 const cols = 30;
 const pixelColors = {

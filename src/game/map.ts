@@ -11,13 +11,14 @@
 //import {drawTile} from "../assets/GrayTiles.js";
 
 // Export makes the file public so other files can see it
-export const pixelWidth = 25; // How wide each pixel is
-export const pixelHeight = 25; // How tall each pixel is
+export const pixelWidth = 16; // How wide each pixel is
+export const pixelHeight = 16; // How tall each pixel is
 // 30x30 = 900 pixels
 const rows = 30; // How many rows of pixels there are
 const cols = 30; // How many columns of pixels there are
 
-// SO this is basically an array of colors, each number = each color
+// SO this is an object literal in which each number is mapped to a color
+// TODO Map number to a file for a specific block
 const pixelColors = {
     0: "black",
     1: "gray",
@@ -98,14 +99,12 @@ const map = [
 ]
 
 export function drawMap(mapCtx: CanvasRenderingContext2D | null) {
-    if (!mapCtx) return; // Safety check, it's a typescript thing
-
     // So this for loop basically goes and makes the map from 1D -> 2D
     for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
             const index = row * cols + col;
 
-            // @ts-ignore TODO Figure out why this line has an error
+            // @ts-ignore
             mapCtx.fillStyle = pixelColors[map[index]];
             mapCtx.fillRect(col * pixelWidth, row * pixelHeight, pixelWidth, pixelHeight);
         }

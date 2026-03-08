@@ -24,7 +24,6 @@ function onStart() {
     const map = document.createElement("canvas"); // map from map.ts
     const mapCtx = map.getContext("2d"); // Gets drawn into memory for faster
                                                                              // loading times
-
     const player = new Player(); // Creates a new player then enables checking
     player.movementKeys(); // if movement keys are pressed
 

@@ -1,1 +1,1 @@
-{"version":3,"file":"map.d.ts","sourceRoot":"","sources":["../../src/game/map.ts"],"names":[],"mappings":"AAaA,eAAO,MAAM,UAAU,KAAK,CAAC;AAC7B,eAAO,MAAM,WAAW,KAAK,CAAC;AAqF9B,wBAAgB,OAAO,CAAC,MAAM,EAAE,wBAAwB,GAAG,IAAI,QAa9D"}
+{"version":3,"file":"map.d.ts","sourceRoot":"","sources":["../../src/game/map.ts"],"names":[],"mappings":"AAaA,eAAO,MAAM,UAAU,KAAK,CAAC;AAC7B,eAAO,MAAM,WAAW,KAAK,CAAC;AAsF9B,wBAAgB,OAAO,CAAC,MAAM,EAAE,wBAAwB,GAAG,IAAI,QAa9D"}
