@@ -6,7 +6,7 @@
  * and monitors for pressed keys to then move the player with the associated
  * keys (WASD & Arrow keys)
  */
-//import {checkCollision} from "./map";
+import {checkCollision} from "./map.js";
 
 // These are all influenced by body, and to an extent mind & soul
 // They should not be changed, but a new player classes stats can enhance them
@@ -63,26 +63,28 @@ export class Player {
      constantly move that direction
      */
     update() {
-        if (this.keys.has("w")) this.y -= SubStats.Speed;
+        if (!checkCollision(this.x, this.y)) {
+            if (this.keys.has("w")) this.y -= SubStats.Speed;
 
-        if (this.keys.has("W")) this.y -= SubStats.Speed + this.body/2;
-        if (this.keys.has("ArrowUp")) this.y -= SubStats.Speed;
+            if (this.keys.has("W")) this.y -= SubStats.Speed + this.body / 2;
+            if (this.keys.has("ArrowUp")) this.y -= SubStats.Speed;
 
-        if (this.keys.has("s")) this.y += SubStats.Speed;
-        if (this.keys.has("S")) this.y += SubStats.Speed + this.body/2;
-        if (this.keys.has("ArrowDown")) this.y += SubStats.Speed;
+            if (this.keys.has("s")) this.y += SubStats.Speed;
+            if (this.keys.has("S")) this.y += SubStats.Speed + this.body / 2;
+            if (this.keys.has("ArrowDown")) this.y += SubStats.Speed;
 
-        if (this.keys.has("a")) this.x -= SubStats.Speed;
-        if (this.keys.has("A")) this.x -= SubStats.Speed + this.body/2;
-        if (this.keys.has("ArrowLeft")) this.x -= SubStats.Speed;
+            if (this.keys.has("a")) this.x -= SubStats.Speed;
+            if (this.keys.has("A")) this.x -= SubStats.Speed + this.body / 2;
+            if (this.keys.has("ArrowLeft")) this.x -= SubStats.Speed;
 
-        if (this.keys.has("d")) this.x += SubStats.Speed;
-        if (this.keys.has("D")) this.x += SubStats.Speed + this.body/2;
-        if (this.keys.has("ArrowRight")) this.x += SubStats.Speed;
+            if (this.keys.has("d")) this.x += SubStats.Speed;
+            if (this.keys.has("D")) this.x += SubStats.Speed + this.body / 2;
+            if (this.keys.has("ArrowRight")) this.x += SubStats.Speed;
+        }
     }
-    // Draws the sprite onto the canvas at the center
+    // Draws the sprite onto the canvas
     draw(ctx: CanvasRenderingContext2D) {
-        ctx.drawImage(this.sprite, this.x, this.y, 75, 75);
+        ctx.drawImage(this.sprite, this.x, this.y, 60, 60);
     }
 }
 

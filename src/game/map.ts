@@ -99,12 +99,21 @@ const map = [
 ]
 
 // TODO Make this work
+// Checks current location
+// Converts x and y into row and col #s
+// If row color == 0 its a wall
+// Returns true if its a wall false if its not
 export function checkCollision(x: number, y: number): boolean {
     let isAWall = false;
 
-    // Check if its a certain color
-    if((map[x] || map[y]) == 0)
+    // Convert X & Y into Rows & Cols
+    const row = Math.floor(y / pixelHeight);
+    const col = Math.floor(x / pixelWidth);
+
+    // Math to convert 1D -> 2D and check if it's index is 0, meaning it's a wall
+    if (map[row * cols + col] <= 0) {
         isAWall = true;
+    }
 
     return isAWall
 }

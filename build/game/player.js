@@ -1,3 +1,4 @@
+import { checkCollision } from "./map.js";
 var SubStats;
 (function (SubStats) {
     SubStats[SubStats["Speed"] = 8] = "Speed";
@@ -31,33 +32,35 @@ export class Player {
         window.addEventListener("keyup", e => this.keys.delete(e.key));
     }
     update() {
-        if (this.keys.has("w"))
-            this.y -= SubStats.Speed;
-        if (this.keys.has("W"))
-            this.y -= SubStats.Speed + this.body / 2;
-        if (this.keys.has("ArrowUp"))
-            this.y -= SubStats.Speed;
-        if (this.keys.has("s"))
-            this.y += SubStats.Speed;
-        if (this.keys.has("S"))
-            this.y += SubStats.Speed + this.body / 2;
-        if (this.keys.has("ArrowDown"))
-            this.y += SubStats.Speed;
-        if (this.keys.has("a"))
-            this.x -= SubStats.Speed;
-        if (this.keys.has("A"))
-            this.x -= SubStats.Speed + this.body / 2;
-        if (this.keys.has("ArrowLeft"))
-            this.x -= SubStats.Speed;
-        if (this.keys.has("d"))
-            this.x += SubStats.Speed;
-        if (this.keys.has("D"))
-            this.x += SubStats.Speed + this.body / 2;
-        if (this.keys.has("ArrowRight"))
-            this.x += SubStats.Speed;
+        if (!checkCollision(this.x, this.y)) {
+            if (this.keys.has("w"))
+                this.y -= SubStats.Speed;
+            if (this.keys.has("W"))
+                this.y -= SubStats.Speed + this.body / 2;
+            if (this.keys.has("ArrowUp"))
+                this.y -= SubStats.Speed;
+            if (this.keys.has("s"))
+                this.y += SubStats.Speed;
+            if (this.keys.has("S"))
+                this.y += SubStats.Speed + this.body / 2;
+            if (this.keys.has("ArrowDown"))
+                this.y += SubStats.Speed;
+            if (this.keys.has("a"))
+                this.x -= SubStats.Speed;
+            if (this.keys.has("A"))
+                this.x -= SubStats.Speed + this.body / 2;
+            if (this.keys.has("ArrowLeft"))
+                this.x -= SubStats.Speed;
+            if (this.keys.has("d"))
+                this.x += SubStats.Speed;
+            if (this.keys.has("D"))
+                this.x += SubStats.Speed + this.body / 2;
+            if (this.keys.has("ArrowRight"))
+                this.x += SubStats.Speed;
+        }
     }
     draw(ctx) {
-        ctx.drawImage(this.sprite, this.x, this.y, 75, 75);
+        ctx.drawImage(this.sprite, this.x, this.y, 60, 60);
     }
 }
 //# sourceMappingURL=player.js.map
