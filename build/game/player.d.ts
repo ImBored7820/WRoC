@@ -1,6 +1,7 @@
 export declare class Player {
     x: number;
     y: number;
+    playerSize: number;
     mind: number;
     body: number;
     soul: number;

@@ -11,7 +11,7 @@ import {checkCollision} from "./map.js";
 // These are all influenced by body, and to an extent mind & soul
 // They should not be changed, but a new player classes stats can enhance them
 enum SubStats {
-    Speed = 8, // How fast it seems the player is moving
+    Speed = 6, // How fast it seems the player is moving
     Health = 100,
     Stamina = 100,
 }
@@ -19,6 +19,7 @@ enum SubStats {
 export class Player {
     x: number;
     y: number;
+    playerSize: number;
     mind: number;
     body: number;
     soul: number;
@@ -42,6 +43,7 @@ export class Player {
 
         // Preload sprite once instead of setting src every draw call
         this.sprite.src = "./assets/sprite.png";
+        this.playerSize = 60;
     }
 
     movementKeys() {
@@ -63,27 +65,45 @@ export class Player {
      constantly move that direction
      */
     update() {
-        if (!checkCollision(this.x, this.y)) {
-            if (this.keys.has("w")) this.y -= SubStats.Speed;
-            if (this.keys.has("W")) this.y -= SubStats.Speed + this.body / 2;
-            if (this.keys.has("ArrowUp")) this.y -= SubStats.Speed;
+        let dx = 0;
+        let dy = 0;
 
-            if (this.keys.has("s")) this.y += SubStats.Speed;
-            if (this.keys.has("S")) this.y += SubStats.Speed + this.body / 2;
-            if (this.keys.has("ArrowDown")) this.y += SubStats.Speed;
+        if (this.keys.has("w")) dy -= SubStats.Speed;
+        if (this.keys.has("W")) dy -= SubStats.Speed + this.body / 2;
+        if (this.keys.has("ArrowUp")) dy -= SubStats.Speed;
 
-            if (this.keys.has("a")) this.x -= SubStats.Speed;
-            if (this.keys.has("A")) this.x -= SubStats.Speed + this.body / 2;
-            if (this.keys.has("ArrowLeft")) this.x -= SubStats.Speed;
+        if (this.keys.has("s")) dy += SubStats.Speed;
+        if (this.keys.has("S")) dy += SubStats.Speed + this.body / 2;
+        if (this.keys.has("ArrowDown")) dy += SubStats.Speed;
 
-            if (this.keys.has("d")) this.x += SubStats.Speed;
-            if (this.keys.has("D")) this.x += SubStats.Speed + this.body / 2;
-            if (this.keys.has("ArrowRight")) this.x += SubStats.Speed;
+        if (this.keys.has("a")) dx -= SubStats.Speed;
+        if (this.keys.has("A")) dx -= SubStats.Speed + this.body / 2;
+        if (this.keys.has("ArrowLeft")) dx -= SubStats.Speed;
+
+        if (this.keys.has("d")) dx += SubStats.Speed;
+        if (this.keys.has("D")) dx += SubStats.Speed + this.body / 2;
+        if (this.keys.has("ArrowRight")) dx += SubStats.Speed;
+
+        const newX = this.x + dx;
+        if (!checkCollision(newX, this.y) &&
+            !checkCollision(newX + this.playerSize - 1, this.y) &&
+            !checkCollision(newX, this.y + this.playerSize - 1) &&
+            !checkCollision(newX + this.playerSize - 1, this.y + this.playerSize - 1)) {
+            this.x = newX;
+        }
+
+        const newY = this.y + dy;
+        if (!checkCollision(this.x, newY) &&
+            !checkCollision(this.x + this.playerSize - 1, newY) &&
+            !checkCollision(this.x, newY + this.playerSize - 1) &&
+            !checkCollision(this.x + this.playerSize, newY + this.playerSize)) {
+            this.y = newY;
         }
     }
+
     // Draws the sprite onto the canvas
     draw(ctx: CanvasRenderingContext2D) {
-        ctx.drawImage(this.sprite, this.x, this.y, 60, 60);
+        ctx.drawImage(this.sprite, this.x, this.y, this.playerSize, this.playerSize);
     }
 }
 

@@ -70,23 +70,21 @@ const map = [
 // Returns true if its a wall false if its not
 
 export function checkCollision(x: number, y: number): boolean {
-    let isAWall = false;
-    x = x + 30;
-    y = y + 30;
-
     // Convert X & Y into Rows & Cols
+    let isAWall = false;
     const row = Math.floor(y / pixelHeight);
     const col = Math.floor(x / pixelWidth);
+    const convert = row * cols + col;
 
-    let convert = row * cols + cols;
-
-    // Math to convert 1D -> 2D and check if it's index is 0, meaning it's a wall
-    if (map[convert + 8] === 0) {
+    // Clamp to map bounds
+    if (row >= rows || col >= cols) {
+        isAWall = true;
+    }
+    else if(map[convert] === 0){
         isAWall = true;
     }
 
-
-    return isAWall
+    return isAWall;
 }
 
 export function drawMap(mapCtx: CanvasRenderingContext2D | null) {

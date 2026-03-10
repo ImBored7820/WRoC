@@ -1,13 +1,14 @@
 import { checkCollision } from "./map.js";
 var SubStats;
 (function (SubStats) {
-    SubStats[SubStats["Speed"] = 8] = "Speed";
+    SubStats[SubStats["Speed"] = 6] = "Speed";
     SubStats[SubStats["Health"] = 100] = "Health";
     SubStats[SubStats["Stamina"] = 100] = "Stamina";
 })(SubStats || (SubStats = {}));
 export class Player {
     x;
     y;
+    playerSize;
     mind;
     body;
     soul;
@@ -26,41 +27,56 @@ export class Player {
         this.body = temp[1];
         this.soul = temp[2];
         this.sprite.src = "./assets/sprite.png";
+        this.playerSize = 60;
     }
     movementKeys() {
         window.addEventListener("keydown", e => this.keys.add(e.key));
         window.addEventListener("keyup", e => this.keys.delete(e.key));
     }
     update() {
-        if (!checkCollision(this.x, this.y)) {
-            if (this.keys.has("w"))
-                this.y -= SubStats.Speed;
-            if (this.keys.has("W"))
-                this.y -= SubStats.Speed + this.body / 2;
-            if (this.keys.has("ArrowUp"))
-                this.y -= SubStats.Speed;
-            if (this.keys.has("s"))
-                this.y += SubStats.Speed;
-            if (this.keys.has("S"))
-                this.y += SubStats.Speed + this.body / 2;
-            if (this.keys.has("ArrowDown"))
-                this.y += SubStats.Speed;
-            if (this.keys.has("a"))
-                this.x -= SubStats.Speed;
-            if (this.keys.has("A"))
-                this.x -= SubStats.Speed + this.body / 2;
-            if (this.keys.has("ArrowLeft"))
-                this.x -= SubStats.Speed;
-            if (this.keys.has("d"))
-                this.x += SubStats.Speed;
-            if (this.keys.has("D"))
-                this.x += SubStats.Speed + this.body / 2;
-            if (this.keys.has("ArrowRight"))
-                this.x += SubStats.Speed;
+        let dx = 0;
+        let dy = 0;
+        if (this.keys.has("w"))
+            dy -= SubStats.Speed;
+        if (this.keys.has("W"))
+            dy -= SubStats.Speed + this.body / 2;
+        if (this.keys.has("ArrowUp"))
+            dy -= SubStats.Speed;
+        if (this.keys.has("s"))
+            dy += SubStats.Speed;
+        if (this.keys.has("S"))
+            dy += SubStats.Speed + this.body / 2;
+        if (this.keys.has("ArrowDown"))
+            dy += SubStats.Speed;
+        if (this.keys.has("a"))
+            dx -= SubStats.Speed;
+        if (this.keys.has("A"))
+            dx -= SubStats.Speed + this.body / 2;
+        if (this.keys.has("ArrowLeft"))
+            dx -= SubStats.Speed;
+        if (this.keys.has("d"))
+            dx += SubStats.Speed;
+        if (this.keys.has("D"))
+            dx += SubStats.Speed + this.body / 2;
+        if (this.keys.has("ArrowRight"))
+            dx += SubStats.Speed;
+        const newX = this.x + dx;
+        if (!checkCollision(newX, this.y) &&
+            !checkCollision(newX + this.playerSize - 1, this.y) &&
+            !checkCollision(newX, this.y + this.playerSize - 1) &&
+            !checkCollision(newX + this.playerSize - 1, this.y + this.playerSize - 1)) {
+            this.x = newX;
+        }
+        const newY = this.y + dy;
+        if (!checkCollision(this.x, newY) &&
+            !checkCollision(this.x + this.playerSize - 1, newY) &&
+            !checkCollision(this.x, newY + this.playerSize - 1) &&
+            !checkCollision(this.x + this.playerSize, newY + this.playerSize)) {
+            this.y = newY;
         }
     }
     draw(ctx) {
-        ctx.drawImage(this.sprite, this.x, this.y, 60, 60);
+        ctx.drawImage(this.sprite, this.x, this.y, this.playerSize, this.playerSize);
     }
 }
 //# sourceMappingURL=player.js.map
