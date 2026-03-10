@@ -65,7 +65,6 @@ export class Player {
     update() {
         if (!checkCollision(this.x, this.y)) {
             if (this.keys.has("w")) this.y -= SubStats.Speed;
-
             if (this.keys.has("W")) this.y -= SubStats.Speed + this.body / 2;
             if (this.keys.has("ArrowUp")) this.y -= SubStats.Speed;
 

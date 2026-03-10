@@ -42,9 +42,12 @@ const map = [
 ];
 export function checkCollision(x, y) {
     let isAWall = false;
+    x = x + 30;
+    y = y + 30;
     const row = Math.floor(y / pixelHeight);
     const col = Math.floor(x / pixelWidth);
-    if (map[row * cols + col] <= 0) {
+    let convert = row * cols + cols;
+    if (map[convert + 8] === 0) {
         isAWall = true;
     }
     return isAWall;
