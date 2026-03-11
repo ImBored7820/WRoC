@@ -63,7 +63,6 @@ const map = [
     0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0,
 ]
-// TODO Make this work
 // Checks current location
 // Converts x and y into row and col #s
 // If row color == 0 its a wall
@@ -77,12 +76,12 @@ export function checkCollision(x: number, y: number): boolean {
     const convert = row * cols + col;
 
     // Clamp to map bounds
-    if (row >= rows || col >= cols) {
+    if (row < 0 || col < 0 || row >= rows || col >= cols) {
         isAWall = true;
     }
-    else if(map[convert] === 0){
-        isAWall = true;
-    }
+    //else if(map[convert] === 0){
+     //   isAWall = true;
+    //}
 
     return isAWall;
 }

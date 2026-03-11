@@ -7,8 +7,8 @@
  * elements from their respective object files
  */
 
-// Import needed methods from other ts files so that they can be referenced
-// You will notice that they are .js and that is so that once build by TSC the
+// Import the necessary methods from other ts files so that they can be referenced
+// You will notice that they are .js, and that is so that once build by TSC the
 // produced js file actually uses js files instead of trying to use ts ones
 import {drawMap} from "./game/map.js";
 import {Player} from "./game/player.js";

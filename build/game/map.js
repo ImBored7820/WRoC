@@ -45,10 +45,7 @@ export function checkCollision(x, y) {
     const row = Math.floor(y / pixelHeight);
     const col = Math.floor(x / pixelWidth);
     const convert = row * cols + col;
-    if (row >= rows || col >= cols) {
-        isAWall = true;
-    }
-    else if (map[convert] === 0) {
+    if (row < 0 || col < 0 || row >= rows || col >= cols) {
         isAWall = true;
     }
     return isAWall;
