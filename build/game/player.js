@@ -26,8 +26,8 @@ export class Player {
         this.mind = temp[0];
         this.body = temp[1];
         this.soul = temp[2];
-        this.sprite.src = "./assets/sprite.png";
-        this.playerSize = 60;
+        this.sprite.src = "./assets/pikaa.png";
+        this.playerSize = 50;
     }
     movementKeys() {
         window.addEventListener("keydown", e => this.keys.add(e.key));
@@ -75,6 +75,12 @@ export class Player {
     }
     draw(ctx) {
         ctx.drawImage(this.sprite, this.x, this.y, this.playerSize, this.playerSize);
+        if (ctx) {
+            ctx.fillStyle = 'red';
+            ctx.beginPath();
+            ctx.fillRect(this.x, this.y, this.playerSize, this.playerSize);
+            ctx.fill();
+        }
     }
 }
 //# sourceMappingURL=player.js.map

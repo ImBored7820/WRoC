@@ -42,8 +42,8 @@ export class Player {
         this.soul = temp[2];
 
         // Preload sprite once instead of setting src every draw call
-        this.sprite.src = "./assets/sprite.png";
-        this.playerSize = 60;
+        this.sprite.src = "./assets/pikaa.png";
+        this.playerSize = 50;
     }
 
     movementKeys() {
@@ -95,7 +95,7 @@ export class Player {
         const newY = this.y + dy;
         if (!checkCollision(this.x, newY) && !checkCollision(this.x + this.playerSize - 1, newY) &&
             !checkCollision(this.x, newY + this.playerSize - 1) &&
-            !checkCollision(this.x + this.playerSize -1, newY + this.playerSize - 1)) {
+            !checkCollision(this.x + this.playerSize - 1, newY + this.playerSize - 1)) {
             this.y = newY;
         }
     }
@@ -104,7 +104,7 @@ export class Player {
     draw(ctx: CanvasRenderingContext2D) {
         ctx.drawImage(this.sprite, this.x, this.y, this.playerSize, this.playerSize);
 
-        //if (ctx) { ctx.fillStyle = 'red'; ctx.beginPath(); ctx.arc(this.x, this.y, 60, 0, Math.PI * 2); ctx.fill(); }
+        if (ctx) { ctx.fillStyle = 'red'; ctx.beginPath(); ctx.fillRect(this.x, this.y, this.playerSize, this.playerSize); ctx.fill(); }
     }
 }
 
