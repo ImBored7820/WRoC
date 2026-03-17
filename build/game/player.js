@@ -75,12 +75,6 @@ export class Player {
     }
     draw(ctx) {
         ctx.drawImage(this.sprite, this.x, this.y, this.playerSize, this.playerSize);
-        if (ctx) {
-            ctx.fillStyle = 'red';
-            ctx.beginPath();
-            ctx.fillRect(this.x, this.y, this.playerSize, this.playerSize);
-            ctx.fill();
-        }
     }
 }
 //# sourceMappingURL=player.js.map

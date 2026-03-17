@@ -104,7 +104,7 @@ export class Player {
     draw(ctx: CanvasRenderingContext2D) {
         ctx.drawImage(this.sprite, this.x, this.y, this.playerSize, this.playerSize);
 
-        if (ctx) { ctx.fillStyle = 'red'; ctx.beginPath(); ctx.fillRect(this.x, this.y, this.playerSize, this.playerSize); ctx.fill(); }
+        //if (ctx) { ctx.fillStyle = 'red'; ctx.beginPath(); ctx.fillRect(this.x, this.y, this.playerSize, this.playerSize); ctx.fill(); }
     }
 }
 
