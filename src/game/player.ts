@@ -20,9 +20,12 @@ export class Player {
     x: number;
     y: number;
     playerSize: number;
+
     mind: number;
     body: number;
     soul: number;
+    extraStatPoints: number;
+
     private sprite: HTMLImageElement = new Image();
     private keys: Set<string> = new Set(); // Set of
 
@@ -40,9 +43,10 @@ export class Player {
         this.mind = temp[0];
         this.body = temp[1];
         this.soul = temp[2];
+        this.extraStatPoints = 0;
 
         // Preload sprite once instead of setting src every draw call
-        this.sprite.src = "./assets/pikaa.png";
+        this.sprite.src = "./assets/sprite.png";
         this.playerSize = 50;
     }
 
@@ -86,16 +90,16 @@ export class Player {
         if (this.keys.has("ArrowRight")) dx += SubStats.Speed;
 
         const newX = this.x + dx;
-        if (!checkCollision(newX, this.y) && !checkCollision(newX + this.playerSize - 1, this.y) &&
-            !checkCollision(newX, this.y + this.playerSize - 1) &&
-            !checkCollision(newX + this.playerSize - 1, this.y + this.playerSize - 1)) {
+        if (!checkCollision(newX, this.y) && !checkCollision(newX + this.playerSize - 15, this.y) &&
+            !checkCollision(newX, this.y + this.playerSize - 15) &&
+            !checkCollision(newX + this.playerSize + 15, this.y + this.playerSize - 15)) {
             this.x = newX;
         }
 
         const newY = this.y + dy;
-        if (!checkCollision(this.x, newY) && !checkCollision(this.x + this.playerSize - 1, newY) &&
-            !checkCollision(this.x, newY + this.playerSize - 1) &&
-            !checkCollision(this.x + this.playerSize - 1, newY + this.playerSize - 1)) {
+        if (!checkCollision(this.x, newY) && !checkCollision(this.x + this.playerSize - 15, newY) &&
+            !checkCollision(this.x, newY + this.playerSize - 15) &&
+            !checkCollision(this.x + this.playerSize - 15, newY + this.playerSize + 15)) {
             this.y = newY;
         }
     }
@@ -104,7 +108,7 @@ export class Player {
     draw(ctx: CanvasRenderingContext2D) {
         ctx.drawImage(this.sprite, this.x, this.y, this.playerSize, this.playerSize);
 
-        //if (ctx) { ctx.fillStyle = 'red'; ctx.beginPath(); ctx.fillRect(this.x, this.y, this.playerSize, this.playerSize); ctx.fill(); }
+        if (ctx) { ctx.fillStyle = 'red'; ctx.beginPath(); ctx.fillRect(this.x, this.y, this.playerSize, this.playerSize); ctx.fill(); }
     }
 }
 

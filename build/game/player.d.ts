@@ -5,6 +5,7 @@ export declare class Player {
     mind: number;
     body: number;
     soul: number;
+    extraStatPoints: number;
     private sprite;
     private keys;
     constructor(x: number, y: number, MBS?: number);
