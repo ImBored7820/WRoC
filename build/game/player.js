@@ -1,4 +1,5 @@
 import { checkCollision } from "./map.js";
+import { playerClasses } from "./playerClasses";
 var SubStats;
 (function (SubStats) {
     SubStats[SubStats["Speed"] = 6] = "Speed";
@@ -9,13 +10,14 @@ export class Player {
     x;
     y;
     playerSize;
+    level;
     mind;
     body;
     soul;
     extraStatPoints;
     sprite = new Image();
     keys = new Set();
-    constructor(x, y, MBS) {
+    constructor(x, y, level, MBS) {
         this.x = x;
         this.y = y;
         if (MBS && MBS < 100)
@@ -30,6 +32,10 @@ export class Player {
         this.extraStatPoints = 0;
         this.sprite.src = "./assets/sprite.png";
         this.playerSize = 50;
+        if (level >= 5)
+            [];
+        else
+            this.level = 0;
     }
     movementKeys() {
         window.addEventListener("keydown", e => this.keys.add(e.key));

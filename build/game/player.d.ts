@@ -2,13 +2,14 @@ export declare class Player {
     x: number;
     y: number;
     playerSize: number;
+    level: number;
     mind: number;
     body: number;
     soul: number;
     extraStatPoints: number;
     private sprite;
     private keys;
-    constructor(x: number, y: number, MBS?: number);
+    constructor(x: number, y: number, level?: number, MBS?: number);
     movementKeys(): void;
     update(): void;
     draw(ctx: CanvasRenderingContext2D): void;

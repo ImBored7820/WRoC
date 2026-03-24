@@ -7,6 +7,7 @@
  * keys (WASD & Arrow keys)
  */
 import {checkCollision} from "./map.js";
+import {playerClasses} from "./playerClasses";
 
 // These are all influenced by body, and to an extent mind & soul
 // They should not be changed, but a new player classes stats can enhance them
@@ -21,6 +22,7 @@ export class Player {
     y: number;
     playerSize: number;
 
+    level: number;
     mind: number;
     body: number;
     soul: number;
@@ -29,7 +31,7 @@ export class Player {
     private sprite: HTMLImageElement = new Image();
     private keys: Set<string> = new Set(); // Set of
 
-    public constructor(x: number, y: number, MBS?: number) {
+    public constructor(x: number, y: number, level?: number, MBS?: number) {
         this.x = x;
         this.y = y;
 
@@ -48,6 +50,10 @@ export class Player {
         // Preload sprite once instead of setting src every draw call
         this.sprite.src = "./assets/sprite.png";
         this.playerSize = 50;
+        if(level >= 5)
+
+        else
+            this.level = 0;
     }
 
     movementKeys() {

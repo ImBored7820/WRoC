@@ -18,24 +18,25 @@ enum ClassBaseStats {
 export class playerClasses {
     // TODO What attributes does a class need from a player
     specialAbility: string;
-    constructor(userChoice: string, player: Player)
+    playerLevel: number;
+    constructor(userChoice: string, player: Player, level: number)
     {
-        if(userChoice == "Language"){
-            player.soul = ClassBaseStats.Language;
-            this.specialAbility = "Persuade"
+        if(level === 5) {
+            if (userChoice == "Language") {
+                player.soul = ClassBaseStats.Language;
+                this.specialAbility = "Persuade"
+            } else if (userChoice == "STEM") {
+                player.mind = ClassBaseStats.STEM;
+                this.specialAbility = "Construct"
+            } else if (userChoice == "Sports") {
+                player.body = ClassBaseStats.Sports;
+                this.specialAbility = "Bash"
+            } else {
+                player.extraStatPoints = 1;
+                this.specialAbility = "none"
+            }
         }
-        else if(userChoice == "STEM"){
-            player.mind = ClassBaseStats.STEM;
-            this.specialAbility = "Construct"
-        }
-        else if(userChoice == "Sports"){
-            player.body = ClassBaseStats.Sports;
-            this.specialAbility = "Bash"
-        }
-        else {
-            player.extraStatPoints = 1;
-            this.specialAbility = "none"
-        }
+        this.playerLevel = level;
     }
 
 }

@@ -1,6 +1,7 @@
 import { Player } from "./player.js";
 export declare class playerClasses {
     specialAbility: string;
-    constructor(userChoice: string, player: Player);
+    playerLevel: number;
+    constructor(userChoice: string, player: Player, level: number);
 }
 //# sourceMappingURL=playerClasses.d.ts.map

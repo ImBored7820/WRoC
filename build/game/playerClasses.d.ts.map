@@ -1,1 +1,1 @@
-{"version":3,"file":"playerClasses.d.ts","sourceRoot":"","sources":["../../src/game/playerClasses.ts"],"names":[],"mappings":"AASA,OAAO,EAAC,MAAM,EAAC,MAAM,aAAa,CAAA;AAQlC,qBAAa,aAAa;IAEtB,cAAc,EAAE,MAAM,CAAC;gBACX,UAAU,EAAE,MAAM,EAAE,MAAM,EAAE,MAAM;CAoBjD"}
+{"version":3,"file":"playerClasses.d.ts","sourceRoot":"","sources":["../../src/game/playerClasses.ts"],"names":[],"mappings":"AASA,OAAO,EAAC,MAAM,EAAC,MAAM,aAAa,CAAA;AAQlC,qBAAa,aAAa;IAEtB,cAAc,EAAE,MAAM,CAAC;IACvB,WAAW,EAAE,MAAM,CAAC;gBACR,UAAU,EAAE,MAAM,EAAE,MAAM,EAAE,MAAM,EAAE,KAAK,EAAE,MAAM;CAoBhE"}

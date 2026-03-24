@@ -7,23 +7,27 @@ var ClassBaseStats;
 })(ClassBaseStats || (ClassBaseStats = {}));
 export class playerClasses {
     specialAbility;
-    constructor(userChoice, player) {
-        if (userChoice == "Language") {
-            player.soul = ClassBaseStats.Language;
-            this.specialAbility = "Persuade";
+    playerLevel;
+    constructor(userChoice, player, level) {
+        if (level === 5) {
+            if (userChoice == "Language") {
+                player.soul = ClassBaseStats.Language;
+                this.specialAbility = "Persuade";
+            }
+            else if (userChoice == "STEM") {
+                player.mind = ClassBaseStats.STEM;
+                this.specialAbility = "Construct";
+            }
+            else if (userChoice == "Sports") {
+                player.body = ClassBaseStats.Sports;
+                this.specialAbility = "Bash";
+            }
+            else {
+                player.extraStatPoints = 1;
+                this.specialAbility = "none";
+            }
         }
-        else if (userChoice == "STEM") {
-            player.mind = ClassBaseStats.STEM;
-            this.specialAbility = "Construct";
-        }
-        else if (userChoice == "Sports") {
-            player.body = ClassBaseStats.Sports;
-            this.specialAbility = "Bash";
-        }
-        else {
-            player.extraStatPoints = 1;
-            this.specialAbility = "none";
-        }
+        this.playerLevel = level;
     }
 }
 //# sourceMappingURL=playerClasses.js.map
