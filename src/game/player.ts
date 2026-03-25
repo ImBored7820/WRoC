@@ -22,9 +22,14 @@ export class Player {
     y: number;
     playerSize: number;
 
+    name: string;
     level: number;
     xp: number;
     xpToNextLevel: number;
+    health: number;
+    maxHealth: number;
+    stamina: number;
+    maxStamina: number;
     mind: number;
     body: number;
     soul: number;
@@ -57,7 +62,16 @@ export class Player {
         this.sprite.src = "./assets/sprite.png";
         this.playerSize = 50;
 
-        // XP system, doubles every level (100 -> 200 -> 400 -> 800...)
+        // Player name, set later via prompt
+        this.name = "Player";
+
+        // Health and Stamina, based on SubStats enum defaults
+        this.maxHealth = SubStats.Health;
+        this.health = this.maxHealth;
+        this.maxStamina = SubStats.Stamina;
+        this.stamina = this.maxStamina;
+
+        // XP system, doubles every level (100 -> 200 -> 400 -> 800)
         this.xp = 0;
         if(level && level > 0)
             this.level = level;

@@ -76,10 +76,10 @@ export function checkCollision(x: number, y: number): boolean {
     const convert = row * cols + col;
 
     // Clamp to map bounds
-    if (row < 0 || col < 0 || row >= rows || col >= cols) {
-        isAWall = true;
-    }
-    else if(map[convert] === 0){
+    //if (row < 0 || col < 0 || row >= rows || col >= cols) {
+      //  isAWall = true;
+    //}
+    if(map[convert] === 0){
         isAWall = true;
     }
 

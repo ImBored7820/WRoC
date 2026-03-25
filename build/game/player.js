@@ -10,9 +10,14 @@ export class Player {
     x;
     y;
     playerSize;
+    name;
     level;
     xp;
     xpToNextLevel;
+    health;
+    maxHealth;
+    stamina;
+    maxStamina;
     mind;
     body;
     soul;
@@ -37,6 +42,11 @@ export class Player {
         this.extraStatPoints = 0;
         this.sprite.src = "./assets/sprite.png";
         this.playerSize = 50;
+        this.name = "Player";
+        this.maxHealth = SubStats.Health;
+        this.health = this.maxHealth;
+        this.maxStamina = SubStats.Stamina;
+        this.stamina = this.maxStamina;
         this.xp = 0;
         if (level && level > 0)
             this.level = level;
