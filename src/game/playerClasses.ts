@@ -17,11 +17,13 @@ enum ClassBaseStats {
 }
 export class playerClasses {
     // TODO What attributes does a class need from a player
+    className: string;
     specialAbility: string;
     playerLevel: number;
     constructor(userChoice: string, player: Player, level: number)
     {
-        if(level === 5) {
+        this.className = userChoice;
+        if(level >= 5) {
             if (userChoice == "Language") {
                 player.soul = ClassBaseStats.Language;
                 this.specialAbility = "Persuade"

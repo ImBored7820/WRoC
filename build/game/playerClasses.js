@@ -6,10 +6,12 @@ var ClassBaseStats;
     ClassBaseStats[ClassBaseStats["Sports"] = 121] = "Sports";
 })(ClassBaseStats || (ClassBaseStats = {}));
 export class playerClasses {
+    className;
     specialAbility;
     playerLevel;
     constructor(userChoice, player, level) {
-        if (level === 5) {
+        this.className = userChoice;
+        if (level >= 5) {
             if (userChoice == "Language") {
                 player.soul = ClassBaseStats.Language;
                 this.specialAbility = "Persuade";

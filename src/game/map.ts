@@ -79,9 +79,9 @@ export function checkCollision(x: number, y: number): boolean {
     if (row < 0 || col < 0 || row >= rows || col >= cols) {
         isAWall = true;
     }
-    //else if(map[convert] === 0){
-     //   isAWall = true;
-    //}
+    else if(map[convert] === 0){
+        isAWall = true;
+    }
 
     return isAWall;
 }
