@@ -22,7 +22,7 @@ export class Player {
     body;
     soul;
     extraStatPoints;
-    showClassSelect;
+    classSelect;
     classChosen;
     playerClass;
     sprite = new Image();
@@ -53,7 +53,7 @@ export class Player {
         else
             this.level = 0;
         this.xpToNextLevel = 100 * Math.pow(2, this.level);
-        this.showClassSelect = false;
+        this.classSelect = false;
         this.classChosen = false;
         this.playerClass = null;
     }
@@ -62,7 +62,7 @@ export class Player {
         window.addEventListener("keyup", e => this.keys.delete(e.key.toLowerCase()));
     }
     update() {
-        if (this.showClassSelect)
+        if (this.classSelect)
             return;
         let dx = 0;
         let dy = 0;
@@ -89,21 +89,21 @@ export class Player {
             this.y = newY;
         }
     }
-    gainXP(amount) {
+    increaseXP(amount) {
         this.xp += amount;
         while (this.xp >= this.xpToNextLevel) {
             this.xp -= this.xpToNextLevel;
             this.level++;
             this.xpToNextLevel = 100 * Math.pow(2, this.level);
             if (this.level >= 5 && !this.classChosen) {
-                this.showClassSelect = true;
+                this.classSelect = true;
             }
         }
     }
     selectClass(choice) {
         this.playerClass = new playerClasses(choice, this, this.level);
         this.classChosen = true;
-        this.showClassSelect = false;
+        this.classSelect = false;
     }
     draw(ctx) {
         ctx.drawImage(this.sprite, this.x, this.y, this.playerSize, this.playerSize);

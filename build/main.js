@@ -8,10 +8,7 @@ function onStart() {
     const player = new Player(210, 210);
     player.movementKeys();
     let chosenName = prompt("Enter your player name:");
-    if (chosenName && chosenName.trim() !== "")
-        player.name = chosenName.trim();
-    else
-        player.name = "Player";
+    player.name = chosenName ? chosenName : "Player";
     function resize() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -22,7 +19,7 @@ function onStart() {
     window.addEventListener("resize", resize);
     resize();
     window.addEventListener("keydown", e => {
-        if (player.showClassSelect) {
+        if (player.classSelect) {
             if (e.key === "1")
                 player.selectClass("Language");
             else if (e.key === "2")
@@ -33,17 +30,17 @@ function onStart() {
                 player.selectClass("None");
         }
         if (e.key === "e" || e.key === "E") {
-            player.gainXP(50);
+            player.increaseXP(1000);
         }
     });
     function drawClassSelect(ctx) {
         ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "white";
-        ctx.font = "bold 32px monospace";
+        ctx.font = "bold 16px monospace";
         ctx.textAlign = "center";
-        ctx.fillText("Level 5! Choose your class:", canvas.width / 2, canvas.height / 2 - 100);
-        ctx.font = "24px monospace";
+        ctx.fillText("Level 5 Achieved Choose your class:", canvas.width / 2, canvas.height / 2 - 100);
+        ctx.font = "12px monospace";
         ctx.fillText("1 - Language  (Soul focused, Ability: Persuade)", canvas.width / 2, canvas.height / 2 - 30);
         ctx.fillText("2 - STEM      (Mind focused, Ability: Construct)", canvas.width / 2, canvas.height / 2 + 10);
         ctx.fillText("3 - Sports    (Body focused, Ability: Bash)", canvas.width / 2, canvas.height / 2 + 50);
@@ -51,10 +48,10 @@ function onStart() {
     }
     function drawHUD(ctx) {
         const barWidth = 200;
-        const padding = 10;
+        const padding = 20;
         const barX = canvas.width - barWidth - padding;
         let curY = padding;
-        ctx.fillStyle = "white";
+        ctx.fillStyle = "black";
         ctx.font = "bold 16px monospace";
         ctx.textAlign = "left";
         ctx.fillText(player.name, barX, curY + 14);
@@ -98,7 +95,7 @@ function onStart() {
         ctx.fillText(player.stamina + " / " + player.maxStamina, barX + barWidth / 2, curY + 10);
         curY += spBarHeight + 4;
         if (player.classChosen && player.playerClass) {
-            ctx.fillStyle = "white";
+            ctx.fillStyle = "black";
             ctx.font = "12px monospace";
             ctx.textAlign = "left";
             ctx.fillText("Class: " + player.playerClass.className + " (" + player.playerClass.specialAbility + ")", barX, curY + 12);
@@ -115,7 +112,7 @@ function onStart() {
         player.draw(ctx);
         ctx.restore();
         drawHUD(ctx);
-        if (player.showClassSelect) {
+        if (player.classSelect) {
             drawClassSelect(ctx);
         }
         window.requestAnimationFrame(refreshRate);

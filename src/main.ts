@@ -29,10 +29,7 @@ function onStart() {
 
     // Prompt the player to choose a name on load
     let chosenName = prompt("Enter your player name:");
-    if(chosenName && chosenName.trim() !== "")
-        player.name = chosenName.trim();
-    else
-        player.name = "Player";
+    player.name = chosenName ? chosenName : "Player";
 
     // So the purpose of this function is to make a canvas that fits the screen
     // no matter what the screen size is
@@ -49,16 +46,16 @@ function onStart() {
 
     // Listens for class selection keys (1-4) when the class select screen is showing
     window.addEventListener("keydown", e => {
-        if(player.showClassSelect) {
+        if(player.classSelect) {
             if(e.key === "1") player.selectClass("Language");
             else if(e.key === "2") player.selectClass("STEM");
             else if(e.key === "3") player.selectClass("Sports");
             else if(e.key === "4") player.selectClass("None");
         }
-        // Temporary XP gain for testing (press E to gain 50xp)
+        // Temporary XP gain for testing
         // TODO Remove once mobs are implemented
         if(e.key === "e" || e.key === "E") {
-            player.gainXP(50);
+            player.increaseXP(1000);
         }
     });
 
@@ -70,12 +67,12 @@ function onStart() {
 
         // Title text
         ctx.fillStyle = "white";
-        ctx.font = "bold 32px monospace";
+        ctx.font = "bold 16px monospace";
         ctx.textAlign = "center";
-        ctx.fillText("Level 5! Choose your class:", canvas.width / 2, canvas.height / 2 - 100);
+        ctx.fillText("Level 5 Achieved Choose your class:", canvas.width / 2, canvas.height / 2 - 100);
 
         // Class options
-        ctx.font = "24px monospace";
+        ctx.font = "12px monospace";
         ctx.fillText("1 - Language  (Soul focused, Ability: Persuade)", canvas.width / 2, canvas.height / 2 - 30);
         ctx.fillText("2 - STEM      (Mind focused, Ability: Construct)", canvas.width / 2, canvas.height / 2 + 10);
         ctx.fillText("3 - Sports    (Body focused, Ability: Bash)", canvas.width / 2, canvas.height / 2 + 50);
@@ -83,18 +80,14 @@ function onStart() {
     }
 
     // Draws the HUD in the top right corner of the screen
-    // Layout: playerName  Lvl X
-    //         [======XP bar======] (very thin)
-    //         [=====Health bar====]
-    //         [====Stamina bar====]
     function drawHUD(ctx: CanvasRenderingContext2D) {
         const barWidth = 200;
-        const padding = 10;
+        const padding = 20;
         const barX = canvas.width - barWidth - padding; // Anchored to top right
         let curY = padding; // Tracks vertical position as we draw down
 
-        // Player name and level on the same line
-        ctx.fillStyle = "white";
+        // Player name and level
+        ctx.fillStyle = "black";
         ctx.font = "bold 16px monospace";
         ctx.textAlign = "left";
         ctx.fillText(player.name, barX, curY + 14);
@@ -102,7 +95,7 @@ function onStart() {
         ctx.fillText("Lvl " + player.level, barX + barWidth, curY + 14);
         curY += 22;
 
-        // XP bar (very thin)
+        // XP bar
         const xpBarHeight = 4;
         const xpPercent = player.xp / player.xpToNextLevel;
         ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
@@ -123,7 +116,8 @@ function onStart() {
         ctx.fillRect(barX, curY, barWidth * hpPercent, hpBarHeight);
         ctx.strokeStyle = "white";
         ctx.strokeRect(barX, curY, barWidth, hpBarHeight);
-        // Health text centered on the bar
+
+        // Health text
         ctx.fillStyle = "white";
         ctx.font = "10px monospace";
         ctx.textAlign = "center";
@@ -139,7 +133,8 @@ function onStart() {
         ctx.fillRect(barX, curY, barWidth * spPercent, spBarHeight);
         ctx.strokeStyle = "white";
         ctx.strokeRect(barX, curY, barWidth, spBarHeight);
-        // Stamina text centered on the bar
+
+        // Stamina text
         ctx.fillStyle = "white";
         ctx.font = "10px monospace";
         ctx.textAlign = "center";
@@ -148,7 +143,7 @@ function onStart() {
 
         // Class display if chosen, shown under the bars
         if(player.classChosen && player.playerClass) {
-            ctx.fillStyle = "white";
+            ctx.fillStyle = "black";
             ctx.font = "12px monospace";
             ctx.textAlign = "left";
             ctx.fillText("Class: " + player.playerClass.className + " (" + player.playerClass.specialAbility + ")", barX, curY + 12);
@@ -176,7 +171,7 @@ function onStart() {
         drawHUD(ctx);
 
         // Class selection overlay drawn on top of everything
-        if(player.showClassSelect) {
+        if(player.classSelect) {
             drawClassSelect(ctx);
         }
 

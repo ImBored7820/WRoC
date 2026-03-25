@@ -35,7 +35,7 @@ export class Player {
     soul: number;
     extraStatPoints: number;
 
-    showClassSelect: boolean;
+    classSelect: boolean;
     classChosen: boolean;
     playerClass: playerClasses | null;
 
@@ -65,13 +65,13 @@ export class Player {
         // Player name, set later via prompt
         this.name = "Player";
 
-        // Health and Stamina, based on SubStats enum defaults
+        // Health and Stamina based on SubStats
         this.maxHealth = SubStats.Health;
         this.health = this.maxHealth;
         this.maxStamina = SubStats.Stamina;
         this.stamina = this.maxStamina;
 
-        // XP system, doubles every level (100 -> 200 -> 400 -> 800)
+        // XP system xp needed doubles every level (100 -> 200 -> 400 -> 800)
         this.xp = 0;
         if(level && level > 0)
             this.level = level;
@@ -80,7 +80,7 @@ export class Player {
         this.xpToNextLevel = 100 * Math.pow(2, this.level);
 
         // Class selection triggers at level 5
-        this.showClassSelect = false;
+        this.classSelect = false;
         this.classChosen = false;
         this.playerClass = null;
     }
@@ -104,7 +104,7 @@ export class Player {
      */
     update() {
         // Dont move if class selection screen is up
-        if(this.showClassSelect) return;
+        if(this.classSelect) return;
 
         let dx = 0;
         let dy = 0;
@@ -133,7 +133,7 @@ export class Player {
     }
 
     // Adds xp to the player and checks if they leveled up
-    gainXP(amount: number) {
+    increaseXP(amount: number) {
         this.xp += amount;
         while(this.xp >= this.xpToNextLevel) {
             this.xp -= this.xpToNextLevel;
@@ -142,7 +142,7 @@ export class Player {
 
             // At level 5 prompt the user to select a class
             if(this.level >= 5 && !this.classChosen) {
-                this.showClassSelect = true;
+                this.classSelect = true;
             }
         }
     }
@@ -151,7 +151,7 @@ export class Player {
     selectClass(choice: string) {
         this.playerClass = new playerClasses(choice, this, this.level);
         this.classChosen = true;
-        this.showClassSelect = false;
+        this.classSelect = false;
     }
 
     // Draws the sprite onto the canvas

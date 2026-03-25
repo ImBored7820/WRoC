@@ -15,7 +15,7 @@ export declare class Player {
     body: number;
     soul: number;
     extraStatPoints: number;
-    showClassSelect: boolean;
+    classSelect: boolean;
     classChosen: boolean;
     playerClass: playerClasses | null;
     private sprite;
@@ -23,7 +23,7 @@ export declare class Player {
     constructor(x: number, y: number, level?: number, MBS?: number);
     movementKeys(): void;
     update(): void;
-    gainXP(amount: number): void;
+    increaseXP(amount: number): void;
     selectClass(choice: string): void;
     draw(ctx: CanvasRenderingContext2D): void;
 }
