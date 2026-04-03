@@ -41,7 +41,7 @@ export class Player {
         this.soul = temp[2];
         this.extraStatPoints = 0;
         this.sprite.src = "./src/assets/sprite.png";
-        this.playerSize = 65;
+        this.playerSize = 30;
         this.name = "Player";
         this.maxHealth = SubStats.Health;
         this.health = this.maxHealth;

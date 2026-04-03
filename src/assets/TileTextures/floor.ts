@@ -29,7 +29,6 @@ const pattern = [
     0, 4, 4, 4, 4, 0
 ];
 
-export function drawFloor(ctx: CanvasRenderingContext2D, x: number, y: number,
-                          tileWidth: number, tileHeight: number) {
+export function drawFloor(ctx: CanvasRenderingContext2D, x: number, y: number, tileWidth: number, tileHeight: number) {
     drawTile(ctx, x, y, tileWidth, tileHeight, pattern, colors, rows, cols);
 }
