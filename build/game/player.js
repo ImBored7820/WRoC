@@ -77,15 +77,15 @@ export class Player {
         if (this.keys.has("d") || this.keys.has("arrowright"))
             dx += SubStats.Speed + speedBoost;
         const newX = this.x + dx;
-        if (!checkCollision(newX, this.y) && !checkCollision(newX + this.playerSize - 15, this.y) &&
-            !checkCollision(newX, this.y + this.playerSize - 15) &&
-            !checkCollision(newX + this.playerSize - 15, this.y + this.playerSize - 15)) {
+        if (!checkCollision(newX, this.y) && !checkCollision(newX + this.playerSize, this.y) &&
+            !checkCollision(newX, this.y + this.playerSize) &&
+            !checkCollision(newX + this.playerSize, this.y + this.playerSize)) {
             this.x = newX;
         }
         const newY = this.y + dy;
-        if (!checkCollision(this.x, newY) && !checkCollision(this.x + this.playerSize - 15, newY) &&
-            !checkCollision(this.x, newY + this.playerSize - 15) &&
-            !checkCollision(this.x + this.playerSize - 15, newY + this.playerSize - 15)) {
+        if (!checkCollision(this.x, newY) && !checkCollision(this.x + this.playerSize, newY) &&
+            !checkCollision(this.x, newY + this.playerSize) &&
+            !checkCollision(this.x + this.playerSize, newY + this.playerSize)) {
             this.y = newY;
         }
     }
@@ -106,7 +106,7 @@ export class Player {
         this.classSelect = false;
     }
     draw(ctx) {
-        ctx.drawImage(this.sprite, this.x, this.y, this.playerSize, this.playerSize);
+        ctx.fillRect(this.x, this.y, this.playerSize, this.playerSize);
     }
 }
 //# sourceMappingURL=player.js.map

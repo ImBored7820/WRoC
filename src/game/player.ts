@@ -121,16 +121,16 @@ export class Player {
 
         // Collision checks use 4 corners of the player hitbox offset by 15px
         const newX = this.x + dx;
-        if (!checkCollision(newX, this.y) && !checkCollision(newX + this.playerSize - 15, this.y) &&
-            !checkCollision(newX, this.y + this.playerSize - 15) &&
-            !checkCollision(newX + this.playerSize - 15, this.y + this.playerSize - 15)) {
+        if (!checkCollision(newX, this.y) && !checkCollision(newX + this.playerSize, this.y) &&
+            !checkCollision(newX, this.y + this.playerSize) &&
+            !checkCollision(newX + this.playerSize, this.y + this.playerSize)) {
             this.x = newX;
         }
 
         const newY = this.y + dy;
-        if (!checkCollision(this.x, newY) && !checkCollision(this.x + this.playerSize - 15, newY) &&
-            !checkCollision(this.x, newY + this.playerSize - 15) &&
-            !checkCollision(this.x + this.playerSize - 15, newY + this.playerSize - 15)) {
+        if (!checkCollision(this.x, newY) && !checkCollision(this.x + this.playerSize, newY) &&
+            !checkCollision(this.x, newY + this.playerSize) &&
+            !checkCollision(this.x + this.playerSize, newY + this.playerSize)) {
             this.y = newY;
         }
     }
@@ -159,6 +159,7 @@ export class Player {
 
     // Draws the sprite onto the canvas
     draw(ctx: CanvasRenderingContext2D) {
-        ctx.drawImage(this.sprite, this.x, this.y, this.playerSize, this.playerSize);
+        //ctx.drawImage(this.sprite, this.x, this.y, this.playerSize, this.playerSize);
+        ctx.fillRect(this.x, this.y, this.playerSize, this.playerSize);
     }
 }

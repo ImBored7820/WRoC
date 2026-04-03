@@ -12,10 +12,13 @@ import {drawWall} from "../assets/TileTextures/wall.js";
 import {drawFloor} from "../assets/TileTextures/floor.js";
 import {drawDoor} from "../assets/TileTextures/door.js";
 import {drawWindow} from "../assets/TileTextures/window.js";
+import {drawSmartBoard} from "../assets/TileTextures/smartboard.js";
+import {drawWhiteBoard} from "../assets/TileTextures/whiteboard.js";
+import {drawDesk} from "../assets/TileTextures/desk.js";
 
 // Export makes the file public so other files can see it
-export const pixelWidth = 36; // How wide each pixel is
-export const pixelHeight = 36; // How tall each pixel is
+const pixelWidth = 36; // How wide each pixel is
+const pixelHeight = 36; // How tall each pixel is
 // 30x30 = 900 pixels
 const rows = 20; // How many rows of pixels there are
 const cols = 20; // How many columns of pixels there are
@@ -26,26 +29,26 @@ to a number corresponds to 1 pixel on the screen of the color the number is
 the map is actually in 1D to reduce loading time
  */
 const map = [
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+    0, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 1, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+    0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+    0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
+    0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+    5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+    5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+    5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+    4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+    4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+    4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+    5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+    5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+    5, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+    0, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+    0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+    0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+    0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+    0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+    0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0,
 ];
 // Checks current location
 // Converts x and y into row and col #s
@@ -59,7 +62,7 @@ export function checkCollision(x: number, y: number): boolean {
     const col = Math.floor(x / pixelWidth);
     const convert = row * cols + col;
 
-    if(map[convert] === 0){
+    if(map[convert] === 0 || map[convert] === 3 || map[convert] === 6){
         isAWall = true;
     }
 
@@ -70,8 +73,11 @@ export function drawMap(mapCtx: CanvasRenderingContext2D | null) {
     const tileTextures: { [key: number]: (ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number) => void } = {
         0: drawWall,
         1: drawFloor,
-        2: drawWindow,
-        3: drawDoor,
+        2: drawDoor,
+        3: drawWindow,
+        4: drawSmartBoard,
+        5: drawWhiteBoard,
+        6: drawDesk,
     };
     // So this for loop basically goes and makes the map from 1D -> 2D
     for (let row = 0; row < rows; row++) {
@@ -80,7 +86,7 @@ export function drawMap(mapCtx: CanvasRenderingContext2D | null) {
             const tileX = col * pixelWidth;
             const tileY = row * pixelHeight;
 
-            tileTextures[map[index]]?.(mapCtx!, tileX, tileY, pixelWidth, pixelHeight);
+            tileTextures[map[index]]?.(mapCtx, tileX, tileY, pixelWidth, pixelHeight);
         }
     }
 }
