@@ -101,6 +101,8 @@ function onStart() {
             ctx.fillText("Class: " + player.playerClass.className + " (" + player.playerClass.specialAbility + ")", barX, curY + 12);
         }
     }
+    const start = performance.now();
+    let nFrames = 0;
     function refreshRate() {
         const camX = (canvas.width / 2) - player.x;
         const camY = (canvas.height / 2) - player.y;
@@ -115,6 +117,8 @@ function onStart() {
         if (player.classSelect) {
             drawClassSelect(ctx);
         }
+        nFrames += 1;
+        console.log(nFrames / ((performance.now() - start) / 1000));
         window.requestAnimationFrame(refreshRate);
     }
     window.requestAnimationFrame(refreshRate);

@@ -150,6 +150,8 @@ function onStart() {
         }
     }
 
+    const start = performance.now();
+    let nFrames = 0;
     function refreshRate(){
         // Logic for the "camera", moves the map instead of the player, creating
         // a visual effect of a camera following the player around
@@ -175,6 +177,9 @@ function onStart() {
             drawClassSelect(ctx);
         }
 
+        nFrames += 1;
+        console.log(nFrames / ((performance.now() - start) / 1000))
+        //   setTimeout(refreshRate); // Kendall Optimized my game by yah (MORE FPS)
         window.requestAnimationFrame(refreshRate); // Recursion so changes
                                                    // happen in real time
     }
