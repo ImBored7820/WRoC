@@ -1,6 +1,6 @@
 # Woodinville HS: Realm of Criscone (WRoC)
 
-## Overview ##
+## Game Overview ##
 
 Explore the glooming hallways of Woodinville, 
 tremble beneath the presence of Criscone, 
