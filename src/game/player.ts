@@ -24,12 +24,15 @@ export class Player {
 
     name: string;
     level: number;
+
     xp: number;
     xpToNextLevel: number;
+
     health: number;
     maxHealth: number;
     stamina: number;
     maxStamina: number;
+
     mind: number;
     body: number;
     soul: number;
@@ -59,8 +62,8 @@ export class Player {
         this.extraStatPoints = 0;
 
         // Preload sprite once instead of setting src every draw call
-        this.sprite.src = "./assets/sprite.png";
-        this.playerSize = 50;
+        this.sprite.src = "./src/assets/sprite.png";
+        this.playerSize = 65;
 
         // Player name, set later via prompt
         this.name = "Player";

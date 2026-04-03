@@ -5,7 +5,7 @@ function onStart() {
     const ctx = canvas.getContext("2d");
     const map = document.createElement("canvas");
     const mapCtx = map.getContext("2d");
-    const player = new Player(100, 100);
+    const player = new Player(200, 200);
     player.movementKeys();
     let chosenName = prompt("Enter your player name:");
     player.name = chosenName ? chosenName : "Player";
