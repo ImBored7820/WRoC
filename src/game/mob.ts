@@ -43,6 +43,7 @@ class Mob {
     // Mob Movement Method
     mobMovement(player: Player){
         // Mob randomly roams
+
         // If the player is within 4 Tiles, mob heads towards player
         // Once player is "touched" enters attack mode
 
