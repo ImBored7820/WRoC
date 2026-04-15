@@ -31,7 +31,6 @@ class Mob {
     attack(player: Player){
         // Player loses health when attacked
         player.health -= this.attackPower;
-
     }
 
     // Mob Health Loss Method
@@ -48,12 +47,24 @@ class Mob {
         // Once player is "touched" enters attack mode
 
         // Check if player is within 4 tiles
+        // d = sqrt[(x1-x2)^2+(y1-y2)^2]
         let isPlayerClose: boolean;
-        if(player.x == this.mobX || player.y == this.mobY || player.x <= mobX-4 || player.y <= mobY-4)
+
+        let relativePlayerX: number;
+        let relativePlayerY: number;
+        let relativePlayerDistance: number;
+        relativePlayerX = player.x - this.mobX;
+        relativePlayerX = relativePlayerX * relativePlayerX;
+        relativePlayerY = player.y - this.mobY;
+        relativePlayerY = relativePlayerY * relativePlayerY;
+
+        relativePlayerDistance = relativePlayerX + relativePlayerY;
+        relativePlayerDistance = Math.sqrt(relativePlayerDistance);
+
+        if(player.x == this.mobX || player.y == this.mobY)
             isPlayerClose = true;
         else
             isPlayerClose = false;
-
 
 
     }
