@@ -12,19 +12,24 @@
 // produced js file actually uses js files instead of trying to use ts ones
 import {drawMap} from "./game/map.js";
 import {Player} from "./game/player.js";
+import {drawHUD} from "./game/HUD.js";
+import {drawClassSelect} from "./game/HUD.js";
 
 /**
  * This is the function that basically does everything, it loads the sprites,
  * the map sets canvas attributes etc.
  */
-function onStart() {
-    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-    const ctx = canvas.getContext("2d");
 
-    const map = document.createElement("canvas"); // map from map.ts
-    const mapCtx = map.getContext("2d"); // Gets drawn into memory for faster
-                                                                             // loading times
-    const player = new Player(200, 200); // Creates a new player then enables checking
+export const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+const ctx = canvas.getContext("2d");
+
+const map = document.createElement("canvas"); // map from map.ts
+const mapCtx = map.getContext("2d"); // Gets drawn into memory for faster
+// loading times
+export const player = new Player(200, 200); // Creates a new player then enables checking
+
+function onStart() {
+
     player.movementKeys(); // if movement keys are pressed
 
     // Prompt the player to choose a name on load
@@ -59,99 +64,8 @@ function onStart() {
         }
     });
 
-    // Draws the class selection overlay onto the screen
-    function drawClassSelect(ctx: CanvasRenderingContext2D) {
-        // Darken the screen
-        ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        // Title text
-        ctx.fillStyle = "white";
-        ctx.font = "bold 16px monospace";
-        ctx.textAlign = "center";
-        ctx.fillText("Level 5 Achieved Choose your class:", canvas.width / 2, canvas.height / 2 - 100);
-
-        // Class options
-        ctx.font = "12px monospace";
-        ctx.fillText("1 - Language  (Soul focused, Ability: Persuade)", canvas.width / 2, canvas.height / 2 - 30);
-        ctx.fillText("2 - STEM      (Mind focused, Ability: Construct)", canvas.width / 2, canvas.height / 2 + 10);
-        ctx.fillText("3 - Sports    (Body focused, Ability: Bash)", canvas.width / 2, canvas.height / 2 + 50);
-        ctx.fillText("4 - None      (Extra stat point)", canvas.width / 2, canvas.height / 2 + 90);
-    }
-
-    // Draws the HUD in the top right corner of the screen
-    function drawHUD(ctx: CanvasRenderingContext2D) {
-        const barWidth = 200;
-        const padding = 20;
-        const barX = canvas.width - barWidth - padding; // Anchored to top right
-        let curY = padding; // Tracks vertical position as we draw down
-
-        // Player name and level
-        ctx.fillStyle = "black";
-        ctx.font = "bold 16px monospace";
-        ctx.textAlign = "left";
-        ctx.fillText(player.name, barX, curY + 14);
-        ctx.textAlign = "right";
-        ctx.fillText("Lvl " + player.level, barX + barWidth, curY + 14);
-        curY += 22;
-
-        // XP bar
-        const xpBarHeight = 4;
-        const xpPercent = player.xp / player.xpToNextLevel;
-        ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
-        ctx.fillRect(barX, curY, barWidth, xpBarHeight);
-        ctx.fillStyle = "limegreen";
-        ctx.fillRect(barX, curY, barWidth * xpPercent, xpBarHeight);
-        ctx.strokeStyle = "white";
-        ctx.lineWidth = 1;
-        ctx.strokeRect(barX, curY, barWidth, xpBarHeight);
-        curY += xpBarHeight + 6;
-
-        // Health bar
-        const hpBarHeight = 12;
-        const hpPercent = player.health / player.maxHealth;
-        ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
-        ctx.fillRect(barX, curY, barWidth, hpBarHeight);
-        ctx.fillStyle = "crimson";
-        ctx.fillRect(barX, curY, barWidth * hpPercent, hpBarHeight);
-        ctx.strokeStyle = "white";
-        ctx.strokeRect(barX, curY, barWidth, hpBarHeight);
-
-        // Health text
-        ctx.fillStyle = "white";
-        ctx.font = "10px monospace";
-        ctx.textAlign = "center";
-        ctx.fillText(player.health + " / " + player.maxHealth, barX + barWidth / 2, curY + 10);
-        curY += hpBarHeight + 4;
-
-        // Stamina bar
-        const spBarHeight = 12;
-        const spPercent = player.stamina / player.maxStamina;
-        ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
-        ctx.fillRect(barX, curY, barWidth, spBarHeight);
-        ctx.fillStyle = "dodgerblue";
-        ctx.fillRect(barX, curY, barWidth * spPercent, spBarHeight);
-        ctx.strokeStyle = "white";
-        ctx.strokeRect(barX, curY, barWidth, spBarHeight);
-
-        // Stamina text
-        ctx.fillStyle = "white";
-        ctx.font = "10px monospace";
-        ctx.textAlign = "center";
-        ctx.fillText(player.stamina + " / " + player.maxStamina, barX + barWidth / 2, curY + 10);
-        curY += spBarHeight + 4;
-
-        // Class display if chosen, shown under the bars
-        if(player.classChosen && player.playerClass) {
-            ctx.fillStyle = "black";
-            ctx.font = "12px monospace";
-            ctx.textAlign = "left";
-            ctx.fillText("Class: " + player.playerClass.className + " (" + player.playerClass.specialAbility + ")", barX, curY + 12);
-        }
-    }
-
     const start = performance.now();
-    let nFrames = 0;
+    let numFrames = 0;
     function refreshRate(){
         // Logic for the "camera", moves the map instead of the player, creating
         // a visual effect of a camera following the player around
@@ -177,9 +91,9 @@ function onStart() {
             drawClassSelect(ctx);
         }
 
-        nFrames += 1;
-        console.log(nFrames / ((performance.now() - start) / 1000))
-        //   setTimeout(refreshRate); // Kendall Optimized my game by yah (MORE FPS)
+        numFrames += 1;
+        console.log(numFrames / ((performance.now() - start) / 1000))
+        //setTimeout(refreshRate);
         window.requestAnimationFrame(refreshRate); // Recursion so changes
                                                    // happen in real time
     }

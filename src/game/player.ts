@@ -11,16 +11,17 @@ import {playerClasses} from "./playerClasses.js";
 
 // These are all influenced by body, and to an extent mind & soul
 // They should not be changed, but a new player classes stats can enhance them
-enum SubStats {
-    Speed = 6, // How fast it seems the player is moving
-    Health = 100,
-    Stamina = 100,
-}
+
+
 
 export class Player {
     x: number;
     y: number;
     playerSize: number;
+
+    speed: number;
+    health: number;
+    stamina: number;
 
     name: string;
     level: number;
@@ -28,9 +29,7 @@ export class Player {
     xp: number;
     xpToNextLevel: number;
 
-    health: number;
     maxHealth: number;
-    stamina: number;
     maxStamina: number;
 
     mind: number;
@@ -68,11 +67,12 @@ export class Player {
         // Player name, set later via prompt
         this.name = "Player";
 
-        // Health and Stamina based on SubStats
-        this.maxHealth = SubStats.Health;
+        // Health and Stamina
+        this.maxHealth = 100;
+        this.maxStamina = 100;
         this.health = this.maxHealth;
-        this.maxStamina = SubStats.Stamina;
         this.stamina = this.maxStamina;
+        this.speed = 7;
 
         // XP system xp needed doubles every level (100 -> 200 -> 400 -> 800)
         this.xp = 0;
@@ -114,10 +114,10 @@ export class Player {
         const shiftHeld = this.keys.has("shift");
         const speedBoost = shiftHeld ? this.body / 2 : 0;
 
-        if (this.keys.has("w") || this.keys.has("arrowup")) dy -= SubStats.Speed + speedBoost;
-        if (this.keys.has("s") || this.keys.has("arrowdown")) dy += SubStats.Speed + speedBoost;
-        if (this.keys.has("a") || this.keys.has("arrowleft")) dx -= SubStats.Speed + speedBoost;
-        if (this.keys.has("d") || this.keys.has("arrowright")) dx += SubStats.Speed + speedBoost;
+        if (this.keys.has("w") || this.keys.has("arrowup")) dy -= this.speed + speedBoost;
+        if (this.keys.has("s") || this.keys.has("arrowdown")) dy += this.speed + speedBoost;
+        if (this.keys.has("a") || this.keys.has("arrowleft")) dx -= this.speed + speedBoost;
+        if (this.keys.has("d") || this.keys.has("arrowright")) dx += this.speed + speedBoost;
 
         // Collision checks use 4 corners of the player hitbox offset by 15px
         const newX = this.x + dx;

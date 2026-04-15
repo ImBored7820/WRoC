@@ -3,13 +3,14 @@ export declare class Player {
     x: number;
     y: number;
     playerSize: number;
+    speed: number;
+    health: number;
+    stamina: number;
     name: string;
     level: number;
     xp: number;
     xpToNextLevel: number;
-    health: number;
     maxHealth: number;
-    stamina: number;
     maxStamina: number;
     mind: number;
     body: number;

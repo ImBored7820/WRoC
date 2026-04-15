@@ -1,22 +1,17 @@
 import { checkCollision } from "./map.js";
 import { playerClasses } from "./playerClasses.js";
-var SubStats;
-(function (SubStats) {
-    SubStats[SubStats["Speed"] = 6] = "Speed";
-    SubStats[SubStats["Health"] = 100] = "Health";
-    SubStats[SubStats["Stamina"] = 100] = "Stamina";
-})(SubStats || (SubStats = {}));
 export class Player {
     x;
     y;
     playerSize;
+    speed;
+    health;
+    stamina;
     name;
     level;
     xp;
     xpToNextLevel;
-    health;
     maxHealth;
-    stamina;
     maxStamina;
     mind;
     body;
@@ -43,10 +38,11 @@ export class Player {
         this.sprite.src = "./src/assets/sprite.png";
         this.playerSize = 30;
         this.name = "Player";
-        this.maxHealth = SubStats.Health;
+        this.maxHealth = 100;
+        this.maxStamina = 100;
         this.health = this.maxHealth;
-        this.maxStamina = SubStats.Stamina;
         this.stamina = this.maxStamina;
+        this.speed = 7;
         this.xp = 0;
         if (level && level > 0)
             this.level = level;
@@ -69,13 +65,13 @@ export class Player {
         const shiftHeld = this.keys.has("shift");
         const speedBoost = shiftHeld ? this.body / 2 : 0;
         if (this.keys.has("w") || this.keys.has("arrowup"))
-            dy -= SubStats.Speed + speedBoost;
+            dy -= this.speed + speedBoost;
         if (this.keys.has("s") || this.keys.has("arrowdown"))
-            dy += SubStats.Speed + speedBoost;
+            dy += this.speed + speedBoost;
         if (this.keys.has("a") || this.keys.has("arrowleft"))
-            dx -= SubStats.Speed + speedBoost;
+            dx -= this.speed + speedBoost;
         if (this.keys.has("d") || this.keys.has("arrowright"))
-            dx += SubStats.Speed + speedBoost;
+            dx += this.speed + speedBoost;
         const newX = this.x + dx;
         if (!checkCollision(newX, this.y) && !checkCollision(newX + this.playerSize, this.y) &&
             !checkCollision(newX, this.y + this.playerSize) &&
