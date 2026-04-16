@@ -62,7 +62,7 @@ export class Player {
 
         // Preload sprite once instead of setting src every draw call
         this.sprite.src = "./src/assets/sprite.png";
-        this.playerSize = 30;
+        this.playerSize = 36;
 
         // Player name, set later via prompt
         this.name = "Player";

@@ -12,6 +12,7 @@
 // produced js file actually uses js files instead of trying to use ts ones
 import {drawMap} from "./game/map.js";
 import {Player} from "./game/player.js";
+import {Mob} from "./game/mob.js";
 import {drawHUD} from "./game/HUD.js";
 import {drawClassSelect} from "./game/HUD.js";
 
@@ -27,10 +28,12 @@ const map = document.createElement("canvas"); // map from map.ts
 const mapCtx = map.getContext("2d"); // Gets drawn into memory for faster
 // loading times
 export const player = new Player(200, 200); // Creates a new player then enables checking
+export const mob = new Mob(368,368, 2);
 
 function onStart() {
 
     player.movementKeys(); // if movement keys are pressed
+    mob.mobMovement(player);
 
     // Prompt the player to choose a name on load
     let chosenName = prompt("Enter your player name:");
@@ -80,6 +83,9 @@ function onStart() {
 
         player.update();
         player.draw(ctx);
+        ctx.fillStyle = "red";
+        mob.mobMovement(player);
+        mob.draw(ctx);
 
         ctx.restore();
 

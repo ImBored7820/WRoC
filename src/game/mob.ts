@@ -8,10 +8,10 @@
  */
 import type {Player} from "./player";
 
-class Mob {
+export class Mob {
     // Mob Class Constructor
-    x: number;
-    y: number;
+    mobX: number;
+    mobY: number;
     level: number;
 
     attackPower: number;
@@ -19,8 +19,8 @@ class Mob {
 
     public constructor(mobX: number, mobY: number, level: number) {
         // Mobs have an X and Y position, and a level
-        this.x = mobX;
-        this.y = mobY;
+        this.mobX = mobX;
+        this.mobY = mobY;
         this.level = level;
         // Level sets mob attack and defense value
         this.attackPower = level * 5;
@@ -41,36 +41,36 @@ class Mob {
     }
     // Mob Movement Method
     mobMovement(player: Player){
-        // Mob randomly roams
-
         // If the player is within 4 Tiles, mob heads towards player
         // Once player is "touched" enters attack mode
 
         // Check if player is within 4 tiles
         // d = sqrt[(x1-x2)^2+(y1-y2)^2]
-        let isPlayerClose: boolean;
+        let isPlayerClose: boolean = false;
+        const playerRelativeX = player.x - this.mobX;
+        const playerRelativeY = player.y - this.mobY;
+        const distance = Math.sqrt(playerRelativeX * playerRelativeX + playerRelativeY * playerRelativeY);
 
-        let relativePlayerX: number;
-        let relativePlayerY: number;
-        let relativePlayerDistance: number;
-        relativePlayerX = player.x - this.mobX;
-        relativePlayerX = relativePlayerX * relativePlayerX;
-        relativePlayerY = player.y - this.mobY;
-        relativePlayerY = relativePlayerY * relativePlayerY;
-
-        relativePlayerDistance = relativePlayerX + relativePlayerY;
-        relativePlayerDistance = Math.sqrt(relativePlayerDistance);
-
-        if(player.x == this.mobX || player.y == this.mobY)
+        if(distance <= 108) {
             isPlayerClose = true;
-        else
-            isPlayerClose = false;
+            if (playerRelativeX > 0) this.mobX += 36;
+            if (playerRelativeX < 0) this.mobX -= 36;
+            if (playerRelativeY > 0) this.mobY += 36;
+            if (playerRelativeY < 0) this.mobY -= 36;
+        }
 
+        // While mot close to player randomaly moves
+        if(!isPlayerClose) {
+            const randomX = Math.random() * 36;
+            const randomY = Math.random() * 36;
+            this.mobX += randomX;
+            this.mobY += randomY;
+        }
 
     }
     // Draw Mob Method
     draw(ctx: CanvasRenderingContext2D) {
         //ctx.drawImage(this.sprite, this.x, this.y, this.playerSize, this.playerSize);
-        ctx.fillRect(this.x, this.y, 30, 30);
+        ctx.fillRect(this.mobX, this.mobY, 20, 20);
     }
 }

@@ -1,5 +1,6 @@
 import { drawMap } from "./game/map.js";
 import { Player } from "./game/player.js";
+import { Mob } from "./game/mob.js";
 import { drawHUD } from "./game/HUD.js";
 import { drawClassSelect } from "./game/HUD.js";
 export const canvas = document.getElementById("canvas");
@@ -7,8 +8,10 @@ const ctx = canvas.getContext("2d");
 const map = document.createElement("canvas");
 const mapCtx = map.getContext("2d");
 export const player = new Player(200, 200);
+export const mob = new Mob(368, 368, 2);
 function onStart() {
     player.movementKeys();
+    mob.mobMovement(player);
     let chosenName = prompt("Enter your player name:");
     player.name = chosenName ? chosenName : "Player";
     function resize() {
@@ -46,6 +49,9 @@ function onStart() {
         ctx.drawImage(map, 0, 0);
         player.update();
         player.draw(ctx);
+        ctx.fillStyle = "red";
+        mob.mobMovement(player);
+        mob.draw(ctx);
         ctx.restore();
         drawHUD(ctx);
         if (player.classSelect) {
