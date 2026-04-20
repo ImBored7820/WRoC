@@ -19,28 +19,30 @@ export class Mob {
     attackPower: number;
     mobHealth: number;
 
+    isMobDead: boolean;
+
     public constructor(mobX: number, mobY: number, level: number) {
         // Mobs have an X and Y position, and a level
         this.mobX = mobX;
         this.mobY = mobY;
         this.level = level;
         this.mobSize = 25;
+        this.isMobDead = false;
         // Level sets mob attack and defense value
-        this.attackPower = level * 5;
-        this.mobHealth = level * 10;
-    }
-
-    // Mob Attack Method
-    attack(player: Player){
-        // Player loses health when attacked
-        player.health -= this.attackPower;
+        this.attackPower = 1;
+        this.mobHealth = 10;
     }
 
     // Mob Health Loss Method
-    loseHp(player: Player){
+    loseHP(player: Player) {
         // Mob loses health when player attacks
         let playerAP = player.body * 5;
-        this.mobHealth -= playerAP;
+        if (this.mobHealth > 0) {
+            this.mobHealth -= playerAP;
+        }
+        else {
+            this.isMobDead = true;
+        }
     }
     // Mob Movement Method
     mobMovement(player: Player){
@@ -77,16 +79,16 @@ export class Mob {
 
         if(distance <= 108) {
             isPlayerClose = true;
-            if (playerRelativeX > 0) moveX(36);
-            if (playerRelativeX < 0) moveX(-36);
-            if (playerRelativeY > 0) moveY(36);
-            if (playerRelativeY < 0) moveY(-36);
+            if (playerRelativeX > 0) moveX(9);
+            if (playerRelativeX < 0) moveX(-9);
+            if (playerRelativeY > 0) moveY(9);
+            if (playerRelativeY < 0) moveY(-9);
         }
 
         // While mot close to player randomly moves
         if(!isPlayerClose) {
-            const randomX = (Math.floor(Math.random() * 3) - 1) * 36;
-            const randomY = (Math.floor(Math.random() * 3 )- 1) * 36;
+            const randomX = (Math.floor(Math.random() * 3) - 1) * 9;
+            const randomY = (Math.floor(Math.random() * 3 )- 1) * 9;
             if (randomX !== 0)
                 moveX(randomX);
 

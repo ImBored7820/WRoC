@@ -6,9 +6,9 @@ export declare class Mob {
     mobSize: number;
     attackPower: number;
     mobHealth: number;
+    isMobDead: boolean;
     constructor(mobX: number, mobY: number, level: number);
-    attack(player: Player): void;
-    loseHp(player: Player): void;
+    loseHP(player: Player): void;
     mobMovement(player: Player): void;
     draw(ctx: CanvasRenderingContext2D): void;
 }

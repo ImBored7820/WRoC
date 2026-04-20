@@ -8,6 +8,7 @@
  */
 import {checkCollision} from "./map.js";
 import {playerClasses} from "./playerClasses.js";
+import {Mob} from "./mob.js";
 
 // These are all influenced by body, and to an extent mind & soul
 // They should not be changed, but a new player classes stats can enhance them
@@ -41,8 +42,10 @@ export class Player {
     classChosen: boolean;
     playerClass: playerClasses | null;
 
+    isPlayerDead: boolean;
+
     private sprite: HTMLImageElement = new Image();
-    private keys: Set<string> = new Set(); // Set of
+    public keys: Set<string> = new Set(); // Set of
 
     public constructor(x: number, y: number, level?: number, MBS?: number) {
         this.x = x;
@@ -86,6 +89,7 @@ export class Player {
         this.classSelect = false;
         this.classChosen = false;
         this.playerClass = null;
+        this.isPlayerDead = false;
     }
 
     movementKeys() {
@@ -134,6 +138,15 @@ export class Player {
             this.y = newY;
         }
     }
+
+   loseHP(mob: Mob){
+        if(this.health > 0) {
+            this.health -= mob.attackPower;
+        }
+        else {
+            this.isPlayerDead = true;
+        }
+   }
 
     // Adds xp to the player and checks if they leveled up
     increaseXP(amount: number) {

@@ -50,8 +50,35 @@ function onStart() {
         player.update();
         player.draw(ctx);
         ctx.fillStyle = "red";
-        mob.mobMovement(player);
-        mob.draw(ctx);
+        if (!mob.isMobDead) {
+            mob.draw(ctx);
+            mob.mobMovement(player);
+        }
+        const playerRelativeX = player.x - mob.mobX;
+        const playerRelativeY = player.y - mob.mobY;
+        const distance = Math.sqrt(playerRelativeX * playerRelativeX + playerRelativeY * playerRelativeY);
+        const mobAttacksPlayer = (attackingMob) => {
+            if (distance < 72)
+                player.loseHP(attackingMob);
+        };
+        const playerAttacksMob = (attackingPlayer) => {
+            if (attackingPlayer["keys"]?.has("r")) {
+                if (distance < 72) {
+                    mob.loseHP(attackingPlayer);
+                }
+            }
+        };
+        if (player.isPlayerDead) {
+            if (player.isPlayerDead) {
+                ctx.fillStyle = "white";
+                ctx.font = "30px Arial";
+                ctx.fillText("Game Over", canvas.width / 4 - 100, canvas.height / 4);
+                ctx.fillText("Press Ctrl R to restart", canvas.width / 4 - 100, canvas.height / 4 + 50);
+                return;
+            }
+        }
+        mobAttacksPlayer(mob);
+        playerAttacksMob(player);
         ctx.restore();
         drawHUD(ctx);
         if (player.classSelect) {

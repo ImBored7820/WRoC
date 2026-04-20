@@ -1,4 +1,5 @@
 import { playerClasses } from "./playerClasses.js";
+import { Mob } from "./mob.js";
 export declare class Player {
     x: number;
     y: number;
@@ -19,11 +20,13 @@ export declare class Player {
     classSelect: boolean;
     classChosen: boolean;
     playerClass: playerClasses | null;
+    isPlayerDead: boolean;
     private sprite;
-    private keys;
+    keys: Set<string>;
     constructor(x: number, y: number, level?: number, MBS?: number);
     movementKeys(): void;
     update(): void;
+    loseHP(mob: Mob): void;
     increaseXP(amount: number): void;
     selectClass(choice: string): void;
     draw(ctx: CanvasRenderingContext2D): void;

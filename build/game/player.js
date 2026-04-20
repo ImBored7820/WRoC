@@ -1,5 +1,6 @@
 import { checkCollision } from "./map.js";
 import { playerClasses } from "./playerClasses.js";
+import { Mob } from "./mob.js";
 export class Player {
     x;
     y;
@@ -20,6 +21,7 @@ export class Player {
     classSelect;
     classChosen;
     playerClass;
+    isPlayerDead;
     sprite = new Image();
     keys = new Set();
     constructor(x, y, level, MBS) {
@@ -52,6 +54,7 @@ export class Player {
         this.classSelect = false;
         this.classChosen = false;
         this.playerClass = null;
+        this.isPlayerDead = false;
     }
     movementKeys() {
         window.addEventListener("keydown", e => this.keys.add(e.key.toLowerCase()));
@@ -83,6 +86,14 @@ export class Player {
             !checkCollision(this.x, newY + this.playerSize) &&
             !checkCollision(this.x + this.playerSize, newY + this.playerSize)) {
             this.y = newY;
+        }
+    }
+    loseHP(mob) {
+        if (this.health > 0) {
+            this.health -= mob.attackPower;
+        }
+        else {
+            this.isPlayerDead = true;
         }
     }
     increaseXP(amount) {

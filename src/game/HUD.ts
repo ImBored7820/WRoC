@@ -99,4 +99,5 @@ export function drawHUD(ctx: CanvasRenderingContext2D) {
         ctx.textAlign = "left";
         ctx.fillText("Class: " + player.playerClass.className + " (" + player.playerClass.specialAbility + ")", barX, curY + 12);
     }
+    ctx.fillStyle = "white";
 }

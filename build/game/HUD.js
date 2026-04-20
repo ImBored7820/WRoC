@@ -67,5 +67,6 @@ export function drawHUD(ctx) {
         ctx.textAlign = "left";
         ctx.fillText("Class: " + player.playerClass.className + " (" + player.playerClass.specialAbility + ")", barX, curY + 12);
     }
+    ctx.fillStyle = "white";
 }
 //# sourceMappingURL=HUD.js.map
