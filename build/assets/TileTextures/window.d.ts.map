@@ -1,1 +1,1 @@
-{"version":3,"file":"window.d.ts","sourceRoot":"","sources":["../../../src/assets/TileTextures/window.ts"],"names":[],"mappings":"AA+BA,wBAAgB,UAAU,CAAC,GAAG,EAAE,wBAAwB,EAAE,CAAC,EAAE,MAAM,EAAE,CAAC,EAAE,MAAM,EAAE,SAAS,EAAE,MAAM,EAAE,UAAU,EAAE,MAAM,QAEpH"}
+{"version":3,"file":"window.d.ts","sourceRoot":"","sources":["../../../src/assets/TileTextures/window.ts"],"names":[],"mappings":"AAsDA,wBAAgB,UAAU,CAAC,MAAM,EAAE,EAAE,GAAG,GAAG,GAAG,GAAG,EAAE,GAAG,EAAE,wBAAwB,EAAE,CAAC,EAAE,MAAM,EAAE,CAAC,EAAE,MAAM,EAAE,SAAS,EAAE,MAAM,EAAE,UAAU,EAAE,MAAM,QAI5I"}

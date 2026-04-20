@@ -1,1 +1,1 @@
-{"version":3,"file":"whiteboard.d.ts","sourceRoot":"","sources":["../../../src/assets/TileTextures/whiteboard.ts"],"names":[],"mappings":"AA+BA,wBAAgB,cAAc,CAAC,GAAG,EAAE,wBAAwB,EAAE,CAAC,EAAE,MAAM,EAAE,CAAC,EAAE,MAAM,EAAE,SAAS,EAAE,MAAM,EAAE,UAAU,EAAE,MAAM,QAExH"}
+{"version":3,"file":"whiteboard.d.ts","sourceRoot":"","sources":["../../../src/assets/TileTextures/whiteboard.ts"],"names":[],"mappings":"AAuDA,wBAAgB,cAAc,CAAC,MAAM,EAAE,EAAE,GAAG,GAAG,GAAG,GAAG,EAAE,GAAG,EAAE,wBAAwB,EAAE,CAAC,EAAE,MAAM,EAAE,CAAC,EAAE,MAAM,EAAE,SAAS,EAAE,MAAM,EAAE,UAAU,EAAE,MAAM,QAIhJ"}

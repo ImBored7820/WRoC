@@ -1,2 +1,2 @@
-export declare function drawSmartBoard(ctx: CanvasRenderingContext2D, x: number, y: number, tileWidth: number, tileHeight: number): void;
+export declare function drawSmartBoard(degree: 90 | 180 | 360, ctx: CanvasRenderingContext2D, x: number, y: number, tileWidth: number, tileHeight: number): void;
 //# sourceMappingURL=smartboard.d.ts.map

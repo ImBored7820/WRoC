@@ -2,37 +2,37 @@ import { drawTile } from "./tileTemplate.js";
 const rows = 6;
 const cols = 6;
 const colors = {
-    0: "#3a3a3e",
-    1: "#3e3e42",
-    2: "#424247",
-    3: "#2e2e33",
-    4: "#353538"
+    0: "#8a6a42",
+    1: "#9a7652",
+    2: "#a88864",
+    3: "#6a4a2a",
+    4: "#7e5a38"
 };
 const pattern360 = [
-    1, 1, 3, 1, 1, 3,
-    1, 4, 3, 1, 2, 3,
+    2, 1, 2, 1, 2, 1,
+    1, 1, 4, 1, 1, 1,
     3, 3, 3, 3, 3, 3,
-    1, 2, 3, 1, 4, 3,
-    1, 1, 3, 1, 1, 3,
+    1, 2, 1, 1, 2, 1,
+    4, 1, 1, 4, 1, 1,
     3, 3, 3, 3, 3, 3,
 ];
 const pattern90 = [
+    3, 4, 1, 3, 1, 2,
+    3, 1, 2, 3, 1, 1,
+    3, 1, 1, 3, 4, 2,
+    3, 4, 1, 3, 1, 1,
+    3, 1, 2, 3, 1, 2,
     3, 1, 1, 3, 1, 1,
-    3, 1, 2, 3, 4, 1,
-    3, 3, 3, 3, 3, 3,
-    3, 1, 1, 3, 1, 1,
-    3, 1, 4, 3, 2, 1,
-    3, 3, 3, 3, 3, 3,
 ];
 const pattern180 = [
     3, 3, 3, 3, 3, 3,
-    3, 1, 1, 3, 1, 1,
-    3, 4, 1, 3, 2, 1,
+    1, 1, 4, 1, 1, 4,
+    1, 2, 1, 1, 2, 1,
     3, 3, 3, 3, 3, 3,
-    3, 2, 1, 3, 4, 1,
-    3, 1, 1, 3, 1, 1,
+    1, 1, 1, 4, 1, 1,
+    1, 2, 1, 2, 1, 2,
 ];
-export function drawFloor(degree, ctx, x, y, tileWidth, tileHeight) {
+export function drawOakFloor(degree, ctx, x, y, tileWidth, tileHeight) {
     if (degree == 90)
         drawTile(ctx, x, y, tileWidth, tileHeight, pattern90, colors, rows, cols);
     else if (degree == 180)
@@ -40,4 +40,4 @@ export function drawFloor(degree, ctx, x, y, tileWidth, tileHeight) {
     else if (degree == 360)
         drawTile(ctx, x, y, tileWidth, tileHeight, pattern360, colors, rows, cols);
 }
-//# sourceMappingURL=floor.js.map
+//# sourceMappingURL=oakfloor.js.map

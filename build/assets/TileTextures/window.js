@@ -6,17 +6,39 @@ const colors = {
     1: "#89b4d4",
     2: "#a8d0ee",
     3: "#78a0c2",
-    4: "#4a6a88"
+    4: "#4a6a88",
+    5: "#e8f2fa"
 };
-const pattern = [
+const pattern360 = [
     4, 4, 4, 4, 4, 4,
-    4, 1, 1, 1, 1, 4,
-    4, 1, 2, 2, 1, 4,
-    4, 1, 2, 3, 1, 4,
-    4, 1, 1, 1, 1, 4,
+    4, 5, 2, 2, 5, 4,
+    4, 2, 4, 4, 1, 4,
+    4, 4, 4, 4, 4, 4,
+    4, 5, 1, 2, 5, 4,
     4, 4, 4, 4, 4, 4,
 ];
-export function drawWindow(ctx, x, y, tileWidth, tileHeight) {
-    drawTile(ctx, x, y, tileWidth, tileHeight, pattern, colors, rows, cols);
+const pattern90 = [
+    4, 4, 4, 4, 4, 4,
+    4, 5, 4, 2, 5, 4,
+    4, 1, 4, 4, 2, 4,
+    4, 2, 4, 4, 2, 4,
+    4, 5, 4, 1, 5, 4,
+    4, 4, 4, 4, 4, 4,
+];
+const pattern180 = [
+    4, 4, 4, 4, 4, 4,
+    4, 5, 2, 1, 5, 4,
+    4, 4, 4, 4, 4, 4,
+    4, 1, 4, 4, 2, 4,
+    4, 5, 2, 2, 5, 4,
+    4, 4, 4, 4, 4, 4,
+];
+export function drawWindow(degree, ctx, x, y, tileWidth, tileHeight) {
+    if (degree == 90)
+        drawTile(ctx, x, y, tileWidth, tileHeight, pattern90, colors, rows, cols);
+    else if (degree == 180)
+        drawTile(ctx, x, y, tileWidth, tileHeight, pattern180, colors, rows, cols);
+    else if (degree == 360)
+        drawTile(ctx, x, y, tileWidth, tileHeight, pattern360, colors, rows, cols);
 }
 //# sourceMappingURL=window.js.map

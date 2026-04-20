@@ -19,15 +19,39 @@ const colors: { [key: number]: string } = {
     3: "#060608"
 };
 
-const pattern = [
+const pattern360 = [
+    // 0 turned 360 degrees (base: horizontal brick courses)
+    1, 1, 1, 0, 1, 1,
     0, 0, 0, 0, 0, 0,
-    0, 1, 1, 1, 1, 0,
-    0, 1, 2, 2, 1, 0,
-    0, 1, 2, 2, 1, 0,
-    0, 3, 3, 3, 3, 0,
+    1, 2, 1, 1, 1, 0,
     0, 0, 0, 0, 0, 0,
-];
+    1, 1, 0, 1, 2, 1,
+    0, 0, 0, 0, 0, 0,
+]
 
-export function drawWall(ctx: CanvasRenderingContext2D, x: number, y: number, tileWidth: number, tileHeight: number) {
-    drawTile(ctx, x, y, tileWidth, tileHeight, pattern, colors, rows, cols);
+const pattern90 = [
+    // 0 turned 90 degrees clockwise (vertical brick courses)
+    0, 1, 0, 1, 0, 1,
+    0, 1, 0, 2, 0, 1,
+    0, 0, 0, 1, 0, 1,
+    0, 1, 0, 1, 0, 0,
+    0, 2, 0, 1, 0, 1,
+    0, 1, 0, 0, 0, 1,
+]
+
+const pattern180 = [
+    // 0 turned 180 degrees
+    0, 0, 0, 0, 0, 0,
+    1, 2, 1, 0, 1, 1,
+    0, 0, 0, 0, 0, 0,
+    0, 1, 1, 1, 2, 1,
+    0, 0, 0, 0, 0, 0,
+    1, 1, 0, 1, 1, 1,
+]
+
+
+export function drawWall(degree: 90 | 180 | 360, ctx: CanvasRenderingContext2D, x: number, y: number, tileWidth: number, tileHeight: number) {
+    if(degree == 90) drawTile(ctx, x, y, tileWidth, tileHeight, pattern90, colors, rows, cols);
+    else if(degree == 180) drawTile(ctx, x, y, tileWidth, tileHeight, pattern180, colors, rows, cols);
+    else if(degree == 360) drawTile(ctx, x, y, tileWidth, tileHeight, pattern360, colors, rows, cols);
 }
