@@ -1,4 +1,4 @@
-import { checkCollision } from "./map.js";
+import { checkCollision } from "./room.js";
 export class Mob {
     mobX;
     mobY;

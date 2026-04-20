@@ -1,4 +1,4 @@
-import { drawMap } from "./game/map.js";
+import { drawMap } from "./game/room.js";
 import { Player } from "./game/player.js";
 import { Mob } from "./game/mob.js";
 import { drawHUD } from "./game/HUD.js";
@@ -53,6 +53,9 @@ function onStart() {
         if (!mob.isMobDead) {
             mob.draw(ctx);
             mob.mobMovement(player);
+        }
+        else {
+            player.increaseXP(50);
         }
         const playerRelativeX = player.x - mob.mobX;
         const playerRelativeY = player.y - mob.mobY;

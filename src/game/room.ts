@@ -27,7 +27,7 @@ const cols = 20; // How many columns of pixels there are
 // Converts x and y into row and col #s
 // If row color == 0 its a wall
 // Returns true if its a wall false if its not
-const map = [
+const room = [
     0.36, 2.18, 3.18, 0.36, 0.36, 0.36, 0.36, 0.36, 0.36, 0.36, 0.36, 0.36, 0.36, 0.36, 0.36, 0.36, 0.36, 0.36, 0.36, 0.36,
     0.9,  1.36, 6.18, 1.36, 1.36, 1.36, 1.36, 1.36, 1.36, 1.36, 1.36, 1.36, 1.36, 1.36, 1.36, 1.36, 1.36, 1.36, 1.36, 0.9,
     0.9,  1.36, 1.36, 1.36, 1.36, 1.36, 1.36, 1.36, 1.36, 1.36, 1.36, 1.36, 1.36, 1.36, 1.36, 1.36, 1.36, 1.36, 1.36, 0.9,
@@ -56,9 +56,9 @@ export function checkCollision(x: number, y: number): boolean {
     const col = Math.floor(x / pixelWidth);
     const convert = row * cols + col;
 
-    if(map[convert] === 0.9 || map[convert] === 0.18 || map[convert] === 0.36 ||
-        map[convert] === 3.9 || map[convert] === 3.18 || map[convert] === 3.36 ||
-        map[convert] === 6.9 || map[convert] === 6.18 || map[convert] === 6.36){
+    if(room[convert] === 0.9 || room[convert] === 0.18 || room[convert] === 0.36 ||
+        room[convert] === 3.9 || room[convert] === 3.18 || room[convert] === 3.36 ||
+        room[convert] === 6.9 || room[convert] === 6.18 || room[convert] === 6.36){
         isAWall = true;
     }
 
@@ -95,14 +95,14 @@ export function drawMap(mapCtx: CanvasRenderingContext2D | null) {
         6.18: (ctx, x, y, w, h) => drawDesk(180, ctx, x, y, w, h),
         6.36:  (ctx, x, y, w, h) => drawDesk(360, ctx, x, y, w, h)
     };
-    // So this for loop basically goes and makes the map from 1D -> 2D
+    // So this for loop basically goes and makes the room from 1D -> 2D
     for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
             const index = row * cols + col;
             const tileX = col * pixelWidth;
             const tileY = row * pixelHeight;
 
-            tileTextures[map[index]]?.(mapCtx, tileX, tileY, pixelWidth, pixelHeight);
+            tileTextures[room[index]]?.(mapCtx, tileX, tileY, pixelWidth, pixelHeight);
         }
     }
 }

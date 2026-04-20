@@ -7,7 +7,7 @@
  * Info: WRoC | mob.ts | WebStorm
  */
 import type {Player} from "./player.js";
-import {checkCollision} from "./map.js";
+import {checkCollision} from "./room.js";
 
 export class Mob {
     // Mob Class Constructor

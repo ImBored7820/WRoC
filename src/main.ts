@@ -10,7 +10,7 @@
 // Import the necessary methods from other ts files so that they can be referenced
 // You will notice that they are .js, and that is so that once build by TSC the
 // produced js file actually uses js files instead of trying to use ts ones
-import {drawMap} from "./game/map.js";
+import {drawMap} from "./game/room.js";
 import {Player} from "./game/player.js";
 import {Mob} from "./game/mob.js";
 import {drawHUD} from "./game/HUD.js";
@@ -24,7 +24,7 @@ import {drawClassSelect} from "./game/HUD.js";
 export const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 const ctx = canvas.getContext("2d");
 
-const map = document.createElement("canvas"); // map from map.ts
+const map = document.createElement("canvas"); // map from room.ts
 const mapCtx = map.getContext("2d"); // Gets drawn into memory for faster
 // loading times
 export const player = new Player(200, 200); // Creates a new player then enables checking
@@ -85,10 +85,13 @@ function onStart() {
         player.draw(ctx);
         ctx.fillStyle = "red";
 
-        if (!mob.isMobDead)
+        if(!mob.isMobDead)
         {
             mob.draw(ctx);
             mob.mobMovement(player);
+        }
+        else {
+            player.increaseXP(50);
         }
 
         const playerRelativeX = player.x - mob.mobX;

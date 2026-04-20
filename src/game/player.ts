@@ -6,7 +6,7 @@
  * and monitors for pressed keys to then move the player with the associated
  * keys (WASD & Arrow keys)
  */
-import {checkCollision} from "./map.js";
+import {checkCollision} from "./room.js";
 import {playerClasses} from "./playerClasses.js";
 import {Mob} from "./mob.js";
 
