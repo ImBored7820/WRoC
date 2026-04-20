@@ -1,8 +1,9 @@
-import type { Player } from "./player";
+import type { Player } from "./player.js";
 export declare class Mob {
     mobX: number;
     mobY: number;
     level: number;
+    mobSize: number;
     attackPower: number;
     mobHealth: number;
     constructor(mobX: number, mobY: number, level: number);

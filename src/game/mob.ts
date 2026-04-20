@@ -6,13 +6,15 @@
  * Description: Describe what the file does
  * Info: WRoC | mob.ts | WebStorm
  */
-import type {Player} from "./player";
+import type {Player} from "./player.js";
+import {checkCollision} from "./map.js";
 
 export class Mob {
     // Mob Class Constructor
     mobX: number;
     mobY: number;
     level: number;
+    mobSize: number;
 
     attackPower: number;
     mobHealth: number;
@@ -22,6 +24,7 @@ export class Mob {
         this.mobX = mobX;
         this.mobY = mobY;
         this.level = level;
+        this.mobSize = 25;
         // Level sets mob attack and defense value
         this.attackPower = level * 5;
         this.mobHealth = level * 10;
@@ -51,26 +54,49 @@ export class Mob {
         const playerRelativeY = player.y - this.mobY;
         const distance = Math.sqrt(playerRelativeX * playerRelativeX + playerRelativeY * playerRelativeY);
 
-        if(distance <= 108) {
-            isPlayerClose = true;
-            if (playerRelativeX > 0) this.mobX += 36;
-            if (playerRelativeX < 0) this.mobX -= 36;
-            if (playerRelativeY > 0) this.mobY += 36;
-            if (playerRelativeY < 0) this.mobY -= 36;
+        const moveX = (dx: number) => {
+            const newX = this.mobX + dx;
+            if(!checkCollision(newX, this.mobY) &&
+                !checkCollision(newX + this.mobSize, this.mobY) &&
+                !checkCollision(newX, this.mobY + this.mobSize) &&
+                !checkCollision(newX + this.mobSize, this.mobY + this.mobSize)) {
+
+                this.mobX = newX;
+            }
         }
 
-        // While mot close to player randomaly moves
+        const moveY = (dy: number) => {
+            const newY = this.mobY + dy;
+            if(!checkCollision(this.mobX, newY) &&
+            !checkCollision(this.mobX + this.mobSize, newY) &&
+            !checkCollision(this.mobX, newY + this.mobSize) &&
+            !checkCollision(this.mobX + this.mobSize, newY + this.mobSize)) {
+                this.mobY = newY;
+            }
+        }
+
+        if(distance <= 108) {
+            isPlayerClose = true;
+            if (playerRelativeX > 0) moveX(36);
+            if (playerRelativeX < 0) moveX(-36);
+            if (playerRelativeY > 0) moveY(36);
+            if (playerRelativeY < 0) moveY(-36);
+        }
+
+        // While mot close to player randomly moves
         if(!isPlayerClose) {
-            const randomX = Math.random() * 36;
-            const randomY = Math.random() * 36;
-            this.mobX += randomX;
-            this.mobY += randomY;
+            const randomX = (Math.floor(Math.random() * 3) - 1) * 36;
+            const randomY = (Math.floor(Math.random() * 3 )- 1) * 36;
+            if (randomX !== 0)
+                moveX(randomX);
+
+            if (randomY !== 0)
+                moveY(randomY);
         }
 
     }
     // Draw Mob Method
     draw(ctx: CanvasRenderingContext2D) {
-        //ctx.drawImage(this.sprite, this.x, this.y, this.playerSize, this.playerSize);
-        ctx.fillRect(this.mobX, this.mobY, 20, 20);
+        ctx.fillRect(this.mobX, this.mobY, this.mobSize, this.mobSize);
     }
 }
