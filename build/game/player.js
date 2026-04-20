@@ -89,11 +89,11 @@ export class Player {
         }
     }
     loseHP(mob) {
-        if (this.health > 0) {
-            this.health -= mob.attackPower;
+        if (this.health == 0) {
+            this.isPlayerDead = true;
         }
         else {
-            this.isPlayerDead = true;
+            this.health -= mob.attackPower;
         }
     }
     increaseXP(amount) {
