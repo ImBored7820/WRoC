@@ -8,10 +8,9 @@ const ctx = canvas.getContext("2d");
 const map = document.createElement("canvas");
 const mapCtx = map.getContext("2d");
 export const player = new Player(200, 200);
-export const mob = new Mob(368, 368, 2);
+export const mobArray = [];
 function onStart() {
     player.movementKeys();
-    mob.mobMovement(player);
     let chosenName = prompt("Enter your player name:");
     player.name = chosenName ? chosenName : "Player";
     function resize() {
@@ -50,15 +49,28 @@ function onStart() {
         player.update();
         player.draw(ctx);
         ctx.fillStyle = "red";
-        if (!mob.isMobDead) {
-            mob.draw(ctx);
-            mob.mobMovement(player);
+        let counter = 0;
+        for (let i = 0; i < mobArray.length; i++) {
+            if (mobArray[i].isMobDead == true) {
+                mobArray.pop();
+                counter++;
+            }
+            else {
+                mobArray[i].draw(ctx);
+                mobArray[i].mobMovement(player);
+            }
         }
-        else {
-            player.increaseXP(50);
+        while (counter != 0) {
+            let mobX = counter * 50;
+            let mobY = counter * 50;
+            mobArray.push(new Mob(mobX, mobY, 2));
+            counter--;
         }
-        const playerRelativeX = player.x - mob.mobX;
-        const playerRelativeY = player.y - mob.mobY;
+        if (counter == 0) {
+            mobArray.push(new Mob(368, 368, 2));
+        }
+        const playerRelativeX = player.x - mobArray[0].mobX;
+        const playerRelativeY = player.y - mobArray[0].mobY;
         const distance = Math.sqrt(playerRelativeX * playerRelativeX + playerRelativeY * playerRelativeY);
         const mobAttacksPlayer = (attackingMob) => {
             if (distance < 72)
@@ -67,7 +79,7 @@ function onStart() {
         const playerAttacksMob = (attackingPlayer) => {
             if (attackingPlayer["keys"]?.has("r")) {
                 if (distance < 72) {
-                    mob.loseHP(attackingPlayer);
+                    mobArray[0].loseHP(attackingPlayer);
                 }
             }
         };
@@ -80,7 +92,7 @@ function onStart() {
                 return;
             }
         }
-        mobAttacksPlayer(mob);
+        mobAttacksPlayer(mobArray[0]);
         playerAttacksMob(player);
         ctx.restore();
         drawHUD(ctx);
