@@ -50,14 +50,17 @@ function onStart() {
         player.draw(ctx);
         ctx.fillStyle = "red";
         let counter = 0;
+        let isFirstTime = false;
         for (let i = 0; i < mobArray.length; i++) {
             if (mobArray[i].isMobDead == true) {
                 mobArray.pop();
                 counter++;
             }
-            else {
+            else if (mobArray.length < 2 || isFirstTime == true) {
                 mobArray[i].draw(ctx);
                 mobArray[i].mobMovement(player);
+                console.log(mobArray[i].isMobDead);
+                isFirstTime = true;
             }
         }
         while (counter != 0) {
@@ -100,7 +103,6 @@ function onStart() {
             drawClassSelect(ctx);
         }
         numFrames += 1;
-        console.log(numFrames / ((performance.now() - start) / 1000));
         window.requestAnimationFrame(refreshRate);
     }
     window.requestAnimationFrame(refreshRate);

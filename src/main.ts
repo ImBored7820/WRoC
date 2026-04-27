@@ -85,13 +85,16 @@ function onStart() {
         player.draw(ctx);
         ctx.fillStyle = "red";
         let counter = 0;
+        let isFirstTime = false;
         for(let i = 0; i < mobArray.length; i++){
             if(mobArray[i].isMobDead == true){
                 mobArray.pop();
                 counter++;
-            } else {
+            } else if(mobArray.length < 2 || isFirstTime == true) {
                 mobArray[i].draw(ctx);
                 mobArray[i].mobMovement(player);
+                console.log(mobArray[i].isMobDead);
+                isFirstTime = true;
             }
         }
 
@@ -112,7 +115,8 @@ function onStart() {
 
         const mobAttacksPlayer = (attackingMob: Mob) => {
             if (distance < 72)
-                player.loseHP(attackingMob)
+                player.loseHP(attackingMob);
+
         }
 
         const playerAttacksMob = (attackingPlayer: Player) => {
@@ -147,7 +151,7 @@ function onStart() {
         }
 
         numFrames += 1;
-        console.log(numFrames / ((performance.now() - start) / 1000))
+        //console.log(numFrames / ((performance.now() - start) / 1000))
         //setTimeout(refreshRate);
         window.requestAnimationFrame(refreshRate); // Recursion so changes
                                                    // happen in real time
