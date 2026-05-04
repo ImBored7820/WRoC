@@ -1,4 +1,4 @@
-import { Player } from "./player.js";
+import { Player } from "../player";
 var ClassBaseStats;
 (function (ClassBaseStats) {
     ClassBaseStats[ClassBaseStats["Language"] = 112] = "Language";
@@ -31,28 +31,5 @@ export class playerClasses {
         }
         this.playerLevel = level;
     }
-    specialAttack(ability) {
-        let damage = 0;
-        let radius = 0;
-        let animation = drawAnimation();
-        if (ability == "Persuade") {
-            damage = 2;
-            radius = 5;
-        }
-        else if (ability == "Construct") {
-            damage = 3;
-            radius = 1;
-        }
-        else if (ability == "Bash") {
-            damage = 4;
-            radius = 2;
-        }
-        else {
-            damage = 1;
-            radius = 1;
-        }
-    }
-}
-export function drawAnimation() {
 }
 //# sourceMappingURL=playerClasses.js.map

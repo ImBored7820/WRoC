@@ -1,5 +1,6 @@
 import { drawMap } from "./game/room.js";
 import { Player } from "./game/player.js";
+import { playerColors } from "./game/player.js";
 import { Mob } from "./game/mob.js";
 import { drawHUD } from "./game/HUD.js";
 import { drawClassSelect } from "./game/HUD.js";
@@ -9,6 +10,7 @@ const map = document.createElement("canvas");
 const mapCtx = map.getContext("2d");
 export const player = new Player(200, 200);
 export const mobArray = [];
+let killCounter = 0;
 function onStart() {
     player.movementKeys();
     let chosenName = prompt("Enter your player name:");
@@ -22,19 +24,16 @@ function onStart() {
     }
     window.addEventListener("resize", resize);
     resize();
-    window.addEventListener("keydown", e => {
+    window.addEventListener("keydown", numPressed => {
         if (player.classSelect) {
-            if (e.key === "1")
+            if (numPressed.key === "1")
                 player.selectClass("Language");
-            else if (e.key === "2")
+            else if (numPressed.key === "2")
                 player.selectClass("STEM");
-            else if (e.key === "3")
+            else if (numPressed.key === "3")
                 player.selectClass("Sports");
-            else if (e.key === "4")
+            else if (numPressed.key === "4")
                 player.selectClass("None");
-        }
-        if (e.key === "e" || e.key === "E") {
-            player.increaseXP(1000);
         }
     });
     const start = performance.now();
@@ -49,28 +48,20 @@ function onStart() {
         player.update();
         player.draw(ctx);
         ctx.fillStyle = "red";
-        let counter = 0;
-        let isFirstTime = false;
         for (let i = 0; i < mobArray.length; i++) {
             if (mobArray[i].isMobDead == true) {
-                mobArray.pop();
-                counter++;
+                mobArray.splice(i, 1);
+                killCounter++;
+                player.increaseXP(100);
             }
-            else if (mobArray.length < 2 || isFirstTime == true) {
+            else {
                 mobArray[i].draw(ctx);
                 mobArray[i].mobMovement(player);
                 console.log(mobArray[i].isMobDead);
-                isFirstTime = true;
             }
         }
-        while (counter != 0) {
-            let mobX = counter * 50;
-            let mobY = counter * 50;
-            mobArray.push(new Mob(mobX, mobY, 2));
-            counter--;
-        }
-        if (counter == 0) {
-            mobArray.push(new Mob(368, 368, 2));
+        if (mobArray.length == 0) {
+            mobArray.push(new Mob(368, 368, 2, killCounter));
         }
         const playerRelativeX = player.x - mobArray[0].mobX;
         const playerRelativeY = player.y - mobArray[0].mobY;
@@ -98,6 +89,9 @@ function onStart() {
         mobAttacksPlayer(mobArray[0]);
         playerAttacksMob(player);
         ctx.restore();
+        ctx.fillStyle = "yellow";
+        ctx.font = "20px Arial";
+        ctx.fillText("KillCount: " + killCounter, 100, 30);
         drawHUD(ctx);
         if (player.classSelect) {
             drawClassSelect(ctx);

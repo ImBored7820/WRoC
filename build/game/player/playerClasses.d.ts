@@ -1,10 +1,8 @@
-import { Player } from "./player.js";
+import { Player } from "../player";
 export declare class playerClasses {
     className: string;
     specialAbility: string;
     playerLevel: number;
     constructor(userChoice: string, player: Player, level: number);
-    specialAttack(ability: string): void;
 }
-export declare function drawAnimation(): void;
 //# sourceMappingURL=playerClasses.d.ts.map

@@ -12,6 +12,7 @@
 // produced js file actually uses js files instead of trying to use ts ones
 import {drawMap} from "./game/room.js";
 import {Player} from "./game/player.js";
+import {playerColors} from "./game/player.js";
 import {Mob} from "./game/mob.js";
 import {drawHUD} from "./game/HUD.js";
 import {drawClassSelect} from "./game/HUD.js";
@@ -30,6 +31,7 @@ const mapCtx = map.getContext("2d"); // Gets drawn into memory for faster
 export const player = new Player(200, 200); // Creates a new player then enables checking
 //export const mob = new Mob(368,368, 2);
 export const mobArray: Mob[] = [];
+let killCounter = 0;
 
 function onStart() {
 
@@ -53,17 +55,12 @@ function onStart() {
     resize(); // This is for the first time, on load it "resizes" the canvas"
 
     // Listens for class selection keys (1-4) when the class select screen is showing
-    window.addEventListener("keydown", e => {
+    window.addEventListener("keydown", numPressed => {
         if(player.classSelect) {
-            if(e.key === "1") player.selectClass("Language");
-            else if(e.key === "2") player.selectClass("STEM");
-            else if(e.key === "3") player.selectClass("Sports");
-            else if(e.key === "4") player.selectClass("None");
-        }
-        // Temporary XP gain for testing
-        // TODO Remove once mobs are implemented
-        if(e.key === "e" || e.key === "E") {
-            player.increaseXP(1000);
+            if(numPressed.key === "1") player.selectClass("Language");
+            else if(numPressed.key === "2") player.selectClass("STEM");
+            else if(numPressed.key === "3") player.selectClass("Sports");
+            else if(numPressed.key === "4") player.selectClass("None");
         }
     });
 
@@ -84,29 +81,21 @@ function onStart() {
         player.update();
         player.draw(ctx);
         ctx.fillStyle = "red";
-        let counter = 0;
-        let isFirstTime = false;
         for(let i = 0; i < mobArray.length; i++){
             if(mobArray[i].isMobDead == true){
-                mobArray.pop();
-                counter++;
-            } else if(mobArray.length < 2 || isFirstTime == true) {
+                mobArray.splice(i, 1);
+                killCounter++;
+                player.increaseXP(100);
+            } else {
                 mobArray[i].draw(ctx);
                 mobArray[i].mobMovement(player);
                 console.log(mobArray[i].isMobDead);
-                isFirstTime = true;
             }
         }
 
-        while(counter != 0){
-            let mobX = counter * 50;
-            let mobY = counter * 50;
-            mobArray.push(new Mob(mobX,mobY,2));
-            counter--;
-        }
-
-        if(counter == 0){
-            mobArray.push(new Mob(368,368,2));
+        if(mobArray.length == 0){
+            mobArray.push(new Mob(368,368,2, killCounter));
+            //mobArray.push(new Mob(368,368,2, killCounter+1));
         }
 
         const playerRelativeX = player.x - mobArray[0].mobX;
@@ -116,20 +105,20 @@ function onStart() {
         const mobAttacksPlayer = (attackingMob: Mob) => {
             if (distance < 72)
                 player.loseHP(attackingMob);
-
         }
 
         const playerAttacksMob = (attackingPlayer: Player) => {
             if(attackingPlayer["keys"]?.has("r")) {
-                if(distance < 72)
+                if(distance < 72) // TODO: remove magic numbers
                 {
                     mobArray[0].loseHP(attackingPlayer);
+
                 }
             }
         }
 
         if (player.isPlayerDead) {
-            if(player.isPlayerDead) {
+            if (player.isPlayerDead) {
                 ctx.fillStyle = "white";
                 ctx.font = "30px Arial";
                 ctx.fillText("Game Over", canvas.width / 4 - 100, canvas.height / 4);
@@ -141,6 +130,9 @@ function onStart() {
         playerAttacksMob(player);
 
         ctx.restore();
+        ctx.fillStyle = "yellow";
+        ctx.font = "20px Arial";
+        ctx.fillText("KillCount: " + killCounter, 100, 30);
 
         // HUD is drawn in screen space (after restore) so it stays fixed on screen
         drawHUD(ctx);

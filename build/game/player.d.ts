@@ -1,5 +1,8 @@
 import { playerClasses } from "./playerClasses.js";
 import { Mob } from "./mob.js";
+export declare const playerColors: {
+    [key: number]: string;
+};
 export declare class Player {
     x: number;
     y: number;
@@ -21,7 +24,6 @@ export declare class Player {
     classChosen: boolean;
     playerClass: playerClasses | null;
     isPlayerDead: boolean;
-    private sprite;
     keys: Set<string>;
     constructor(x: number, y: number, level?: number, MBS?: number);
     movementKeys(): void;

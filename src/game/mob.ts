@@ -15,13 +15,14 @@ export class Mob {
     mobY: number;
     level: number;
     mobSize: number;
+    name: number;
 
     attackPower: number;
     mobHealth: number;
 
     isMobDead: boolean;
 
-    public constructor(mobX: number, mobY: number, level: number) {
+    public constructor(mobX: number, mobY: number, level: number, name: number) {
         // Mobs have an X and Y position, and a level
         this.mobX = mobX;
         this.mobY = mobY;
@@ -30,18 +31,18 @@ export class Mob {
         this.isMobDead = false;
         // Level sets mob attack and defense value
         this.attackPower = 1;
-        this.mobHealth = 10;
+        this.mobHealth = 100;
+        this.name = name;
     }
 
     // Mob Health Loss Method
     loseHP(player: Player) {
         // Mob loses health when player attacks
-        let playerAP = player.body * 5;
-        if (this.mobHealth > 0) {
-            this.mobHealth -= playerAP;
-        }
-        else {
+        let playerAP = player.body * 3;
+        this.mobHealth -= playerAP;
+        if (this.mobHealth <= 0) {
             this.isMobDead = true;
+            this.mobHealth = 0;
         }
     }
     // Mob Movement Method
@@ -79,16 +80,16 @@ export class Mob {
 
         if(distance <= 108) {
             isPlayerClose = true;
-            if (playerRelativeX > 0) moveX(9);
-            if (playerRelativeX < 0) moveX(-9);
-            if (playerRelativeY > 0) moveY(9);
-            if (playerRelativeY < 0) moveY(-9);
+            if (playerRelativeX > 0) moveX(4);
+            if (playerRelativeX < 0) moveX(-4);
+            if (playerRelativeY > 0) moveY(4);
+            if (playerRelativeY < 0) moveY(-4);
         }
 
         // While mot close to player randomly moves
         if(!isPlayerClose) {
-            const randomX = (Math.floor(Math.random() * 3) - 1) * 9;
-            const randomY = (Math.floor(Math.random() * 3 )- 1) * 9;
+            const randomX = (Math.floor(Math.random() * 3) - 1) * 5;
+            const randomY = (Math.floor(Math.random() * 3)- 1) * 5;
             if (randomX !== 0)
                 moveX(randomX);
 
@@ -100,5 +101,10 @@ export class Mob {
     // Draw Mob Method
     draw(ctx: CanvasRenderingContext2D) {
         ctx.fillRect(this.mobX, this.mobY, this.mobSize, this.mobSize);
+        ctx.font = "24px Arial";
+        ctx.fillStyle = "green";
+        ctx.fillText("Iter: " + this.name.toString() + " Health: " + this.mobHealth, this.mobX + this.mobSize / 2, this.mobY - 8);
+
+
     }
 }

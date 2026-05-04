@@ -9,11 +9,26 @@
 import {checkCollision} from "./room.js";
 import {playerClasses} from "./playerClasses.js";
 import {Mob} from "./mob.js";
+import {drawPlayer} from "../assets/drawPlayer.js";
 
 // These are all influenced by body, and to an extent mind & soul
 // They should not be changed, but a new player classes stats can enhance them
 
 
+const playerPattern = [
+    0,0,0,0,0,0,
+    1,1,1,1,1,1,
+    0,0,0,0,0,0,
+    1,1,1,1,1,1,
+    1,1,1,1,1,1,
+    1,1,1,1,1,1,
+
+];
+
+export const playerColors: { [key: number]: string } = {
+    0: "#080810",
+    1: "#101018",
+};
 
 export class Player {
     x: number;
@@ -44,7 +59,6 @@ export class Player {
 
     isPlayerDead: boolean;
 
-    private sprite: HTMLImageElement = new Image();
     public keys: Set<string> = new Set(); // Set of
 
     public constructor(x: number, y: number, level?: number, MBS?: number) {
@@ -64,8 +78,7 @@ export class Player {
         this.extraStatPoints = 0;
 
         // Preload sprite once instead of setting src every draw call
-        this.sprite.src = "./src/assets/sprite.png";
-        this.playerSize = 30;
+        this.playerSize = 34;
 
         // Player name, set later via prompt
         this.name = "Player";
@@ -75,7 +88,7 @@ export class Player {
         this.maxStamina = 100;
         this.health = this.maxHealth;
         this.stamina = this.maxStamina;
-        this.speed = 7;
+        this.speed = 6;
 
         // XP system xp needed doubles every level (100 -> 200 -> 400 -> 800)
         this.xp = 0;
@@ -125,26 +138,25 @@ export class Player {
 
         // Collision checks use 4 corners of the player hitbox offset by 15px
         const newX = this.x + dx;
-        if (!checkCollision(newX, this.y) && !checkCollision(newX + this.playerSize, this.y) &&
-            !checkCollision(newX, this.y + this.playerSize) &&
-            !checkCollision(newX + this.playerSize, this.y + this.playerSize)) {
+        if (!checkCollision(newX, this.y) && !checkCollision(newX + this.playerSize-1, this.y) &&
+            !checkCollision(newX, this.y + this.playerSize-1) &&
+            !checkCollision(newX + this.playerSize-1, this.y + this.playerSize-1)) {
             this.x = newX;
         }
 
         const newY = this.y + dy;
-        if (!checkCollision(this.x, newY) && !checkCollision(this.x + this.playerSize, newY) &&
-            !checkCollision(this.x, newY + this.playerSize) &&
-            !checkCollision(this.x + this.playerSize, newY + this.playerSize)) {
+        if (!checkCollision(this.x, newY) && !checkCollision(this.x + this.playerSize-1, newY) &&
+            !checkCollision(this.x, newY + this.playerSize-1) &&
+            !checkCollision(this.x + this.playerSize-1, newY + this.playerSize-1)) {
             this.y = newY;
         }
     }
 
    loseHP(mob: Mob){
-        if(this.health == 0) {
+        this.health -= mob.attackPower;
+        if(this.health <= 0) {
             this.isPlayerDead = true;
-        }
-        else {
-            this.health -= mob.attackPower;
+            this.health = 0;
         }
    }
 
@@ -172,7 +184,10 @@ export class Player {
 
     // Draws the sprite onto the canvas
     draw(ctx: CanvasRenderingContext2D) {
-        //ctx.drawImage(this.sprite, this.x, this.y, this.playerSize, this.playerSize);
-        ctx.fillRect(this.x, this.y, this.playerSize, this.playerSize);
+        drawPlayer(ctx, this.x, this.y, this.playerSize, this.playerSize, playerPattern, playerColors);
+        //ctx.fillRect(this.x, this.y, this.playerSize, this.playerSize);
+        ctx.font = "24px Arial";
+        ctx.fillStyle = "white";
+        ctx.fillText("Name: " + this.name.toString() + " Health: " + this.health, this.x + this.playerSize / 2, this.y - 8);
     }
 }

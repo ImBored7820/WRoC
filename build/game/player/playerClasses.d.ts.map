@@ -1,0 +1,1 @@
+{"version":3,"file":"playerClasses.d.ts","sourceRoot":"","sources":["../../../src/game/player/playerClasses.ts"],"names":[],"mappings":"AASA,OAAO,EAAC,MAAM,EAAC,MAAM,WAAW,CAAA;AAQhC,qBAAa,aAAa;IAEtB,SAAS,EAAE,MAAM,CAAC;IAClB,cAAc,EAAE,MAAM,CAAC;IACvB,WAAW,EAAE,MAAM,CAAC;gBACR,UAAU,EAAE,MAAM,EAAE,MAAM,EAAE,MAAM,EAAE,KAAK,EAAE,MAAM;CAqBhE"}
