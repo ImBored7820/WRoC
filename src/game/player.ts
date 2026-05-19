@@ -6,7 +6,7 @@
  * and monitors for pressed keys to then move the player with the associated
  * keys (WASD & Arrow keys)
  */
-import {checkCollision} from "./room.js";
+import {checkCollision} from "./collisionlogic.js";
 import {playerClasses} from "./playerClasses.js";
 import {Mob} from "./mob.js";
 import {drawPlayer} from "../assets/drawPlayer.js";
@@ -151,6 +151,7 @@ export class Player {
             this.y = newY;
         }
     }
+
 
    loseHP(mob: Mob){
         this.health -= mob.attackPower;

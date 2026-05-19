@@ -1,4 +1,4 @@
-import { drawMap } from "./game/room.js";
+import { drawTrisect } from "./game/map/drawTrisect.js";
 import { Player } from "./game/player.js";
 import { playerColors } from "./game/player.js";
 import { Mob } from "./game/mob.js";
@@ -18,9 +18,9 @@ function onStart() {
     function resize() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        map.width = canvas.width;
+        map.width = 2160 * 3;
         map.height = canvas.height;
-        drawMap(mapCtx);
+        drawTrisect(mapCtx, 0, 0);
     }
     window.addEventListener("resize", resize);
     resize();
@@ -36,7 +36,6 @@ function onStart() {
                 player.selectClass("None");
         }
     });
-    const start = performance.now();
     let numFrames = 0;
     function refreshRate() {
         const camX = (canvas.width / 2) - player.x;

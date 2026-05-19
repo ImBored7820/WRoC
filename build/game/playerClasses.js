@@ -34,7 +34,6 @@ export class playerClasses {
     specialAttack(ability) {
         let damage = 0;
         let radius = 0;
-        let animation = drawAnimation();
         if (ability == "Persuade") {
             damage = 2;
             radius = 5;
@@ -52,7 +51,5 @@ export class playerClasses {
             radius = 1;
         }
     }
-}
-export function drawAnimation() {
 }
 //# sourceMappingURL=playerClasses.js.map

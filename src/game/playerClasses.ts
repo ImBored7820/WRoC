@@ -43,7 +43,7 @@ export class playerClasses {
     specialAttack(ability: string) {
         let damage = 0;
         let radius = 0;
-        let animation = drawAnimation(radius, ability);
+        //let animation = drawAnimation(radius, ability);
 
         if(ability == "Persuade") {
             damage = 2;
@@ -62,6 +62,6 @@ export class playerClasses {
 
 }
 
-export function drawAnimation(radius: number, ability: string) {
+/*export function drawAnimation(radius: number, ability: string) {
 
-}
+}*/

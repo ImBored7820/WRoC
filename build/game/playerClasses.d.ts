@@ -6,5 +6,4 @@ export declare class playerClasses {
     constructor(userChoice: string, player: Player, level: number);
     specialAttack(ability: string): void;
 }
-export declare function drawAnimation(): void;
 //# sourceMappingURL=playerClasses.d.ts.map

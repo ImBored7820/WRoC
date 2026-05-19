@@ -1,4 +1,4 @@
-import { checkCollision } from "./room.js";
+import { checkCollision } from "./collisionlogic.js";
 import { playerClasses } from "./playerClasses.js";
 import { Mob } from "./mob.js";
 import { drawPlayer } from "../assets/drawPlayer.js";

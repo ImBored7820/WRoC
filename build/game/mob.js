@@ -1,4 +1,4 @@
-import { checkCollision } from "./room.js";
+import { checkCollision } from "./collisionlogic.js";
 export class Mob {
     mobX;
     mobY;

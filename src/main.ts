@@ -10,7 +10,7 @@
 // Import the necessary methods from other ts files so that they can be referenced
 // You will notice that they are .js, and that is so that once build by TSC the
 // produced js file actually uses js files instead of trying to use ts ones
-import {drawMap} from "./game/room.js";
+import {drawTrisect} from "./game/map/drawTrisect.js";
 import {Player} from "./game/player.js";
 import {playerColors} from "./game/player.js";
 import {Mob} from "./game/mob.js";
@@ -25,7 +25,7 @@ import {drawClassSelect} from "./game/HUD.js";
 export const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 const ctx = canvas.getContext("2d");
 
-const map = document.createElement("canvas"); // map from room.ts
+const map = document.createElement("canvas"); // map from patterns.ts
 const mapCtx = map.getContext("2d"); // Gets drawn into memory for faster
 // loading times
 export const player = new Player(200, 200); // Creates a new player then enables checking
@@ -46,9 +46,10 @@ function onStart() {
     function resize() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        map.width = canvas.width;
+        map.width = 2160*3;
         map.height = canvas.height;
-        drawMap(mapCtx);
+        drawTrisect(mapCtx, 0,0);
+        //drawTrisect(mapCtx, 720,0);
     }
 
     window.addEventListener("resize", resize); // Watches for resizing of browser
@@ -64,7 +65,7 @@ function onStart() {
         }
     });
 
-    const start = performance.now();
+    //const start = performance.now();
     let numFrames = 0;
     function refreshRate(){
         // Logic for the "camera", moves the map instead of the player, creating
