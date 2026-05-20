@@ -1,4 +1,4 @@
-# Woodinville HS: Realm of Criscone (WRoC)
+# WRoC
 
 ## Game Overview ##
 

@@ -19,39 +19,45 @@ const colors: { [key: number]: string } = {
     3: "#060608"
 };
 
-const pattern360 = [
-    // 0 turned 360 degrees (base: horizontal brick courses)
-    1, 1, 1, 0, 1, 1,
-    0, 0, 0, 0, 0, 0,
-    1, 2, 1, 1, 1, 0,
-    0, 0, 0, 0, 0, 0,
-    1, 1, 0, 1, 2, 1,
-    0, 0, 0, 0, 0, 0,
+const pattern0 = [
+    1,1,1,1,1,1,
+    2,2,2,2,2,2,
+    3,3,0,0,3,3,
+    3,3,0,0,3,3,
+    2,2,2,2,2,2,
+    1,1,1,1,1,1,
 ]
 
 const pattern90 = [
-    // 0 turned 90 degrees clockwise (vertical brick courses)
-    0, 1, 0, 1, 0, 1,
-    0, 1, 0, 2, 0, 1,
-    0, 0, 0, 1, 0, 1,
-    0, 1, 0, 1, 0, 0,
-    0, 2, 0, 1, 0, 1,
-    0, 1, 0, 0, 0, 1,
+    1,1,1,1,0,0,
+    2,2,2,2,2,2,
+    3,1,0,0,3,3,
+    3,3,0,0,3,3,
+    2,2,2,2,2,2,
+    1,1,1,1,1,1,
 ]
 
 const pattern180 = [
-    // 0 turned 180 degrees
-    0, 0, 0, 0, 0, 0,
-    1, 2, 1, 0, 1, 1,
-    0, 0, 0, 0, 0, 0,
-    0, 1, 1, 1, 2, 1,
-    0, 0, 0, 0, 0, 0,
-    1, 1, 0, 1, 1, 1,
+    1,1,1,1,1,0,
+    2,2,2,2,2,2,
+    3,3,0,0,3,3,
+    3,3,0,0,3,3,
+    2,2,2,2,2,2,
+    1,1,1,1,1,1,
 ]
 
+const pattern270 = [
+    1,1,1,1,1,1,
+    2,1,3,2,2,2,
+    3,3,0,0,3,3,
+    3,3,0,0,3,3,
+    2,2,2,2,2,2,
+    1,1,1,1,1,1,
+]
 
-export function drawWall(degree: 90 | 180 | 360, ctx: CanvasRenderingContext2D, x: number, y: number, tileWidth: number, tileHeight: number) {
-    if(degree == 90) drawTile(ctx, x, y, tileWidth, tileHeight, pattern90, colors, rows, cols);
+export function drawWall(degree: 0 | 90 | 180 | 270, ctx: CanvasRenderingContext2D, x: number, y: number, tileWidth: number, tileHeight: number) {
+    if(degree == 0) drawTile(ctx, x, y, tileWidth, tileHeight, pattern0, colors, rows, cols);
+    else if(degree == 90) drawTile(ctx, x, y, tileWidth, tileHeight, pattern90, colors, rows, cols);
     else if(degree == 180) drawTile(ctx, x, y, tileWidth, tileHeight, pattern180, colors, rows, cols);
-    else if(degree == 360) drawTile(ctx, x, y, tileWidth, tileHeight, pattern360, colors, rows, cols);
+    else if(degree == 270) drawTile(ctx, x, y, tileWidth, tileHeight, pattern270, colors, rows, cols);
 }

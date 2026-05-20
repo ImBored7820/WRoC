@@ -11,9 +11,10 @@ const pixelHeight = 36;
 const rows = 20;
 const cols = 20;
 export const colors = {
+    0: (ctx, x, y, w, h) => drawWall(0, ctx, x, y, w, h),
     0.9: (ctx, x, y, w, h) => drawWall(90, ctx, x, y, w, h),
     0.18: (ctx, x, y, w, h) => drawWall(180, ctx, x, y, w, h),
-    0.36: (ctx, x, y, w, h) => drawWall(360, ctx, x, y, w, h),
+    0.27: (ctx, x, y, w, h) => drawWall(270, ctx, x, y, w, h),
     1.9: (ctx, x, y, w, h) => drawFloor(90, ctx, x, y, w, h),
     1.18: (ctx, x, y, w, h) => drawFloor(180, ctx, x, y, w, h),
     1.36: (ctx, x, y, w, h) => drawFloor(360, ctx, x, y, w, h),
@@ -33,14 +34,33 @@ export const colors = {
     6.18: (ctx, x, y, w, h) => drawDesk(180, ctx, x, y, w, h),
     6.36: (ctx, x, y, w, h) => drawDesk(360, ctx, x, y, w, h)
 };
+const solidTiles = new Set([0, 0.9, 0.18, 0.27, 3.9, 3.18, 3.36, 6.9, 6.18, 6.36]);
+export function checkRectCollision(x, y, w, h) {
+    let leftMostTile = Math.floor(x / pixelWidth);
+    let rightMostTile = Math.floor((x + w - 1) / pixelWidth);
+    let topMostTile = Math.floor(y / pixelHeight);
+    let bottomMostTile = Math.floor((y + h - 1) / pixelHeight);
+    if (topMostTile < 0 || bottomMostTile >= rows || leftMostTile < 0 || rightMostTile >= cols) {
+        return true;
+    }
+    for (let row = topMostTile; row <= bottomMostTile; row++) {
+        for (let col = leftMostTile; col <= rightMostTile; col++) {
+            let tileIndex = row * cols + col;
+            if (solidTiles.has(defaultPattern[tileIndex])) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
 export function checkCollision(x, y) {
     let isAWall = false;
     const row = Math.floor(y / pixelHeight);
     const col = Math.floor(x / pixelWidth);
     const convert = row * cols + col;
-    if (defaultPattern[convert] === 0.9 || defaultPattern[convert] === 0.18 || defaultPattern[convert] === 0.36 ||
-        defaultPattern[convert] === 3.9 || defaultPattern[convert] === 3.18 || defaultPattern[convert] === 3.36 ||
-        defaultPattern[convert] === 6.9 || defaultPattern[convert] === 6.18 || defaultPattern[convert] === 6.36) {
+    if (row < 0 || row >= rows || col < 0 || col >= cols)
+        return true;
+    if (solidTiles.has(defaultPattern[convert])) {
         isAWall = true;
     }
     return isAWall;

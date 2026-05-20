@@ -1,4 +1,4 @@
-import { checkCollision } from "./collisionlogic.js";
+import { checkRectCollision } from "./collisionlogic.js";
 export class Mob {
     mobX;
     mobY;
@@ -6,6 +6,8 @@ export class Mob {
     mobSize;
     name;
     attackPower;
+    lastAttackTime;
+    attackCooldown;
     mobHealth;
     isMobDead;
     constructor(mobX, mobY, level, name) {
@@ -15,6 +17,8 @@ export class Mob {
         this.mobSize = 25;
         this.isMobDead = false;
         this.attackPower = 1;
+        this.lastAttackTime = 0;
+        this.attackCooldown = 1000;
         this.mobHealth = 100;
         this.name = name;
     }
@@ -33,19 +37,13 @@ export class Mob {
         const distance = Math.sqrt(playerRelativeX * playerRelativeX + playerRelativeY * playerRelativeY);
         const moveX = (dx) => {
             const newX = this.mobX + dx;
-            if (!checkCollision(newX, this.mobY) &&
-                !checkCollision(newX + this.mobSize, this.mobY) &&
-                !checkCollision(newX, this.mobY + this.mobSize) &&
-                !checkCollision(newX + this.mobSize, this.mobY + this.mobSize)) {
+            if (!checkRectCollision(newX, this.mobY, this.mobSize, this.mobSize)) {
                 this.mobX = newX;
             }
         };
         const moveY = (dy) => {
             const newY = this.mobY + dy;
-            if (!checkCollision(this.mobX, newY) &&
-                !checkCollision(this.mobX + this.mobSize, newY) &&
-                !checkCollision(this.mobX, newY + this.mobSize) &&
-                !checkCollision(this.mobX + this.mobSize, newY + this.mobSize)) {
+            if (!checkRectCollision(this.mobX, newY, this.mobSize, this.mobSize)) {
                 this.mobY = newY;
             }
         };
@@ -61,8 +59,8 @@ export class Mob {
                 moveY(-4);
         }
         if (!isPlayerClose) {
-            const randomX = (Math.floor(Math.random() * 3) - 1) * 5;
-            const randomY = (Math.floor(Math.random() * 3) - 1) * 5;
+            const randomX = (Math.floor(Math.random() * 3) - 1) * 2;
+            const randomY = (Math.floor(Math.random() * 3) - 1) * 2;
             if (randomX !== 0)
                 moveX(randomX);
             if (randomY !== 0)

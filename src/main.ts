@@ -17,11 +17,6 @@ import {Mob} from "./game/mob.js";
 import {drawHUD} from "./game/HUD.js";
 import {drawClassSelect} from "./game/HUD.js";
 
-/**
- * This is the function that basically does everything, it loads the sprites,
- * the map sets canvas attributes etc.
- */
-
 export const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 const ctx = canvas.getContext("2d");
 
@@ -32,6 +27,10 @@ export const player = new Player(200, 200); // Creates a new player then enables
 //export const mob = new Mob(368,368, 2);
 export const mobArray: Mob[] = [];
 let killCounter = 0;
+
+function rectangularOverlapChecker (ax: number, ay: number, aw: number, ah: number, bx: number, by: number, bw: number, bh: number) {
+    return ax < bx + bw && ax + aw > bx && ay < by + bh && ay + ah > by;
+}
 
 function onStart() {
 
@@ -47,9 +46,9 @@ function onStart() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         map.width = 2160*3;
-        map.height = canvas.height;
+        map.height = 2160*3;
         drawTrisect(mapCtx, 0,0);
-        //drawTrisect(mapCtx, 720,0);
+        drawTrisect(mapCtx, 720*3-72,720);
     }
 
     window.addEventListener("resize", resize); // Watches for resizing of browser
@@ -78,11 +77,11 @@ function onStart() {
         ctx.translate(camX, camY); // Implements the previous map moving logic
                                    // into the canvas
         ctx.drawImage(map, 0, 0);
-
-        player.update();
+                player.update();
         player.draw(ctx);
         ctx.fillStyle = "red";
-        for(let i = 0; i < mobArray.length; i++){
+
+        for(let i = mobArray.length - 1; i >= 0; i--){
             if(mobArray[i].isMobDead == true){
                 mobArray.splice(i, 1);
                 killCounter++;
@@ -90,7 +89,18 @@ function onStart() {
             } else {
                 mobArray[i].draw(ctx);
                 mobArray[i].mobMovement(player);
-                console.log(mobArray[i].isMobDead);
+                const isTouching = rectangularOverlapChecker(player.x, player.y, player.playerSize, player.playerSize, mobArray[i].mobX, mobArray[i].mobY, mobArray[i].mobSize, mobArray[i].mobSize)
+                if(isTouching) {
+                    const timeNow = performance.now();
+                    if (timeNow - mobArray[i].lastAttackTime >= mobArray[i].attackCooldown) {
+                        player.loseHP(mobArray[i]);
+                        mobArray[i].lastAttackTime = timeNow;
+                    }
+                }
+
+                if(player.keys.has("r") && isTouching) {
+                    mobArray[i].loseHP(player);
+                }
             }
         }
 
@@ -98,37 +108,13 @@ function onStart() {
             mobArray.push(new Mob(368,368,2, killCounter));
             //mobArray.push(new Mob(368,368,2, killCounter+1));
         }
-
-        const playerRelativeX = player.x - mobArray[0].mobX;
-        const playerRelativeY = player.y - mobArray[0].mobY;
-        const distance = Math.sqrt(playerRelativeX * playerRelativeX + playerRelativeY * playerRelativeY);
-
-        const mobAttacksPlayer = (attackingMob: Mob) => {
-            if (distance < 72)
-                player.loseHP(attackingMob);
-        }
-
-        const playerAttacksMob = (attackingPlayer: Player) => {
-            if(attackingPlayer["keys"]?.has("r")) {
-                if(distance < 72) // TODO: remove magic numbers
-                {
-                    mobArray[0].loseHP(attackingPlayer);
-
-                }
-            }
-        }
-
         if (player.isPlayerDead) {
-            if (player.isPlayerDead) {
-                ctx.fillStyle = "white";
-                ctx.font = "30px Arial";
-                ctx.fillText("Game Over", canvas.width / 4 - 100, canvas.height / 4);
-                ctx.fillText("Press Ctrl R to restart", canvas.width / 4 - 100, canvas.height / 4 + 50);
-                return;
-            }
+            ctx.fillStyle = "white";
+            ctx.font = "30px Arial";
+            ctx.fillText("Game Over", canvas.width / 4 - 100, canvas.height / 4);
+            ctx.fillText("Press Ctrl R to restart", canvas.width / 4 - 100, canvas.height / 4 + 50);
         }
-        mobAttacksPlayer(mobArray[0]);
-        playerAttacksMob(player);
+
 
         ctx.restore();
         ctx.fillStyle = "yellow";

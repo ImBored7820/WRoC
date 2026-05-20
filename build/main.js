@@ -11,6 +11,9 @@ const mapCtx = map.getContext("2d");
 export const player = new Player(200, 200);
 export const mobArray = [];
 let killCounter = 0;
+function rectangularOverlapChecker(ax, ay, aw, ah, bx, by, bw, bh) {
+    return ax < bx + bw && ax + aw > bx && ay < by + bh && ay + ah > by;
+}
 function onStart() {
     player.movementKeys();
     let chosenName = prompt("Enter your player name:");
@@ -19,8 +22,9 @@ function onStart() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         map.width = 2160 * 3;
-        map.height = canvas.height;
+        map.height = 2160 * 3;
         drawTrisect(mapCtx, 0, 0);
+        drawTrisect(mapCtx, 720 * 3 - 72, 720);
     }
     window.addEventListener("resize", resize);
     resize();
@@ -47,7 +51,7 @@ function onStart() {
         player.update();
         player.draw(ctx);
         ctx.fillStyle = "red";
-        for (let i = 0; i < mobArray.length; i++) {
+        for (let i = mobArray.length - 1; i >= 0; i--) {
             if (mobArray[i].isMobDead == true) {
                 mobArray.splice(i, 1);
                 killCounter++;
@@ -56,37 +60,28 @@ function onStart() {
             else {
                 mobArray[i].draw(ctx);
                 mobArray[i].mobMovement(player);
-                console.log(mobArray[i].isMobDead);
+                const isTouching = rectangularOverlapChecker(player.x, player.y, player.playerSize, player.playerSize, mobArray[i].mobX, mobArray[i].mobY, mobArray[i].mobSize, mobArray[i].mobSize);
+                if (isTouching) {
+                    const timeNow = performance.now();
+                    if (timeNow - mobArray[i].lastAttackTime >= mobArray[i].attackCooldown) {
+                        player.loseHP(mobArray[i]);
+                        mobArray[i].lastAttackTime = timeNow;
+                    }
+                }
+                if (player.keys.has("r") && isTouching) {
+                    mobArray[i].loseHP(player);
+                }
             }
         }
         if (mobArray.length == 0) {
             mobArray.push(new Mob(368, 368, 2, killCounter));
         }
-        const playerRelativeX = player.x - mobArray[0].mobX;
-        const playerRelativeY = player.y - mobArray[0].mobY;
-        const distance = Math.sqrt(playerRelativeX * playerRelativeX + playerRelativeY * playerRelativeY);
-        const mobAttacksPlayer = (attackingMob) => {
-            if (distance < 72)
-                player.loseHP(attackingMob);
-        };
-        const playerAttacksMob = (attackingPlayer) => {
-            if (attackingPlayer["keys"]?.has("r")) {
-                if (distance < 72) {
-                    mobArray[0].loseHP(attackingPlayer);
-                }
-            }
-        };
         if (player.isPlayerDead) {
-            if (player.isPlayerDead) {
-                ctx.fillStyle = "white";
-                ctx.font = "30px Arial";
-                ctx.fillText("Game Over", canvas.width / 4 - 100, canvas.height / 4);
-                ctx.fillText("Press Ctrl R to restart", canvas.width / 4 - 100, canvas.height / 4 + 50);
-                return;
-            }
+            ctx.fillStyle = "white";
+            ctx.font = "30px Arial";
+            ctx.fillText("Game Over", canvas.width / 4 - 100, canvas.height / 4);
+            ctx.fillText("Press Ctrl R to restart", canvas.width / 4 - 100, canvas.height / 4 + 50);
         }
-        mobAttacksPlayer(mobArray[0]);
-        playerAttacksMob(player);
         ctx.restore();
         ctx.fillStyle = "yellow";
         ctx.font = "20px Arial";

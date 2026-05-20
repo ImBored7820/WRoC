@@ -7,7 +7,7 @@
  * Info: WRoC | mob.ts | WebStorm
  */
 import type {Player} from "./player.js";
-import {checkCollision} from "./collisionlogic.js";
+import {checkRectCollision} from "./collisionlogic.js";
 
 export class Mob {
     // Mob Class Constructor
@@ -18,6 +18,8 @@ export class Mob {
     name: number;
 
     attackPower: number;
+    lastAttackTime: number;
+    attackCooldown: number;
     mobHealth: number;
 
     isMobDead: boolean;
@@ -31,8 +33,12 @@ export class Mob {
         this.isMobDead = false;
         // Level sets mob attack and defense value
         this.attackPower = 1;
+        this.lastAttackTime = 0;
+        this.attackCooldown = 1000;
+
         this.mobHealth = 100;
         this.name = name;
+
     }
 
     // Mob Health Loss Method
@@ -52,6 +58,7 @@ export class Mob {
 
         // Check if player is within 4 tiles
         // d = sqrt[(x1-x2)^2+(y1-y2)^2]
+
         let isPlayerClose: boolean = false;
         const playerRelativeX = player.x - this.mobX;
         const playerRelativeY = player.y - this.mobY;
@@ -59,21 +66,14 @@ export class Mob {
 
         const moveX = (dx: number) => {
             const newX = this.mobX + dx;
-            if(!checkCollision(newX, this.mobY) &&
-                !checkCollision(newX + this.mobSize, this.mobY) &&
-                !checkCollision(newX, this.mobY + this.mobSize) &&
-                !checkCollision(newX + this.mobSize, this.mobY + this.mobSize)) {
-
+            if(!checkRectCollision(newX, this.mobY, this.mobSize, this.mobSize)) {
                 this.mobX = newX;
             }
         }
 
         const moveY = (dy: number) => {
             const newY = this.mobY + dy;
-            if(!checkCollision(this.mobX, newY) &&
-            !checkCollision(this.mobX + this.mobSize, newY) &&
-            !checkCollision(this.mobX, newY + this.mobSize) &&
-            !checkCollision(this.mobX + this.mobSize, newY + this.mobSize)) {
+            if(!checkRectCollision(this.mobX, newY, this.mobSize, this.mobSize)) {
                 this.mobY = newY;
             }
         }
@@ -88,8 +88,8 @@ export class Mob {
 
         // While mot close to player randomly moves
         if(!isPlayerClose) {
-            const randomX = (Math.floor(Math.random() * 3) - 1) * 5;
-            const randomY = (Math.floor(Math.random() * 3)- 1) * 5;
+            const randomX = (Math.floor(Math.random() * 3) - 1) * 2;
+            const randomY = (Math.floor(Math.random() * 3)- 1) * 2;
             if (randomX !== 0)
                 moveX(randomX);
 
