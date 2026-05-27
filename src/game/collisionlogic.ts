@@ -7,7 +7,7 @@
  * Info: WRoC | collisionlogic.ts | WebStorm
  */
 
-import {defaultPattern} from "./map/drawTrisect.js";
+//import {defaultPattern} from "./map/drawTrisect.js";
 import {drawWall} from "../assets/TileTextures/wall.js";
 import {drawFloor} from "../assets/TileTextures/floor.js";
 import {drawDoor} from "../assets/TileTextures/door.js";
@@ -15,10 +15,10 @@ import {drawWindow} from "../assets/TileTextures/window.js";
 import {drawSmartBoard} from "../assets/TileTextures/smartboard.js";
 import {drawWhiteBoard} from "../assets/TileTextures/whiteboard.js";
 import {drawDesk} from "../assets/TileTextures/desk.js";
+import {roomRegistry} from "./map/roomRegistry.js";
+
 const pixelWidth = 36;
 const pixelHeight = 36;
-const rows = 20;
-const cols = 20;
 
 export const colors: { [key: number]: (ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number) => void } = {
     0: (ctx, x, y, w, h) => drawWall(0, ctx, x, y, w, h),
@@ -53,7 +53,41 @@ export const colors: { [key: number]: (ctx: CanvasRenderingContext2D, x: number,
 
 const solidTiles = new Set<number>([0, 0.9, 0.18, 0.27, 3.9, 3.18, 3.36, 6.9, 6.18, 6.36]);
 
-export function checkRectCollision(x: number, y: number, w: number, h: number): boolean {
+export function isPointSolid(x: number, y: number): boolean {
+    let inARoom = false;
+    for(const room of roomRegistry) {
+        const localX = x - room.roomX;
+        const localY = y - room.roomY;
+
+        if(localX < 0 || localY < 0 ) continue;
+
+        const col = Math.floor(localX/pixelWidth);
+        const row = Math.floor(localY/pixelHeight);
+
+        if (col >= room.cols || row >= room.rows) continue;
+
+        inARoom = true;
+
+        const tileValue = room.patterns[row * room.cols + col];
+
+        if (!solidTiles.has(tileValue)) return false;
+
+    }
+    return true;
+}
+
+export function checkRectCollision(x: number, y: number, w: number, h: number
+): boolean {
+    return (
+        isPointSolid(x,         y        ) ||  // top-left
+        isPointSolid(x + w - 1, y        ) ||  // top-right
+        isPointSolid(x,         y + h - 1) ||  // bottom-left
+        isPointSolid(x + w - 1, y + h - 1)     // bottom-right
+    );
+}
+
+
+/*export function checkRectCollision(x: number, y: number, w: number, h: number): boolean {
     let leftMostTile = Math.floor(x/pixelWidth);
     let rightMostTile = Math.floor((x+w-1)/pixelWidth);
     let topMostTile = Math.floor(y/pixelHeight);
@@ -74,7 +108,6 @@ export function checkRectCollision(x: number, y: number, w: number, h: number): 
 
     return false;
 }
-
 export function checkCollision(x: number, y: number): boolean {
     // Convert X & Y into Rows & Cols
     let isAWall = false;
@@ -87,4 +120,4 @@ export function checkCollision(x: number, y: number): boolean {
     }
 
     return isAWall;
-}
+}*/

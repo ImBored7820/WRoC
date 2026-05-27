@@ -1,14 +1,14 @@
 import { drawTrisect } from "./game/map/drawTrisect.js";
 import { Player } from "./game/player.js";
-import { playerColors } from "./game/player.js";
 import { Mob } from "./game/mob.js";
 import { drawHUD } from "./game/HUD.js";
 import { drawClassSelect } from "./game/HUD.js";
+import { unregisterAllRooms } from "./game/map/roomRegistry.js";
 export const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 const map = document.createElement("canvas");
 const mapCtx = map.getContext("2d");
-export const player = new Player(200, 200);
+export const player = new Player(1000, 720);
 export const mobArray = [];
 let killCounter = 0;
 function rectangularOverlapChecker(ax, ay, aw, ah, bx, by, bw, bh) {
@@ -19,12 +19,13 @@ function onStart() {
     let chosenName = prompt("Enter your player name:");
     player.name = chosenName ? chosenName : "Player";
     function resize() {
+        unregisterAllRooms();
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         map.width = 2160 * 3;
         map.height = 2160 * 3;
-        drawTrisect(mapCtx, 0, 0);
-        drawTrisect(mapCtx, 720 * 3 - 72, 720);
+        drawTrisect(mapCtx, 0, 720 / 2);
+        drawTrisect(mapCtx, 720 * 3 - 108, 0);
     }
     window.addEventListener("resize", resize);
     resize();
@@ -74,7 +75,7 @@ function onStart() {
             }
         }
         if (mobArray.length == 0) {
-            mobArray.push(new Mob(368, 368, 2, killCounter));
+            mobArray.push(new Mob(player.x + 36, player.y + 36, 2, killCounter));
         }
         if (player.isPlayerDead) {
             ctx.fillStyle = "white";

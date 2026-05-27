@@ -8,6 +8,7 @@
  */
 
 import {colors} from "../collisionlogic.js";
+import {registerRoom} from "./roomRegistry.js";
 
 // Export makes the file public so other files can see it
 const pixelWidth = 36; // How wide each pixel is
@@ -16,6 +17,7 @@ const pixelHeight = 36; // How tall each pixel is
 const rows = 20; // How many rows of pixels there are
 const cols = 20; // How many columns of pixels there are
 
+const roomPixelArea = cols * pixelWidth;
 
 export const defaultPattern = [
     0.9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2.36,0,0,0.9,
@@ -46,21 +48,25 @@ export function drawTrisect(ctx: CanvasRenderingContext2D, x: number, y: number,
                             roomThreePattern?: number[], roomThreeColors?: { [key: number]: (ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number) => void }) {
 
 
-    if(roomOnePattern && roomOneColors) {
-        oneToTwoDimensional(ctx, x, y, roomOnePattern, roomOneColors);
-    } else {
-        oneToTwoDimensional(ctx, x, y, defaultPattern, colors);
-    }
-    if(roomTwoPattern && roomTwoColors) {
-        oneToTwoDimensional(ctx, x+720-36, y, roomTwoPattern, roomTwoColors);
-    } else {
-        oneToTwoDimensional(ctx, x+720-36, y, defaultPattern, colors);
-    }
-    if(roomThreePattern && roomThreeColors) {
-        oneToTwoDimensional(ctx, x+1440-36, y, roomThreePattern, roomThreeColors);
-    } else {
-        oneToTwoDimensional(ctx, x+1440-36, y, defaultPattern, colors);
-    }
+    const roomOneX = x;
+    const roomTwoX = x + roomPixelArea - pixelWidth;
+    const roomThreeX = x + (roomPixelArea - pixelWidth) * 2;
+
+    const patternOne = roomOnePattern ?? defaultPattern;
+    const patternTwo = roomTwoPattern ?? defaultPattern;
+    const patternThree = roomThreePattern ?? defaultPattern;
+
+    const colorOne = roomOneColors ?? colors;
+    const colorTwo = roomTwoColors ?? colors;
+    const colorThree = roomThreeColors ?? colors;
+
+    oneToTwoDimensional(ctx, roomOneX, y, patternOne, colorOne);
+    oneToTwoDimensional(ctx, roomTwoX, y, patternTwo, colorTwo);
+    oneToTwoDimensional(ctx, roomThreeX, y, patternThree, colorThree);
+
+    registerRoom(roomOneX, y, cols, rows, patternOne);
+    registerRoom(roomTwoX, y, cols, rows, patternTwo);
+    registerRoom(roomThreeX, y, cols, rows, patternThree);
 
 }
 

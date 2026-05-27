@@ -1,4 +1,3 @@
-import { defaultPattern } from "./map/drawTrisect.js";
 import { drawWall } from "../assets/TileTextures/wall.js";
 import { drawFloor } from "../assets/TileTextures/floor.js";
 import { drawDoor } from "../assets/TileTextures/door.js";
@@ -6,10 +5,9 @@ import { drawWindow } from "../assets/TileTextures/window.js";
 import { drawSmartBoard } from "../assets/TileTextures/smartboard.js";
 import { drawWhiteBoard } from "../assets/TileTextures/whiteboard.js";
 import { drawDesk } from "../assets/TileTextures/desk.js";
+import { roomRegistry } from "./map/roomRegistry.js";
 const pixelWidth = 36;
 const pixelHeight = 36;
-const rows = 20;
-const cols = 20;
 export const colors = {
     0: (ctx, x, y, w, h) => drawWall(0, ctx, x, y, w, h),
     0.9: (ctx, x, y, w, h) => drawWall(90, ctx, x, y, w, h),
@@ -35,34 +33,28 @@ export const colors = {
     6.36: (ctx, x, y, w, h) => drawDesk(360, ctx, x, y, w, h)
 };
 const solidTiles = new Set([0, 0.9, 0.18, 0.27, 3.9, 3.18, 3.36, 6.9, 6.18, 6.36]);
-export function checkRectCollision(x, y, w, h) {
-    let leftMostTile = Math.floor(x / pixelWidth);
-    let rightMostTile = Math.floor((x + w - 1) / pixelWidth);
-    let topMostTile = Math.floor(y / pixelHeight);
-    let bottomMostTile = Math.floor((y + h - 1) / pixelHeight);
-    if (topMostTile < 0 || bottomMostTile >= rows || leftMostTile < 0 || rightMostTile >= cols) {
-        return true;
+export function isPointSolid(x, y) {
+    let inARoom = false;
+    for (const room of roomRegistry) {
+        const localX = x - room.roomX;
+        const localY = y - room.roomY;
+        if (localX < 0 || localY < 0)
+            continue;
+        const col = Math.floor(localX / pixelWidth);
+        const row = Math.floor(localY / pixelHeight);
+        if (col >= room.cols || row >= room.rows)
+            continue;
+        inARoom = true;
+        const tileValue = room.patterns[row * room.cols + col];
+        if (!solidTiles.has(tileValue))
+            return false;
     }
-    for (let row = topMostTile; row <= bottomMostTile; row++) {
-        for (let col = leftMostTile; col <= rightMostTile; col++) {
-            let tileIndex = row * cols + col;
-            if (solidTiles.has(defaultPattern[tileIndex])) {
-                return true;
-            }
-        }
-    }
-    return false;
+    return true;
 }
-export function checkCollision(x, y) {
-    let isAWall = false;
-    const row = Math.floor(y / pixelHeight);
-    const col = Math.floor(x / pixelWidth);
-    const convert = row * cols + col;
-    if (row < 0 || row >= rows || col < 0 || col >= cols)
-        return true;
-    if (solidTiles.has(defaultPattern[convert])) {
-        isAWall = true;
-    }
-    return isAWall;
+export function checkRectCollision(x, y, w, h) {
+    return (isPointSolid(x, y) ||
+        isPointSolid(x + w - 1, y) ||
+        isPointSolid(x, y + h - 1) ||
+        isPointSolid(x + w - 1, y + h - 1));
 }
 //# sourceMappingURL=collisionlogic.js.map
