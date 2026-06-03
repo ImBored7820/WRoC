@@ -49,7 +49,7 @@ export class Player {
         this.body = temp[1];
         this.soul = temp[2];
         this.extraStatPoints = 0;
-        this.playerSize = 34;
+        this.playerSize = 30;
         this.name = "Player";
         this.maxHealth = 100;
         this.maxStamina = 100;

@@ -17,6 +17,7 @@ import {Mob} from "./game/mob.js";
 import {drawHUD} from "./game/HUD.js";
 import {drawClassSelect} from "./game/HUD.js";
 import {unregisterAllRooms} from "./game/map/roomRegistry.js";
+import {boss} from "./game/Boss.js";
 
 export const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 const ctx = canvas.getContext("2d");
@@ -27,6 +28,7 @@ const mapCtx = map.getContext("2d"); // Gets drawn into memory for faster
 export const player = new Player(1000, 720); // Creates a new player then enables checking
 //export const mob = new Mob(368,368, 2);
 export const mobArray: Mob[] = [];
+export const miniBoss = new boss(1000, 720, "miniBoss", "Josh");
 let killCounter = 0;
 
 function rectangularOverlapChecker (ax: number, ay: number, aw: number, ah: number, bx: number, by: number, bw: number, bh: number) {
@@ -36,10 +38,20 @@ function rectangularOverlapChecker (ax: number, ay: number, aw: number, ah: numb
 function onStart() {
 
     player.movementKeys(); // if movement keys are pressed
+    miniBoss.bossMovement(player);
+    let audio = new Audio('/bgmusic.aac');
+    audio.loop = true; // Loop the background music
+    audio.volume = 1.0; // Set volume (0.0 to 1.0)
+    let audioStarted = false;
 
     // Prompt the player to choose a name on load
     let chosenName = prompt("Enter your player name:");
     player.name = chosenName ? chosenName : "Player";
+
+    // Start playing background music
+    audio.play().catch(error => {
+        console.log('Audio playback failed:', error);
+    });
 
     // So the purpose of this function is to make a canvas that fits the screen
     // no matter what the screen size is
@@ -50,7 +62,7 @@ function onStart() {
         map.width = 2160*3;
         map.height = 2160*3;
         drawTrisect(mapCtx, 0,720/2);
-        drawTrisect(mapCtx, 720*3-108,0);
+        drawTrisect(mapCtx, 720*3-108,720);
     }
 
     window.addEventListener("resize", resize); // Watches for resizing of browser
@@ -58,6 +70,12 @@ function onStart() {
 
     // Listens for class selection keys (1-4) when the class select screen is showing
     window.addEventListener("keydown", numPressed => {
+        if (!audioStarted) {
+            audio.play().catch(error => {
+                console.log('Audio playback failed:', error);
+            });
+            audioStarted = true;
+        }
         if(player.classSelect) {
             if(numPressed.key === "1") player.selectClass("Language");
             else if(numPressed.key === "2") player.selectClass("STEM");
@@ -81,6 +99,7 @@ function onStart() {
         ctx.drawImage(map, 0, 0);
                 player.update();
         player.draw(ctx);
+        miniBoss.draw(ctx);
         ctx.fillStyle = "red";
 
         for(let i = mobArray.length - 1; i >= 0; i--){
@@ -108,15 +127,15 @@ function onStart() {
 
         if(mobArray.length == 0){
             mobArray.push(new Mob(player.x + 36,player.y + 36,2, killCounter));
+            mobArray.push(new Mob(player.x + 72,player.y + 72,5, killCounter));
             //mobArray.push(new Mob(368,368,2, killCounter+1));
         }
         if (player.isPlayerDead) {
             ctx.fillStyle = "white";
             ctx.font = "30px Arial";
-            ctx.fillText("Game Over", canvas.width / 4 - 100, canvas.height / 4);
-            ctx.fillText("Press Ctrl R to restart", canvas.width / 4 - 100, canvas.height / 4 + 50);
+            ctx.fillText("Game Over", player.x, player.y);
+            ctx.fillText("Press Ctrl R to restart", player.x, player.y + 50);
         }
-
 
         ctx.restore();
         ctx.fillStyle = "yellow";

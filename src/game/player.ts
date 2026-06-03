@@ -77,7 +77,7 @@ export class Player {
         this.soul = temp[2];
         this.extraStatPoints = 0;
 
-        this.playerSize = 34;
+        this.playerSize = 30;
 
         // Player name, set later via prompt
         this.name = "Player";
@@ -144,7 +144,6 @@ export class Player {
             this.y = newY;
         }
     }
-
 
    loseHP(mob: Mob){
         this.health -= mob.attackPower;
