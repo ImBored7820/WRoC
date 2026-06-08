@@ -1,13 +1,13 @@
 import { playerClasses } from "./playerClasses.js";
-import { Mob } from "./mob.js";
-export declare const playerColors: {
-    [key: number]: string;
-};
+import type { Mob } from "./entities/mob.js";
+import type { Item } from "./items/Item.js";
+declare const playerPattern: number[];
 export declare class Player {
     x: number;
     y: number;
     playerSize: number;
     speed: number;
+    baseSpeed: number;
     health: number;
     stamina: number;
     name: string;
@@ -24,13 +24,52 @@ export declare class Player {
     classChosen: boolean;
     playerClass: playerClasses | null;
     isPlayerDead: boolean;
+    damageFlashTimer: number;
+    playerColors: {
+        [key: number]: string;
+    };
+    equippedWeapon: Item | null;
+    equippedArmour: Item | null;
+    isFrozen: boolean;
+    freezeTimer: number;
+    inPaintZone: boolean;
+    knockbackVx: number;
+    knockbackVy: number;
+    knockbackTimer: number;
+    abilityAnimType: string;
+    abilityAnimTimer: number;
+    constructWallX: number;
+    constructWallY: number;
+    constructWallTimer: number;
+    lastMoveDir: {
+        x: number;
+        y: number;
+    };
+    staminaConsumedThisFrame: boolean;
+    sprintBlocked: boolean;
     keys: Set<string>;
     constructor(x: number, y: number, level?: number, MBS?: number);
+    setColors(skinColor: string, clothesColor: string): void;
     movementKeys(): void;
     update(): void;
+    tryAttack(mob: Mob): boolean;
+    tryAbility(mobs: Mob[], bosses: import("./Boss.js").boss[]): boolean;
     loseHP(mob: Mob): void;
+    loseHPFromBoss(damage: number): void;
     increaseXP(amount: number): void;
+    levelUp(): void;
     selectClass(choice: string): void;
+    equipItem(item: Item): void;
+    unequipItem(item: Item | null): void;
+    applyStatBonus(bonus: Partial<{
+        mind: number;
+        body: number;
+        soul: number;
+        hp: number;
+        speed: number;
+    }>): void;
+    getAttackReach(): number;
     draw(ctx: CanvasRenderingContext2D): void;
 }
+export { playerPattern };
 //# sourceMappingURL=player.d.ts.map

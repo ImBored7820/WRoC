@@ -1,63 +1,59 @@
 /**
- * Author: 2030971 -
- * Date: 03/27/2026
- * Time: 14:06:18
- *
- * Description: Describe what the file does
- * Info: WRoC | wall.ts | WebStorm
+ * GBC Pokemon-style indoor brick wall — 4-shade tan palette, crisp 2×2 brick grid
  */
-
 import { drawTile } from "./tileTemplate.js";
 
 const rows = 6;
 const cols = 6;
 
+// Pokemon building interior: warm tan bricks with dark mortar
 const colors: { [key: number]: string } = {
-    0: "#000000",
-    1: "#0a0a0c",
-    2: "#0f0f14",
-    3: "#060608"
+    0: "#584818", // dark mortar / shadow
+    1: "#786030", // brick shadow
+    2: "#a08048", // brick mid
+    3: "#c0a060", // brick highlight
 };
 
+// Base wall — horizontal mortar bands with offset brick rows
 const pattern0 = [
-    1,1,1,1,1,1,
-    2,2,2,2,2,2,
-    3,3,0,0,3,3,
-    3,3,0,0,3,3,
-    2,2,2,2,2,2,
-    1,1,1,1,1,1,
-]
+    0, 0, 0, 0, 0, 0,
+    2, 3, 2, 3, 2, 3,
+    0, 0, 0, 0, 0, 0,
+    3, 2, 3, 2, 3, 2,
+    1, 1, 1, 1, 1, 1,
+    0, 0, 0, 0, 0, 0,
+];
 
 const pattern90 = [
-    1,1,1,1,0,0,
-    2,2,2,2,2,2,
-    3,1,0,0,3,3,
-    3,3,0,0,3,3,
-    2,2,2,2,2,2,
-    1,1,1,1,1,1,
-]
+    0, 2, 0, 3, 0, 2,
+    0, 3, 0, 2, 0, 3,
+    0, 0, 0, 0, 0, 0,
+    0, 2, 0, 3, 0, 2,
+    0, 3, 0, 2, 0, 3,
+    1, 1, 1, 1, 1, 1,
+];
 
 const pattern180 = [
-    1,1,1,1,1,0,
-    2,2,2,2,2,2,
-    3,3,0,0,3,3,
-    3,3,0,0,3,3,
-    2,2,2,2,2,2,
-    1,1,1,1,1,1,
-]
+    0, 0, 0, 0, 0, 0,
+    1, 1, 1, 1, 1, 1,
+    2, 3, 2, 3, 2, 3,
+    0, 0, 0, 0, 0, 0,
+    3, 2, 3, 2, 3, 2,
+    0, 0, 0, 0, 0, 0,
+];
 
 const pattern270 = [
-    1,1,1,1,1,1,
-    2,1,3,2,2,2,
-    3,3,0,0,3,3,
-    3,3,0,0,3,3,
-    2,2,2,2,2,2,
-    1,1,1,1,1,1,
-]
+    1, 1, 1, 1, 1, 1,
+    2, 0, 3, 0, 2, 0,
+    3, 0, 2, 0, 3, 0,
+    0, 0, 0, 0, 0, 0,
+    2, 0, 3, 0, 2, 0,
+    3, 0, 2, 0, 3, 0,
+];
 
 export function drawWall(degree: 0 | 90 | 180 | 270, ctx: CanvasRenderingContext2D, x: number, y: number, tileWidth: number, tileHeight: number) {
-    if(degree == 0) drawTile(ctx, x, y, tileWidth, tileHeight, pattern0, colors, rows, cols);
-    else if(degree == 90) drawTile(ctx, x, y, tileWidth, tileHeight, pattern90, colors, rows, cols);
-    else if(degree == 180) drawTile(ctx, x, y, tileWidth, tileHeight, pattern180, colors, rows, cols);
-    else if(degree == 270) drawTile(ctx, x, y, tileWidth, tileHeight, pattern270, colors, rows, cols);
+    if (degree == 0) drawTile(ctx, x, y, tileWidth, tileHeight, pattern0, colors, rows, cols);
+    else if (degree == 90) drawTile(ctx, x, y, tileWidth, tileHeight, pattern90, colors, rows, cols);
+    else if (degree == 180) drawTile(ctx, x, y, tileWidth, tileHeight, pattern180, colors, rows, cols);
+    else if (degree == 270) drawTile(ctx, x, y, tileWidth, tileHeight, pattern270, colors, rows, cols);
 }

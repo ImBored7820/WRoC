@@ -1,25 +1,198 @@
 /**
  * Author: musa -
  * Date: 05/20/2026
- * Time: 13:31:41
  *
- * Description: Describe what the file does
+ * Description: Room registry with freeze/activate system and door connections
  * Info: WRoC | roomRegistry.ts | WebStorm
  */
+
+import type { Mob } from "../entities/mob.js";
+import type { boss } from "../Boss.js";
+import type { Item } from "../items/Item.js";
+
+const TILE_SIZE = 36;
+const ENTRY_MARGIN = 18;
+
+export interface RoomSnapshot {
+    mobs: Mob[];
+    minibossAlive: boolean;
+    minibossHealth: number;
+    droppedItems: DroppedItem[];
+    defeatedBannerTimer: number;
+    respawnTimer: number;
+}
+
+export interface DroppedItem {
+    item: Item;
+    x: number;
+    y: number;
+}
+
 export interface RoomData {
+    roomId: number;
+    roomX: number;
+    roomY: number;
+    cols: number;
+    rows: number;
+    patterns: number[];
+    roomType: "room" | "hallway";
+    isActive: boolean;
+    snapshot: RoomSnapshot | null;
+    miniboss: boss | null;
+}
+
+export interface DoorConnection {
+    fromRoomId: number;
+    toRoomId: number;
+    doorTileX: number;
+    doorTileY: number;
+    spawnX: number;
+    spawnY: number;
+}
+
+export const roomRegistry: RoomData[] = [];
+export const doorConnections: DoorConnection[] = [];
+
+let nextRoomId = 1;
+const spawnedRoomIds = new Set<number>();
+
+export function registerRoom(
     roomX: number,
     roomY: number,
     cols: number,
     rows: number,
-    patterns: number[]
+    patterns: number[],
+    roomType: "room" | "hallway" = "room"
+): number {
+    const roomId = nextRoomId++;
+    roomRegistry.push({
+        roomId,
+        roomX,
+        roomY,
+        cols,
+        rows,
+        patterns,
+        roomType,
+        isActive: false,
+        snapshot: null,
+        miniboss: null,
+    });
+    return roomId;
 }
 
-export const roomRegistry: RoomData[] = [];
-
-export function registerRoom(roomX: number, roomY: number, cols: number, rows: number, patterns: number[]) {
-    roomRegistry.push({roomX, roomY, cols, rows, patterns});
+export function registerDoor(conn: DoorConnection): void {
+    doorConnections.push(conn);
 }
 
-export function unregisterAllRooms() {
+export function unregisterAllRooms(): void {
     roomRegistry.length = 0;
+    doorConnections.length = 0;
+    nextRoomId = 1;
+    spawnedRoomIds.clear();
+}
+
+export function getRoomById(roomId: number): RoomData | undefined {
+    return roomRegistry.find(r => r.roomId === roomId);
+}
+
+export function isRoomActive(roomX: number, roomY: number, cols: number, rows: number, playerX: number, playerY: number): boolean {
+    const roomW = cols * TILE_SIZE;
+    const roomH = rows * TILE_SIZE;
+    const cx = playerX + 15;
+    const cy = playerY + 15;
+    return (
+        cx >= roomX + ENTRY_MARGIN &&
+        cx < roomX + roomW - ENTRY_MARGIN &&
+        cy >= roomY + ENTRY_MARGIN &&
+        cy < roomY + roomH - ENTRY_MARGIN
+    );
+}
+
+export function getActiveRoomId(playerX: number, playerY: number, currentRoomId: number | null = null): number | null {
+    const cx = playerX + 15;
+    const cy = playerY + 15;
+    let bestId: number | null = null;
+    let bestDepth = -1;
+
+    for (const room of roomRegistry) {
+        if (!isRoomActive(room.roomX, room.roomY, room.cols, room.rows, playerX, playerY)) continue;
+
+        const roomW = room.cols * TILE_SIZE;
+        const roomH = room.rows * TILE_SIZE;
+        const depthX = Math.min(cx - room.roomX, room.roomX + roomW - cx);
+        const depthY = Math.min(cy - room.roomY, room.roomY + roomH - cy);
+        const depth = Math.min(depthX, depthY);
+
+        if (depth > bestDepth) {
+            bestDepth = depth;
+            bestId = room.roomId;
+        }
+    }
+
+    // Slight hysteresis so shared-wall boundaries don't flicker
+    if (currentRoomId !== null && bestId !== null && bestId !== currentRoomId) {
+        const current = getRoomById(currentRoomId);
+        if (current && isRoomActive(current.roomX, current.roomY, current.cols, current.rows, playerX, playerY)) {
+            const roomW = current.cols * TILE_SIZE;
+            const roomH = current.rows * TILE_SIZE;
+            const depthX = Math.min(cx - current.roomX, current.roomX + roomW - cx);
+            const depthY = Math.min(cy - current.roomY, current.roomY + roomH - cy);
+            const currentDepth = Math.min(depthX, depthY);
+            if (currentDepth >= bestDepth - 8) return currentRoomId;
+        }
+    }
+
+    return bestId;
+}
+
+export function freezeRoom(roomId: number): void {
+    const room = getRoomById(roomId);
+    if (!room) return;
+    room.isActive = false;
+}
+
+export function activateRoom(roomId: number): void {
+    const room = getRoomById(roomId);
+    if (!room) return;
+    room.isActive = true;
+}
+
+export function saveRoomSnapshot(roomId: number, snapshot: RoomSnapshot): void {
+    const room = getRoomById(roomId);
+    if (room) room.snapshot = snapshot;
+}
+
+export function getRoomSnapshot(roomId: number): RoomSnapshot | null {
+    return getRoomById(roomId)?.snapshot ?? null;
+}
+
+export function hasRoomBeenSpawned(roomId: number): boolean {
+    return spawnedRoomIds.has(roomId);
+}
+
+export function markRoomSpawned(roomId: number): void {
+    spawnedRoomIds.add(roomId);
+}
+
+export function clearSpawnedRoom(roomId: number): void {
+    spawnedRoomIds.delete(roomId);
+}
+
+export function isRoomCleared(roomId: number, mobs: Mob[]): boolean {
+    const room = getRoomById(roomId);
+    if (!room) return true;
+    const roomMobsAlive = mobs.some(m => m.homeRoomId === roomId && !m.isMobDead);
+    const minibossAlive = room.miniboss && !room.miniboss.isDead;
+    return !roomMobsAlive && !minibossAlive;
+}
+
+export function getRoomWorldBounds(roomId: number): { x: number; y: number; w: number; h: number } | null {
+    const room = getRoomById(roomId);
+    if (!room) return null;
+    return {
+        x: room.roomX,
+        y: room.roomY,
+        w: room.cols * TILE_SIZE,
+        h: room.rows * TILE_SIZE,
+    };
 }
