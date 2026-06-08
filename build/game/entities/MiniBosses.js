@@ -78,7 +78,7 @@ export class MiniBoss extends boss {
 }
 export class Teacher1 extends MiniBoss {
     constructor(x, y, homeRoomId) {
-        super(x, y, "Ms. Inksworth", homeRoomId, 750, 2, "Paint Splash", 6000, 500, () => new SharpPencil());
+        super(x, y, "Teacher One", homeRoomId, 750, 2, "Paint Splash", 6000, 500, () => new SharpPencil());
     }
     getColorMap() {
         return { 0: "#c8a888", 1: "#e06040", 2: "#40a0c0", 3: "#8040a0" };
@@ -96,7 +96,7 @@ export class Teacher1 extends MiniBoss {
 }
 export class Teacher2 extends MiniBoss {
     constructor(x, y, homeRoomId) {
-        super(x, y, "Coach Brutus", homeRoomId, 1000, 6, "Whistle Blast", 8000, 500, () => new LongRuler());
+        super(x, y, "Teacher Two ", homeRoomId, 1000, 6, "Whistle Blast", 8000, 500, () => new LongRuler());
     }
     getColorMap() {
         return { 0: "#c8a888", 1: "#5a6a8a", 2: "#ffd700", 3: "#3a4a6a" };
@@ -112,7 +112,7 @@ export class Teacher2 extends MiniBoss {
 }
 export class Teacher3 extends MiniBoss {
     constructor(x, y, homeRoomId) {
-        super(x, y, "VP Stern", homeRoomId, 600, 4, "Detention!", 10000, 500, () => new TrackShoes());
+        super(x, y, "Vice Principal", homeRoomId, 600, 4, "Detention!", 10000, 500, () => new TrackShoes());
     }
     getColorMap() {
         return { 0: "#c8a888", 1: "#1a1a2a", 2: "#cccccc", 3: "#0a0a1a" };

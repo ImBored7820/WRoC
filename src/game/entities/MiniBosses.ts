@@ -123,7 +123,7 @@ export class MiniBoss extends boss {
 // MiniBoss 1 - art teacher who throws paint everywhere
 export class Teacher1 extends MiniBoss {
     constructor(x: number, y: number, homeRoomId: number) {
-        super(x, y, "Ms. Inksworth", homeRoomId,
+        super(x, y, "Teacher One", homeRoomId,
             750, 2, "Paint Splash", 6000, 500, () => new SharpPencil());
     }
 
@@ -148,7 +148,7 @@ export class Teacher1 extends MiniBoss {
 // MiniBoss 2 - gym teacher who pushes you around
 export class Teacher2 extends MiniBoss {
     constructor(x: number, y: number, homeRoomId: number) {
-        super(x, y, "Coach Brutus", homeRoomId,
+        super(x, y, "Teacher Two ", homeRoomId,
             1000, 6, "Whistle Blast", 8000, 500, () => new LongRuler());
     }
 
@@ -171,7 +171,7 @@ export class Teacher2 extends MiniBoss {
 // MiniBoss 3 - vice principal who freezes you in place 
 export class Teacher3 extends MiniBoss {
     constructor(x: number, y: number, homeRoomId: number) {
-        super(x, y, "VP Stern", homeRoomId,
+        super(x, y, "Vice Principal", homeRoomId,
             600, 4, "Detention!", 10000, 500, () => new TrackShoes());
     }
 
