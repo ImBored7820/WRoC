@@ -3,9 +3,10 @@
  * Date: 04/14/2026
  *
  * Description: HUD, class selection, and ability cooldown display
+ * This file is all AI
  * Info: WRoC | HUD.ts | WebStorm
  */
-import type { Player } from "./player.js";
+import type { Player } from "../player.js";
 
 let classHoverIndex = -1;
 

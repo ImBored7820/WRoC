@@ -9,8 +9,8 @@ import type { Player } from "../player.js";
 import { checkRectCollision } from "../collisionlogic.js";
 import { drawPlayer } from "../../assets/drawPlayer.js";
 
-const BASE_MOB_HEALTH = 60;
-const BASE_MOB_ATTACK = 8;
+const BASE_MOB_HEALTH = 60; // base stats for all mobs before scaling
+const BASE_MOB_ATTACK = 8; // base stats for all mobs before scaling
 
 // zombiePattern — blocky head with outstretched arm suggestion
 const zombiePattern = [
@@ -60,20 +60,20 @@ export class Mob {
     mobX: number;
     mobY: number;
     level: number;
-    mobSize: number;
+    mobSize: number; // smaller than minibosses
     name: string;
     mobType: string;
 
     attackPower: number;
-    lastAttackTime: number;
-    attackCooldown: number;
+    lastAttackTime: number; // last time the mob attacked
+    attackCooldown: number; // ms between attacks
     mobHealth: number;
     maxMobHealth: number;
     moveSpeed: number;
 
     isMobDead: boolean;
-    homeRoomId: number;
-    damageFlashTimer: number;
+    homeRoomId: number; // which room this mob belongs to
+    damageFlashTimer: number; // red flash when hurt
     isStunned: boolean;
     stunTimer: number;
 
@@ -104,7 +104,7 @@ export class Mob {
 
         this.attackPower = attackPower;
         this.lastAttackTime = 0;
-        this.attackCooldown = 800;
+        this.attackCooldown = 800; // 0.8 seconds
         this.maxMobHealth = health;
         this.mobHealth = health;
         this.moveSpeed = moveSpeed;
@@ -113,16 +113,16 @@ export class Mob {
         this.colorMap = colorMap;
     }
 
-    loseHP(player: Player) {
-        let playerAP = player.body * 3;
+    loseHP(player: Player) { // damage calculation based on player body stat
+        let playerAP = player.body * 3; // damage calculation based on player body stat
         if (player.equippedWeapon?.name === "Sharp Pencil") {
-            playerAP *= 1.2;
+            playerAP *= 1.2; // sharp pencil bonus
         }
-        this.mobHealth -= playerAP;
+        this.mobHealth -= playerAP; // deduct health
         this.damageFlashTimer = 8;
         if (this.mobHealth <= 0) {
             this.isMobDead = true;
-            this.mobHealth = 0;
+            this.mobHealth = 0; // dont go negative
         }
     }
 
@@ -138,21 +138,21 @@ export class Mob {
         const playerRelativeY = player.y - this.mobY;
         const distance = Math.sqrt(playerRelativeX * playerRelativeX + playerRelativeY * playerRelativeY);
 
-        const moveX = (dx: number) => {
+        const moveX = (dx: number) => { // helper functions to move with collision checking
             const newX = this.mobX + dx;
             if (!checkRectCollision(newX, this.mobY, this.mobSize, this.mobSize)) {
                 this.mobX = newX;
             }
         };
 
-        const moveY = (dy: number) => {
+        const moveY = (dy: number) => { // helper functions to move with collision checking
             const newY = this.mobY + dy;
             if (!checkRectCollision(this.mobX, newY, this.mobSize, this.mobSize)) {
                 this.mobY = newY;
             }
         };
 
-        if (distance <= 108) {
+        if (distance <= 108) { // about 3-4 tiles
             isPlayerClose = true;
             if (playerRelativeX > 0) moveX(this.moveSpeed);
             if (playerRelativeX < 0) moveX(-this.moveSpeed);
@@ -161,7 +161,7 @@ export class Mob {
         }
 
         if (!isPlayerClose) {
-            if (this.wanderTimer <= 0) {
+            if (this.wanderTimer <= 0) { // pick new direction every half second
                 this.wanderDirX = (Math.floor(Math.random() * 3) - 1);  // -1, 0, or 1
                 this.wanderDirY = (Math.floor(Math.random() * 3) - 1);
                 this.wanderTimer = 30;
@@ -202,7 +202,9 @@ export class Mob {
         if (this.damageFlashTimer > 0) this.damageFlashTimer--;
     }
 }
-
+/* These specifc variations of the mobs follow everything a regular Mob does
+ * With their own caveats
+ */
 export class ZombieMob extends Mob {
     constructor(x: number, y: number, level: number, homeRoomId: number, playerLevel: number) {
         const health = BASE_MOB_HEALTH * (1 + playerLevel * 0.15);

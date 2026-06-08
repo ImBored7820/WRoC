@@ -2,7 +2,8 @@
  * Author: musa -
  * Date: 06/07/2026
  *
- * Description: Equipment items with pixel-art icons
+ * Description: Equipment items with pixel-art icons, no point in commenting
+ * all pretty intuitive, mostly art and stat bnouses
  * Info: WRoC | Item.ts | WebStorm
  */
 

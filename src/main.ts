@@ -3,12 +3,14 @@
  * Date: 3/4/2026
  *
  * Description: Game management — initializes map, player, and game loop
+ * Please note if you ever see any ctx it is most likelu ai'ed unless its for
+ * drawPlayer or drawMob
  */
 import { drawTrisect, roomPattern, hallwayPattern } from "./game/map/drawTrisect.js";
 import { StrongJacket } from "./game/items/Item.js";
 import { Player } from "./game/player.js";
 import type { Mob } from "./game/entities/mob.js";
-import { drawHUD, drawClassSelect, setClassHover, getClassFromClick, drawControlsPanel } from "./game/HUD.js";
+import { drawHUD, drawClassSelect, setClassHover, getClassFromClick, drawControlsPanel } from "./game/ui/HUD.js";
 import {
     unregisterAllRooms, getActiveRoomId, activateRoom, freezeRoom,
     saveRoomSnapshot, getRoomSnapshot,
@@ -16,64 +18,73 @@ import {
     type DroppedItem, type RoomSnapshot,
 } from "./game/map/roomRegistry.js";
 import { boss } from "./game/Boss.js";
-import { MsInksworth, CoachBrutus, VicePrincipalStern, type MiniBoss } from "./game/entities/MiniBosses.js";
+import { Teacher1, Teacher2, Teacher3, type MiniBoss } from "./game/entities/MiniBosses.js";
 import { spawnRoomMobs, respawnRoomMobs } from "./game/spawner.js";
 import { WelcomeScreen } from "./game/ui/WelcomeScreen.js";
 import { Inventory } from "./game/ui/Inventory.js";
 import { GameOverScreen } from "./game/ui/GameOver.js";
 import { PauseMenu } from "./game/ui/PauseMenu.js";
 
+// Main canvas where everything gets drawn
 export const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 const ctx = canvas.getContext("2d")!;
-ctx.imageSmoothingEnabled = false;
+ctx.imageSmoothingEnabled = false; // Keep that pixel art crispy
 
+// Separate canvas for the map so we don't redraw it every frame
 const map = document.createElement("canvas");
 const mapCtx = map.getContext("2d")!;
 mapCtx.imageSmoothingEnabled = false;
 
+// Core game entities
 export const player = new Player(360, 720);
-export const mobArray: Mob[] = [];
-const miniBossArray: MiniBoss[] = [];
-let primaryBoss: boss | null = null;
+export const mobArray: Mob[] = []; // All the enemies running around
+const miniBossArray: MiniBoss[] = []; // Those annoying teachers
+let primaryBoss: boss | null = null; // The big bad principal
 
+// Game state tracking stuff
 let killCounter = 0;
-let activeRoomId: number | null = null;
+let activeRoomId: number | null = null; // Which room is the player in right now
 let previousRoomId: number | null = null;
 let bossDefeated = false;
-let floorClearedTimer = 0;
-let transitionFlashTimer = 0;
+let floorClearedTimer = 0; // How long to show the victory screen
+let transitionFlashTimer = 0; // That white flash when moving between rooms
 let gameStarted = false;
-let primaryBossDropProcessed = false;
-let pickupMessage = "";
+let primaryBossDropProcessed = false; // So we don't drop the same loot twice
+let pickupMessage = ""; // "You picked up a thing!" messages
 let pickupMessageTimer = 0;
-const deadMinibossRoomIds = new Set<number>();
+const deadMinibossRoomIds = new Set<number>(); // Remember which minibosses we killed
 
 const TRISECT_TYPES: ["room", "hallway", "room"] = ["room", "hallway", "room"];
 
+// All the different screens in our game
 const welcomeScreen = new WelcomeScreen();
 const inventory = new Inventory();
 const gameOverScreen = new GameOverScreen();
 const pauseMenu = new PauseMenu();
 
+// Where the player starts each life
 const floorStartX = 360;
 const floorStartY = 720;
 
-// Per-room dropped items on the floor
-const roomDroppedItems = new Map<number, DroppedItem[]>();
-// Per-room respawn timers (frames until respawn)
-const roomRespawnTimers = new Map<number, number>();
+// Room-specific data that persists when you leave and come back
+const roomDroppedItems = new Map<number, DroppedItem[]>(); // Items on the floor in each room
+const roomRespawnTimers = new Map<number, number>(); // How long until mobs respawn
 
+// Basic collision detection - checks if two rectangles are touching
 function rectangularOverlapChecker(ax: number, ay: number, aw: number, ah: number, bx: number, by: number, bw: number, bh: number) {
     return ax < bx + bw && ax + aw > bx && ay < by + bh && ay + ah > by;
 }
 
+// Sets up the whole dungeon layout
 function buildMap() {
+    // Clear everything first
     unregisterAllRooms();
     mobArray.length = 0;
     miniBossArray.length = 0;
     roomDroppedItems.clear();
     roomRespawnTimers.clear();
 
+    // Build the first set of rooms - room, hallway, room
     const trisect1 = drawTrisect(
         mapCtx, 0, 720 / 2,
         roomPattern, undefined,
@@ -81,11 +92,12 @@ function buildMap() {
         roomPattern, undefined,
         TRISECT_TYPES
     );
-    // Butt against trisect1 room 3 (shared wall column)
+
+    // Connect the second set right next to the first one
     const trisect1Room3 = getRoomById(trisect1.roomIds[2]);
     const trisect2X = trisect1Room3
-        ? trisect1Room3.roomX + trisect1Room3.cols * 36 - 36
-        : 2052;
+        ? trisect1Room3.roomX + trisect1Room3.cols * 36 - 36 // Share a wall
+        : 2052; // Fallback position
     const trisect2 = drawTrisect(
         mapCtx, trisect2X, 720,
         roomPattern, undefined,
@@ -94,46 +106,50 @@ function buildMap() {
         TRISECT_TYPES
     );
 
+    // Place the minibosses in strategic locations
     const hallway1 = getRoomById(trisect1.roomIds[1]);
     const room3t1 = getRoomById(trisect1.roomIds[2]);
-    // Place minibosses — hallway wing + end rooms
-    const inkRoom = hallway1;
-    const coachRoom = room3t1;
-    const vpRoom = getRoomById(trisect2.roomIds[1]);
+    const inkRoom = hallway1; // Ink teacher hangs out in the hallway
+    const coachRoom = room3t1; // Coach is in the first end room
+    const vpRoom = getRoomById(trisect2.roomIds[1]); // VP is in the second hallway
 
+    // Only spawn minibosses if we haven't killed them yet
     if (inkRoom && !deadMinibossRoomIds.has(inkRoom.roomId)) {
-        const mb = new MsInksworth(inkRoom.roomX + 300, inkRoom.roomY + 300, inkRoom.roomId);
+        const mb = new Teacher1(inkRoom.roomX + 300, inkRoom.roomY + 300, inkRoom.roomId);
         miniBossArray.push(mb);
         inkRoom.miniboss = mb;
     }
     if (coachRoom && !deadMinibossRoomIds.has(coachRoom.roomId)) {
-        const mb = new CoachBrutus(coachRoom.roomX + 300, coachRoom.roomY + 300, coachRoom.roomId);
+        const mb = new Teacher2(coachRoom.roomX + 300, coachRoom.roomY + 300, coachRoom.roomId);
         miniBossArray.push(mb);
         coachRoom.miniboss = mb;
     }
     if (vpRoom && !deadMinibossRoomIds.has(vpRoom.roomId)) {
-        const mb = new VicePrincipalStern(vpRoom.roomX + 300, vpRoom.roomY + 300, vpRoom.roomId);
+        const mb = new Teacher3(vpRoom.roomX + 300, vpRoom.roomY + 300, vpRoom.roomId);
         miniBossArray.push(mb);
         vpRoom.miniboss = mb;
     }
 
-    // Primary boss in room 3 of second trisect
+    // The big boss always goes in the final room
     const bossRoom = getRoomById(trisect2.roomIds[2]);
     if (bossRoom) {
         primaryBoss = new boss(bossRoom.roomX + 300, bossRoom.roomY + 300, "boss", "Principal", bossRoom.roomId);
     }
-
 }
 
+// Check if player is standing in any dangerous paint zones
 function updatePaintZoneStatus() {
     player.inPaintZone = false;
     const px = player.x + player.playerSize / 2;
     const py = player.y + player.playerSize / 2;
+
+    // Go through all miniboss paint zones in the current room
     for (const mb of miniBossArray) {
         if (mb.homeRoomId !== activeRoomId || mb.isDead) continue;
         for (const zone of mb.paintZones) {
             const dx = px - zone.x;
             const dy = py - zone.y;
+            // Simple circle collision check
             if (dx * dx + dy * dy < zone.radius * zone.radius) {
                 player.inPaintZone = true;
                 return;
@@ -142,11 +158,12 @@ function updatePaintZoneStatus() {
     }
 }
 
+// Handle when player moves between rooms
 function handleRoomTransition() {
     const newRoomId = getActiveRoomId(player.x, player.y, activeRoomId);
 
     if (newRoomId !== activeRoomId) {
-        // Snapshot preserves mob positions — they stay in mobArray but freeze when inactive
+        // Save the current room state so we can restore it later
         if (activeRoomId !== null) {
             const snapshot: RoomSnapshot = {
                 mobs: mobArray.filter(m => m.homeRoomId === activeRoomId),
@@ -160,13 +177,15 @@ function handleRoomTransition() {
             freezeRoom(activeRoomId);
         }
 
+        // Switch to the new room
         previousRoomId = activeRoomId;
         activeRoomId = newRoomId;
-        transitionFlashTimer = 10;
+        transitionFlashTimer = 10; // That brief white flash effect
 
         if (activeRoomId !== null) {
             activateRoom(activeRoomId);
 
+            // If we haven't been in this room before, spawn some mobs
             const snapshot = getRoomSnapshot(activeRoomId);
             if (!snapshot) {
                 const room = getRoomById(activeRoomId);
@@ -183,6 +202,7 @@ function handleRoomTransition() {
     }
 }
 
+// When a mob dies, give player XP and maybe some stats
 function processMobDeaths() {
     for (let i = mobArray.length - 1; i >= 0; i--) {
         const mob = mobArray[i];
@@ -193,26 +213,32 @@ function processMobDeaths() {
         const isHallway = mob.mobType === "Hall Monitor" || mob.mobType === "Teacher";
         if (isHallway) {
             player.increaseXP(200 + player.level * 20);
+            // Random stat boost for hallway enemies
             const stats = ["mind", "body", "soul"] as const;
             const pick = stats[Math.floor(Math.random() * 3)];
             player[pick] += 1;
         } else {
             player.increaseXP(250 + player.level * 25);
         }
-        mobArray.splice(i, 1);
+        mobArray.splice(i, 1); // Remove the dead mob
     }
 }
 
+// When a miniboss dies, drop some loot and give big XP
 function processMinibossDeaths() {
     for (const mb of miniBossArray) {
         if (mb.isDead && !mb.dropProcessed) {
             mb.dropProcessed = true;
-            deadMinibossRoomIds.add(mb.homeRoomId);
+            deadMinibossRoomIds.add(mb.homeRoomId); // Remember we killed this one
             player.increaseXP(mb.xpReward);
+
+            // Drop the loot where the boss died
             const item = mb.dropItem();
             const drops = roomDroppedItems.get(mb.homeRoomId) ?? [];
             drops.push({ item, x: mb.x + mb.bossSize / 2 - 15, y: mb.y + mb.bossSize / 2 - 15 });
             roomDroppedItems.set(mb.homeRoomId, drops);
+
+            // Show a message about what dropped
             pickupMessage = item.name + " dropped!";
             pickupMessageTimer = 120;
             mb.onDeath();
@@ -220,10 +246,14 @@ function processMinibossDeaths() {
     }
 }
 
+// When the main boss dies, drop the final loot
 function processPrimaryBossDeath() {
     if (!primaryBoss || !primaryBoss.isDead || primaryBossDropProcessed) return;
+
     primaryBossDropProcessed = true;
-    player.increaseXP(1500);
+    player.increaseXP(1500); // Big XP reward
+
+    // Drop the best item in the game
     const item = new StrongJacket();
     const drops = roomDroppedItems.get(primaryBoss.homeRoomId) ?? [];
     drops.push({
@@ -232,10 +262,12 @@ function processPrimaryBossDeath() {
         y: primaryBoss.y + primaryBoss.bossSize / 2 - 15,
     });
     roomDroppedItems.set(primaryBoss.homeRoomId, drops);
+
     pickupMessage = item.name + " dropped!";
     pickupMessageTimer = 120;
 }
 
+// Let the player pick up items by walking over them
 function pickupItems() {
     if (activeRoomId === null) return;
     const drops = roomDroppedItems.get(activeRoomId);
@@ -243,9 +275,10 @@ function pickupItems() {
 
     for (let i = drops.length - 1; i >= 0; i--) {
         const drop = drops[i];
+        // Check if player is touching the item
         if (rectangularOverlapChecker(player.x, player.y, player.playerSize, player.playerSize, drop.x, drop.y, 30, 30)) {
             if (inventory.addItem(drop.item)) {
-                drops.splice(i, 1);
+                drops.splice(i, 1); // Remove from floor
                 player.equipItem(drop.item);
                 pickupMessage = "Picked up " + drop.item.name + "!";
                 pickupMessageTimer = 90;
@@ -254,16 +287,18 @@ function pickupItems() {
     }
 }
 
+// Respawn mobs in cleared rooms after a delay
 function handleRoomRespawn() {
     if (bossDefeated || activeRoomId === null) return;
 
     if (isRoomCleared(activeRoomId, mobArray)) {
         const timer = roomRespawnTimers.get(activeRoomId) ?? 0;
         if (timer <= 0) {
-            roomRespawnTimers.set(activeRoomId, 300); // 5 seconds at 60fps
+            roomRespawnTimers.set(activeRoomId, 300); // Start 5 second timer
         } else {
             roomRespawnTimers.set(activeRoomId, timer - 1);
             if (timer - 1 <= 0) {
+                // Time's up, respawn the mobs
                 const room = getRoomById(activeRoomId);
                 const bounds = getRoomWorldBounds(activeRoomId);
                 if (room && bounds) {
@@ -277,11 +312,14 @@ function handleRoomRespawn() {
             }
         }
     } else {
+        // Room isn't cleared, reset the timer
         roomRespawnTimers.set(activeRoomId, 0);
     }
 }
 
+// Reset player to starting position and optionally reset progress
 function resetGame(fullReset: boolean) {
+    // Always reset these
     player.x = floorStartX;
     player.y = floorStartY;
     player.health = player.maxHealth;
@@ -294,6 +332,7 @@ function resetGame(fullReset: boolean) {
     primaryBossDropProcessed = false;
 
     if (fullReset) {
+        // Complete restart - lose all progress
         killCounter = 0;
         deadMinibossRoomIds.clear();
         player.level = 0;
@@ -304,12 +343,14 @@ function resetGame(fullReset: boolean) {
         player.playerClass = null;
         inventory.slots = new Array(7).fill(null);
     }
-    buildMap();
+    buildMap(); // Rebuild the world
 }
 
+// Load saved game data if continuing
 function loadSaveIfContinuing() {
     const raw = localStorage.getItem("wroc_save");
     if (!raw || !welcomeScreen.continuingFromSave) return;
+
     try {
         const data = JSON.parse(raw);
         if (data.level) player.level = data.level;
@@ -317,10 +358,13 @@ function loadSaveIfContinuing() {
         if (data.health) player.health = data.health;
         if (data.stamina) player.stamina = data.stamina;
         if (data.killCount) killCounter = data.killCount;
-        player.xpToNextLevel = 100 * Math.pow(2, player.level);
-    } catch { /* ignore corrupt save */ }
+        player.xpToNextLevel = 100 * Math.pow(2, player.level); // Recalculate XP requirement
+    } catch {
+        // If save is corrupted, just ignore it
+    }
 }
 
+// Save the current game state
 function saveGame() {
     const saveData = {
         playerName: player.name,
@@ -335,14 +379,16 @@ function saveGame() {
     localStorage.setItem("wroc_save", JSON.stringify(saveData));
 }
 
+// Main game initialization
 function onStart() {
-    player.movementKeys();
+    player.movementKeys(); // Set up WASD controls
 
+    // Handle window resizing
     function resize() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         ctx.imageSmoothingEnabled = false;
-        map.width = 2160 * 3;
+        map.width = 2160 * 3; // Big enough for our dungeon
         map.height = 2160 * 3;
         mapCtx.imageSmoothingEnabled = false;
         buildMap();
@@ -351,7 +397,7 @@ function onStart() {
     window.addEventListener("resize", resize);
     resize();
 
-    // Welcome screen loop
+    // Show welcome screen first, then start the game
     function welcomeLoop() {
         if (!welcomeScreen.isComplete) {
             welcomeScreen.draw(ctx, canvas);
@@ -359,6 +405,7 @@ function onStart() {
             return;
         }
 
+        // Player finished welcome screen setup
         player.name = welcomeScreen.playerName || "Player";
         player.setColors(welcomeScreen.skinColor, welcomeScreen.clothesColor);
         loadSaveIfContinuing();
@@ -366,27 +413,31 @@ function onStart() {
         window.requestAnimationFrame(gameLoop);
     }
 
-    // Input handlers
+    // Handle keyboard input
     window.addEventListener("keydown", e => {
         if (!gameStarted) {
             welcomeScreen.handleInput(e);
             return;
         }
 
+        // Don't process game input if we're in a menu
         if (gameOverScreen.isShowing || pauseMenu.isOpen) return;
 
         if (e.key === "Escape") {
+            // Toggle pause menu
             pauseMenu.isOpen = !pauseMenu.isOpen;
             return;
         }
 
         if (e.key === "e") {
+            // Toggle inventory
             if (inventory.isOpen) inventory.close();
             else inventory.open();
             return;
         }
 
         if (player.classSelect) {
+            // Player is choosing their class
             if (e.key === "1") player.selectClass("Language");
             else if (e.key === "2") player.selectClass("STEM");
             else if (e.key === "3") player.selectClass("Sports");
@@ -395,11 +446,13 @@ function onStart() {
         }
 
         if (e.key === "q" && !inventory.isOpen) {
+            // Use special ability
             const allBosses = [...miniBossArray, ...(primaryBoss ? [primaryBoss] : [])];
             player.tryAbility(mobArray, allBosses);
         }
     });
 
+    // Handle mouse clicks
     window.addEventListener("click", e => {
         if (!gameStarted) {
             welcomeScreen.handleClick(e, canvas);
@@ -410,7 +463,7 @@ function onStart() {
             const action = gameOverScreen.handleClick(e, canvas);
             if (action === "respawn") {
                 gameOverScreen.hide();
-                resetGame(false);
+                resetGame(false); // Just respawn, keep progress
             } else if (action === "menu") {
                 gameOverScreen.hide();
                 gameStarted = false;
@@ -427,7 +480,7 @@ function onStart() {
                     pauseMenu.isOpen = false;
                     gameStarted = false;
                     welcomeScreen.isComplete = false;
-                    resetGame(true);
+                    resetGame(true); // Full restart
                     window.requestAnimationFrame(welcomeLoop);
                 },
                 onSaveQuit: () => {
@@ -449,12 +502,14 @@ function onStart() {
         }
 
         if (player.classSelect) {
+            // Handle class selection clicks
             const rect = canvas.getBoundingClientRect();
             const choice = getClassFromClick(e.clientX - rect.left, e.clientY - rect.top, canvas);
             if (choice) player.selectClass(choice);
         }
     });
 
+    // Handle mouse movement for class selection hover effects
     window.addEventListener("mousemove", e => {
         if (player.classSelect) {
             const rect = canvas.getBoundingClientRect();
@@ -462,9 +517,11 @@ function onStart() {
         }
     });
 
+    // Main game loop - this runs 60 times per second
     function gameLoop() {
         if (!gameStarted) return;
 
+        // If paused, just draw the current state and pause menu
         if (pauseMenu.isOpen) {
             const camX = Math.round((canvas.width / 2) - player.x);
             const camY = Math.round((canvas.height / 2) - player.y);
@@ -479,14 +536,17 @@ function onStart() {
             return;
         }
 
+        // Camera follows the player
         const camX = Math.round((canvas.width / 2) - player.x);
         const camY = Math.round((canvas.height / 2) - player.y);
 
+        // Clear screen and draw the world
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.save();
-        ctx.translate(camX, camY);
+        ctx.translate(camX, camY); // Move everything relative to player
         ctx.drawImage(map, 0, 0);
 
+        // Only update game logic if player is alive and not in inventory
         if (!player.isPlayerDead && !inventory.isOpen) {
             updatePaintZoneStatus();
             player.update();
@@ -495,33 +555,37 @@ function onStart() {
 
         player.draw(ctx);
 
-        // Only process entities in the room the player is currently inside
+        // Process all mobs in the current room
         for (let i = mobArray.length - 1; i >= 0; i--) {
             const mob = mobArray[i];
-            if (mob.homeRoomId !== activeRoomId) continue;
+            if (mob.homeRoomId !== activeRoomId) continue; // Skip mobs in other rooms
 
             if (mob.isMobDead) continue;
 
             mob.draw(ctx);
             if (!player.isPlayerDead && !inventory.isOpen) {
                 mob.mobMovement(player);
+                // Check if mob is touching player
                 const isTouching = rectangularOverlapChecker(
                     player.x, player.y, player.playerSize, player.playerSize,
                     mob.mobX, mob.mobY, mob.mobSize, mob.mobSize
                 );
                 if (isTouching) {
+                    // Attack with cooldown
                     const timeNow = performance.now();
                     if (timeNow - mob.lastAttackTime >= mob.attackCooldown) {
                         player.loseHP(mob);
                         mob.lastAttackTime = timeNow;
                     }
                 }
+                // Player attacks with R key
                 if (player.keys.has("r") && isTouching) {
                     player.tryAttack(mob);
                 }
             }
         }
 
+        // Process minibosses in the current room
         for (const mb of miniBossArray) {
             if (mb.homeRoomId !== activeRoomId) continue;
             mb.draw(ctx);
@@ -538,6 +602,7 @@ function onStart() {
             }
         }
 
+        // Process the main boss if in the same room
         if (primaryBoss && primaryBoss.homeRoomId === activeRoomId) {
             primaryBoss.draw(ctx);
             if (!primaryBoss.isDead && !player.isPlayerDead && !inventory.isOpen) {
@@ -551,17 +616,19 @@ function onStart() {
                     if (touching) primaryBoss.loseHP(player);
                 }
             }
+            // Check for victory condition
             if (primaryBoss.isDead && !bossDefeated) {
                 bossDefeated = true;
-                floorClearedTimer = 180;
+                floorClearedTimer = 180; // Show victory screen for 3 seconds
             }
         }
 
-        // Draw dropped items in active room
+        // Draw items dropped on the floor with a nice pulsing effect
         const drops = activeRoomId !== null ? roomDroppedItems.get(activeRoomId) : undefined;
         if (drops) {
             const pulse = 0.5 + Math.sin(performance.now() / 200) * 0.3;
             for (const drop of drops) {
+                // Draw a glowing circle around the item
                 ctx.fillStyle = `rgba(255, 220, 80, ${pulse * 0.4})`;
                 ctx.beginPath();
                 ctx.arc(drop.x + 15, drop.y + 15, 22, 0, Math.PI * 2);
@@ -570,6 +637,7 @@ function onStart() {
             }
         }
 
+        // Process game events only when alive and not in menus
         if (!player.isPlayerDead && !inventory.isOpen) {
             processMobDeaths();
             processMinibossDeaths();
@@ -578,15 +646,17 @@ function onStart() {
             handleRoomRespawn();
         }
 
+        // Count down pickup message timer
         if (pickupMessageTimer > 0) pickupMessageTimer--;
 
+        // Show game over screen when player dies
         if (player.isPlayerDead && !gameOverScreen.isShowing) {
             gameOverScreen.show();
         }
 
-        ctx.restore();
+        ctx.restore(); // Stop translating for UI elements
 
-        // Door transition flash
+        // Room transition flash effect
         if (transitionFlashTimer > 0) {
             const alpha = transitionFlashTimer > 8 ? (16 - transitionFlashTimer) / 8 : transitionFlashTimer / 8;
             ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
@@ -594,7 +664,7 @@ function onStart() {
             transitionFlashTimer--;
         }
 
-        // Soft vignette for depth (GBC-era mood)
+        // Add a subtle vignette for that retro feel
         const vig = ctx.createRadialGradient(
             canvas.width / 2, canvas.height / 2, canvas.height * 0.25,
             canvas.width / 2, canvas.height / 2, canvas.height * 0.75
@@ -604,8 +674,10 @@ function onStart() {
         ctx.fillStyle = vig;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+        // Draw the HUD with player stats
         drawHUD(ctx, canvas, player, killCounter);
 
+        // Show pickup messages
         if (pickupMessageTimer > 0 && pickupMessage) {
             ctx.fillStyle = "rgba(0,0,0,0.6)";
             ctx.fillRect(canvas.width / 2 - 140, canvas.height - 80, 280, 32);
@@ -618,14 +690,17 @@ function onStart() {
             ctx.fillText(pickupMessage, canvas.width / 2, canvas.height - 58);
         }
 
+        // Show controls when not in a menu
         if (!inventory.isOpen && !gameOverScreen.isShowing) {
             drawControlsPanel(ctx, canvas);
         }
 
+        // Show class selection screen
         if (player.classSelect) {
             drawClassSelect(ctx, canvas);
         }
 
+        // Show victory screen when boss is defeated
         if (bossDefeated && floorClearedTimer > 0) {
             ctx.fillStyle = "rgba(0,0,0,0.5)";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -641,6 +716,7 @@ function onStart() {
             }
         }
 
+        // Draw UI elements on top of everything
         if (inventory.isOpen) {
             inventory.draw(ctx, canvas, player);
         }
@@ -649,10 +725,13 @@ function onStart() {
             gameOverScreen.draw(ctx, canvas, player.name, player.level, killCounter);
         }
 
+        // Keep the loop going
         window.requestAnimationFrame(gameLoop);
     }
 
+    // Start with the welcome screen
     window.requestAnimationFrame(welcomeLoop);
 }
 
+// Wait for the page to load before starting
 window.addEventListener("DOMContentLoaded", onStart);

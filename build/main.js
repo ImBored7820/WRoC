@@ -1,10 +1,10 @@
 import { drawTrisect, roomPattern, hallwayPattern } from "./game/map/drawTrisect.js";
 import { StrongJacket } from "./game/items/Item.js";
 import { Player } from "./game/player.js";
-import { drawHUD, drawClassSelect, setClassHover, getClassFromClick, drawControlsPanel } from "./game/HUD.js";
+import { drawHUD, drawClassSelect, setClassHover, getClassFromClick, drawControlsPanel } from "./game/ui/HUD.js";
 import { unregisterAllRooms, getActiveRoomId, activateRoom, freezeRoom, saveRoomSnapshot, getRoomSnapshot, getRoomById, getRoomWorldBounds, isRoomCleared, clearSpawnedRoom, } from "./game/map/roomRegistry.js";
 import { boss } from "./game/Boss.js";
-import { MsInksworth, CoachBrutus, VicePrincipalStern } from "./game/entities/MiniBosses.js";
+import { Teacher1, Teacher2, Teacher3 } from "./game/entities/MiniBosses.js";
 import { spawnRoomMobs, respawnRoomMobs } from "./game/spawner.js";
 import { WelcomeScreen } from "./game/ui/WelcomeScreen.js";
 import { Inventory } from "./game/ui/Inventory.js";
@@ -61,17 +61,17 @@ function buildMap() {
     const coachRoom = room3t1;
     const vpRoom = getRoomById(trisect2.roomIds[1]);
     if (inkRoom && !deadMinibossRoomIds.has(inkRoom.roomId)) {
-        const mb = new MsInksworth(inkRoom.roomX + 300, inkRoom.roomY + 300, inkRoom.roomId);
+        const mb = new Teacher1(inkRoom.roomX + 300, inkRoom.roomY + 300, inkRoom.roomId);
         miniBossArray.push(mb);
         inkRoom.miniboss = mb;
     }
     if (coachRoom && !deadMinibossRoomIds.has(coachRoom.roomId)) {
-        const mb = new CoachBrutus(coachRoom.roomX + 300, coachRoom.roomY + 300, coachRoom.roomId);
+        const mb = new Teacher2(coachRoom.roomX + 300, coachRoom.roomY + 300, coachRoom.roomId);
         miniBossArray.push(mb);
         coachRoom.miniboss = mb;
     }
     if (vpRoom && !deadMinibossRoomIds.has(vpRoom.roomId)) {
-        const mb = new VicePrincipalStern(vpRoom.roomX + 300, vpRoom.roomY + 300, vpRoom.roomId);
+        const mb = new Teacher3(vpRoom.roomX + 300, vpRoom.roomY + 300, vpRoom.roomId);
         miniBossArray.push(mb);
         vpRoom.miniboss = mb;
     }
@@ -267,7 +267,8 @@ function loadSaveIfContinuing() {
             killCounter = data.killCount;
         player.xpToNextLevel = 100 * Math.pow(2, player.level);
     }
-    catch { }
+    catch {
+    }
 }
 function saveGame() {
     const saveData = {

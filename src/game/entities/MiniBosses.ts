@@ -1,6 +1,6 @@
 /**
  * Author: musa -
- * Date: 06/07/2026
+ * Date: 06/01/2026
  *
  * Description: Three distinct miniboss entities with unique abilities
  * Info: WRoC | MiniBosses.ts | WebStorm
@@ -11,6 +11,7 @@ import { drawPlayer } from "../../assets/drawPlayer.js";
 import type { Item } from "../items/Item.js";
 import { SharpPencil, LongRuler, TrackShoes } from "../items/Item.js";
 
+// What they look like, meant to look like humans 
 const humanoidPattern = [
     0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0,
@@ -20,20 +21,21 @@ const humanoidPattern = [
     0, 1, 0, 0, 1, 0,
 ];
 
+// paint zones are for teahcer 1's special ability where she paints the ground
 export interface PaintZone {
     x: number;
     y: number;
     radius: number;
-    timer: number;
+    timer: number; // how long the zone lasts
     color: string;
 }
 
 export class MiniBoss extends boss {
     xpReward: number;
-    dropItem: () => Item;
-    defeatedBannerTimer: number;
+    dropItem: () => Item; // function that returns what item they drop when killed
+    defeatedBannerTimer: number; // shows "DEFEATED" text for a bit
     dropProcessed: boolean;
-    paintZones: PaintZone[] = [];
+    paintZones: PaintZone[] = []; // only used by teacher 1 but easier to put here
 
     constructor(
         x: number, y: number, name: string, homeRoomId: number,
@@ -51,7 +53,7 @@ export class MiniBoss extends boss {
         this.dropItem = dropItem;
         this.defeatedBannerTimer = 0;
         this.dropProcessed = false;
-        this.bossSize = 42;
+        this.bossSize = 42; // bigger than regular mobs
     }
 
     getPattern(): number[] {
@@ -63,6 +65,7 @@ export class MiniBoss extends boss {
     }
 
     draw(ctx: CanvasRenderingContext2D) {
+        // if dead just show the defeated banner for a bit then stop drawing
         if (this.isDead) {
             if (this.defeatedBannerTimer > 0) {
                 ctx.fillStyle = "rgba(255, 215, 0, 0.9)";
@@ -74,15 +77,17 @@ export class MiniBoss extends boss {
             return;
         }
 
+        // draw the actual boss sprite
         drawPlayer(ctx, this.x, this.y, this.bossSize, this.bossSize, this.getPattern(), this.getColorMap());
 
+        // red flash when taking damage
         if (this.damageFlashTimer > 0) {
             ctx.fillStyle = "rgba(255, 50, 50, 0.5)";
             ctx.fillRect(this.x, this.y, this.bossSize, this.bossSize);
             this.damageFlashTimer--;
         }
 
-        // Draw paint zones for Ms. Inksworth
+        // Draw paint zones for Msteacher 1
         for (const zone of this.paintZones) {
             ctx.beginPath();
             ctx.arc(zone.x, zone.y, zone.radius, 0, Math.PI * 2);
@@ -90,8 +95,10 @@ export class MiniBoss extends boss {
             ctx.fill();
             zone.timer--;
         }
+        // clean up expired paint zones
         this.paintZones = this.paintZones.filter(z => z.timer > 0);
 
+        // health bar above the boss
         const barY = this.y - 16;
         ctx.fillStyle = "rgba(0,0,0,0.4)";
         ctx.fillRect(this.x, barY, this.bossSize, 8);
@@ -101,6 +108,7 @@ export class MiniBoss extends boss {
         ctx.lineWidth = 1;
         ctx.strokeRect(this.x, barY, this.bossSize, 8);
 
+        // boss name above health bar
         ctx.fillStyle = "white";
         ctx.font = "10px monospace";
         ctx.textAlign = "center";
@@ -112,13 +120,14 @@ export class MiniBoss extends boss {
     }
 }
 
-// MiniBoss 1 — Ms. Inksworth (Art Teacher)
-export class MsInksworth extends MiniBoss {
+// MiniBoss 1 - art teacher who throws paint everywhere
+export class Teacher1 extends MiniBoss {
     constructor(x: number, y: number, homeRoomId: number) {
         super(x, y, "Ms. Inksworth", homeRoomId,
             750, 2, "Paint Splash", 6000, 500, () => new SharpPencil());
     }
 
+    // colorful art teacher colors
     getColorMap(): { [key: number]: string } {
         return { 0: "#c8a888", 1: "#e06040", 2: "#40a0c0", 3: "#8040a0" };
     }
@@ -129,20 +138,21 @@ export class MsInksworth extends MiniBoss {
         this.paintZones.push({
             x: this.x + this.bossSize / 2,
             y: this.y + this.bossSize / 2,
-            radius: 54,
-            timer: 180,
+            radius: 54, // covers about 3x3 tiles
+            timer: 180, // 3 seconds at 60fps
             color: colors[Math.floor(Math.random() * colors.length)],
         });
     }
 }
 
-// MiniBoss 2 — Coach Brutus (PE Teacher)
-export class CoachBrutus extends MiniBoss {
+// MiniBoss 2 - gym teacher who pushes you around
+export class Teacher2 extends MiniBoss {
     constructor(x: number, y: number, homeRoomId: number) {
         super(x, y, "Coach Brutus", homeRoomId,
             1000, 6, "Whistle Blast", 8000, 500, () => new LongRuler());
     }
 
+    // gym teacher colors with whistle
     getColorMap(): { [key: number]: string } {
         return { 0: "#c8a888", 1: "#5a6a8a", 2: "#ffd700", 3: "#3a4a6a" };
     }
@@ -151,25 +161,27 @@ export class CoachBrutus extends MiniBoss {
         // Pushes player back 5 tiles instantly
         const dx = player.x - this.x;
         const dy = player.y - this.y;
-        const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-        player.knockbackVx = (dx / dist) * 180;
+        const dist = Math.sqrt(dx * dx + dy * dy) || 1; // prevent divide by zero
+        player.knockbackVx = (dx / dist) * 180; // knockback force
         player.knockbackVy = (dy / dist) * 180;
-        player.knockbackTimer = 30;
+        player.knockbackTimer = 30; // half second of knockback
     }
 }
 
-// MiniBoss 3 — Vice Principal Stern
-export class VicePrincipalStern extends MiniBoss {
+// MiniBoss 3 - vice principal who freezes you in place 
+export class Teacher3 extends MiniBoss {
     constructor(x: number, y: number, homeRoomId: number) {
         super(x, y, "VP Stern", homeRoomId,
             600, 4, "Detention!", 10000, 500, () => new TrackShoes());
     }
 
+    // formal dark colors for the VP
     getColorMap(): { [key: number]: string } {
         return { 0: "#c8a888", 1: "#1a1a2a", 2: "#cccccc", 3: "#0a0a1a" };
     }
 
     specialAttack(player: Player) {
+        // freezes player in detention basically
         player.isFrozen = true;
         player.freezeTimer = 90; // 1.5 seconds at 60fps
     }

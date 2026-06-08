@@ -125,7 +125,10 @@ export class boss {
     }
     getColorMap() {
         return {
-            0: "#c8a070", 1: "#1a2a4a", 2: "#eeeeee", 3: "#2a2a3a",
+            0: "#c8a070",
+            1: "#1a2a4a",
+            2: "#eeeeee",
+            3: "#2a2a3a",
         };
     }
     draw(ctx) {

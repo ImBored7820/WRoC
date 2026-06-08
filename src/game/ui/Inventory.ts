@@ -2,7 +2,8 @@
  * Author: musa -
  * Date: 06/07/2026
  *
- * Description: 7-slot inventory with player preview and stats
+ * Description: 7-slot inventory with player preview and stats,
+ * This file is ALL AI
  * Info: WRoC | Inventory.ts | WebStorm
  */
 import type { Player } from "../player.js";

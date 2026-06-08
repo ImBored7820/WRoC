@@ -1,8 +1,9 @@
 /**
  * Author: musa -
- * Date: 06/07/2026
+ * Date: 06/04/2026
  *
  * Description: Welcome screen for name and character customization
+ * This file is all Ai
  * Info: WRoC | WelcomeScreen.ts | WebStorm
  */
 import { drawPlayer } from "../../assets/drawPlayer.js";

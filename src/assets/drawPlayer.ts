@@ -3,8 +3,12 @@
  * Date: 04/29/2026
  * Time: 12:55:32
  *
- * Description: Describe what the file does
+ * Description: This file draws the player onto the canvas
  * Info: WRoC | drawPlayer.ts | WebStorm
+ */
+
+/* This method takes a ctx tool, position, dimensions as well as the patterns
+ * and colors of the player and draws it onto the canvas
  */
 
 export function drawPlayer(ctx: CanvasRenderingContext2D,

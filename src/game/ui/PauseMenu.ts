@@ -1,8 +1,9 @@
 /**
  * Author: musa -
- * Date: 06/07/2026
+ * Date: 06/04/2026
  *
  * Description: Pause menu with resume, restart, and save options
+ * This file is all AI
  * Info: WRoC | PauseMenu.ts | WebStorm
  */
 export interface PauseCallbacks {

@@ -22,21 +22,21 @@ export declare class MiniBoss extends boss {
     draw(ctx: CanvasRenderingContext2D): void;
     onDeath(): void;
 }
-export declare class MsInksworth extends MiniBoss {
+export declare class Teacher1 extends MiniBoss {
     constructor(x: number, y: number, homeRoomId: number);
     getColorMap(): {
         [key: number]: string;
     };
     specialAttack(_player: Player): void;
 }
-export declare class CoachBrutus extends MiniBoss {
+export declare class Teacher2 extends MiniBoss {
     constructor(x: number, y: number, homeRoomId: number);
     getColorMap(): {
         [key: number]: string;
     };
     specialAttack(player: Player): void;
 }
-export declare class VicePrincipalStern extends MiniBoss {
+export declare class Teacher3 extends MiniBoss {
     constructor(x: number, y: number, homeRoomId: number);
     getColorMap(): {
         [key: number]: string;

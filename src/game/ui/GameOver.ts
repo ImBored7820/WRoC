@@ -1,8 +1,8 @@
 /**
  * Author: musa -
- * Date: 06/07/2026
+ * Date: 06/04/2026
  *
- * Description: Game over screen with respawn and main menu options
+ * Description: Game over screen with respawn and main menu options. this files all AI
  * Info: WRoC | GameOver.ts | WebStorm
  */
 export class GameOverScreen {

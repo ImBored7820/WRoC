@@ -76,7 +76,7 @@ export class MiniBoss extends boss {
         this.defeatedBannerTimer = 120;
     }
 }
-export class MsInksworth extends MiniBoss {
+export class Teacher1 extends MiniBoss {
     constructor(x, y, homeRoomId) {
         super(x, y, "Ms. Inksworth", homeRoomId, 750, 2, "Paint Splash", 6000, 500, () => new SharpPencil());
     }
@@ -94,7 +94,7 @@ export class MsInksworth extends MiniBoss {
         });
     }
 }
-export class CoachBrutus extends MiniBoss {
+export class Teacher2 extends MiniBoss {
     constructor(x, y, homeRoomId) {
         super(x, y, "Coach Brutus", homeRoomId, 1000, 6, "Whistle Blast", 8000, 500, () => new LongRuler());
     }
@@ -110,7 +110,7 @@ export class CoachBrutus extends MiniBoss {
         player.knockbackTimer = 30;
     }
 }
-export class VicePrincipalStern extends MiniBoss {
+export class Teacher3 extends MiniBoss {
     constructor(x, y, homeRoomId) {
         super(x, y, "VP Stern", homeRoomId, 600, 4, "Detention!", 10000, 500, () => new TrackShoes());
     }
