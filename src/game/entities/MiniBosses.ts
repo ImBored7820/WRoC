@@ -87,7 +87,7 @@ export class MiniBoss extends boss {
             this.damageFlashTimer--;
         }
 
-        // Draw paint zones for Msteacher 1
+        // Draw paint zones for teacher 1
         for (const zone of this.paintZones) {
             ctx.beginPath();
             ctx.arc(zone.x, zone.y, zone.radius, 0, Math.PI * 2);
@@ -120,14 +120,14 @@ export class MiniBoss extends boss {
     }
 }
 
-// MiniBoss 1 - art teacher who throws paint everywhere
+// MiniBoss 1 - First entity who throws paint
 export class Teacher1 extends MiniBoss {
     constructor(x: number, y: number, homeRoomId: number) {
-        super(x, y, "Teacher One", homeRoomId,
-            750, 2, "Paint Splash", 6000, 500, () => new SharpPencil());
+        super(x, y, "Entity One", homeRoomId,
+            1000, 2, "Paint Splash", 6000, 500, () => new SharpPencil());
     }
 
-    // colorful art teacher colors
+    // Colors for Entity 1
     getColorMap(): { [key: number]: string } {
         return { 0: "#c8a888", 1: "#e06040", 2: "#40a0c0", 3: "#8040a0" };
     }
@@ -145,14 +145,14 @@ export class Teacher1 extends MiniBoss {
     }
 }
 
-// MiniBoss 2 - gym teacher who pushes you around
+// MiniBoss 2 - Entity 2, pushes players around
 export class Teacher2 extends MiniBoss {
     constructor(x: number, y: number, homeRoomId: number) {
-        super(x, y, "Teacher Two ", homeRoomId,
-            1000, 6, "Whistle Blast", 8000, 500, () => new LongRuler());
+        super(x, y, "Entity Two ", homeRoomId,
+            1200, 6, "Whistle Blast", 8000, 750, () => new LongRuler());
     }
 
-    // gym teacher colors with whistle
+    // Colors for Entity 2
     getColorMap(): { [key: number]: string } {
         return { 0: "#c8a888", 1: "#5a6a8a", 2: "#ffd700", 3: "#3a4a6a" };
     }
@@ -168,11 +168,11 @@ export class Teacher2 extends MiniBoss {
     }
 }
 
-// MiniBoss 3 - vice principal who freezes you in place 
+// MiniBoss 3 - Greater Entity, freezes you in place, more health
 export class Teacher3 extends MiniBoss {
     constructor(x: number, y: number, homeRoomId: number) {
-        super(x, y, "Vice Principal", homeRoomId,
-            600, 4, "Detention!", 10000, 500, () => new TrackShoes());
+        super(x, y, "Greater Entity", homeRoomId,
+            1500, 4, "Detention!", 10000, 1000, () => new TrackShoes());
     }
 
     // formal dark colors for the VP

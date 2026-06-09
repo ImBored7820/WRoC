@@ -133,7 +133,7 @@ function buildMap() {
     // The big boss always goes in the final room
     const bossRoom = getRoomById(trisect2.roomIds[2]);
     if (bossRoom) {
-        primaryBoss = new boss(bossRoom.roomX + 300, bossRoom.roomY + 300, "boss", "Principal", bossRoom.roomId);
+        primaryBoss = new boss(bossRoom.roomX + 300, bossRoom.roomY + 300, "boss", "Final Entity", bossRoom.roomId);
     }
 }
 

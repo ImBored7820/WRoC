@@ -10,7 +10,7 @@ import { checkRectCollision } from "./collisionlogic.js";
 import { drawPlayer } from "../assets/drawPlayer.js";
 
 // starting stats for all bosses
-const BASE_BOSS_HEALTH = 500;
+const BASE_BOSS_HEALTH = 1500;
 const BASE_BOSS_ATTACK = 5;
 
 // pixel pattern for boss sprite - makes them look menacing
