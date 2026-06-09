@@ -3,7 +3,7 @@ import { StrongJacket } from "./game/items/Item.js";
 import { Player } from "./game/player.js";
 import { drawHUD, drawClassSelect, setClassHover, getClassFromClick, drawControlsPanel } from "./game/ui/HUD.js";
 import { unregisterAllRooms, getActiveRoomId, activateRoom, freezeRoom, saveRoomSnapshot, getRoomSnapshot, getRoomById, getRoomWorldBounds, isRoomCleared, clearSpawnedRoom, } from "./game/map/roomRegistry.js";
-import { boss } from "./game/Boss.js";
+import { boss } from "./game/entities/Boss.js";
 import { Teacher1, Teacher2, Teacher3 } from "./game/entities/MiniBosses.js";
 import { spawnRoomMobs, respawnRoomMobs } from "./game/spawner.js";
 import { WelcomeScreen } from "./game/ui/WelcomeScreen.js";

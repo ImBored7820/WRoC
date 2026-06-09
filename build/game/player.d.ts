@@ -53,7 +53,7 @@ export declare class Player {
     movementKeys(): void;
     update(): void;
     tryAttack(mob: Mob): boolean;
-    tryAbility(mobs: Mob[], bosses: import("./Boss.js").boss[]): boolean;
+    tryAbility(mobs: Mob[], bosses: import("./entities/Boss").boss[]): boolean;
     loseHP(mob: Mob): void;
     loseHPFromBoss(damage: number): void;
     increaseXP(amount: number): void;

@@ -5,7 +5,7 @@
  * Description: Three distinct miniboss entities with unique abilities
  * Info: WRoC | MiniBosses.ts | WebStorm
  */
-import { boss } from "../Boss.js";
+import { boss } from "./Boss.js";
 import type { Player } from "../player.js";
 import { drawPlayer } from "../../assets/drawPlayer.js";
 import type { Item } from "../items/Item.js";

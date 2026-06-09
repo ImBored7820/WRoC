@@ -1,5 +1,5 @@
 import type { Mob } from "../entities/mob.js";
-import type { boss } from "../Boss.js";
+import type { boss } from "../entities/Boss.js";
 import type { Item } from "../items/Item.js";
 export interface RoomSnapshot {
     mobs: Mob[];

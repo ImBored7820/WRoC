@@ -1,4 +1,4 @@
-import { boss } from "../Boss.js";
+import { boss } from "./Boss.js";
 import { drawPlayer } from "../../assets/drawPlayer.js";
 import { SharpPencil, LongRuler, TrackShoes } from "../items/Item.js";
 const humanoidPattern = [

@@ -1,6 +1,6 @@
 import type { Player } from "./player.js";
 import type { Mob } from "./entities/mob.js";
-import type { boss } from "./Boss.js";
+import type { boss } from "./entities/Boss.js";
 export declare class playerClasses {
     className: string;
     specialAbility: string;

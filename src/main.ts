@@ -17,7 +17,7 @@ import {
     getRoomById, getRoomWorldBounds, isRoomCleared, clearSpawnedRoom,
     type DroppedItem, type RoomSnapshot,
 } from "./game/map/roomRegistry.js";
-import { boss } from "./game/Boss.js";
+import { boss } from "./game/entities/Boss.js";
 import { Teacher1, Teacher2, Teacher3, type MiniBoss } from "./game/entities/MiniBosses.js";
 import { spawnRoomMobs, respawnRoomMobs } from "./game/spawner.js";
 import { WelcomeScreen } from "./game/ui/WelcomeScreen.js";

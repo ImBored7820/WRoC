@@ -1,6 +1,6 @@
-import { checkRectCollision } from "../collisionlogic";
-import { drawPlayer } from "../../assets/drawPlayer";
-const BASE_BOSS_HEALTH = 500;
+import { checkRectCollision } from "../collisionlogic.js";
+import { drawPlayer } from "../../assets/drawPlayer.js";
+const BASE_BOSS_HEALTH = 1500;
 const BASE_BOSS_ATTACK = 5;
 const bossPattern = [
     0, 0, 0, 0, 0, 0,

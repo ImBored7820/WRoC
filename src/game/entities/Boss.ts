@@ -5,9 +5,9 @@
  * Description: Boss entity with pixel-art texture and special attacks
  * Info: WRoC | Boss.ts | WebStorm
  */
-import type { Player } from "./player.js";
-import { checkRectCollision } from "./collisionlogic.js";
-import { drawPlayer } from "../assets/drawPlayer.js";
+import type { Player } from "../player.js";
+import { checkRectCollision } from "../collisionlogic.js";
+import { drawPlayer } from "../../assets/drawPlayer.js";
 
 // starting stats for all bosses
 const BASE_BOSS_HEALTH = 1500;

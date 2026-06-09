@@ -1,4 +1,4 @@
-import { boss } from "../Boss.js";
+import { boss } from "./Boss.js";
 import type { Player } from "../player.js";
 import type { Item } from "../items/Item.js";
 export interface PaintZone {

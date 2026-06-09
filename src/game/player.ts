@@ -251,7 +251,7 @@ export class Player {
         return true;
     }
 
-    tryAbility(mobs: Mob[], bosses: import("./Boss.js").boss[]): boolean {
+    tryAbility(mobs: Mob[], bosses: import("./entities/Boss").boss[]): boolean {
         // need a class to use abilities
         if (!this.playerClass) return false;
         return this.playerClass.useAbility(this, mobs, bosses);

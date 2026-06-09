@@ -7,7 +7,7 @@
  */
 import type { Player } from "./player.js";
 import type { Mob } from "./entities/mob.js";
-import type { boss } from "./Boss.js";
+import type { boss } from "./entities/Boss.js";
 
 // these are the starting stats for each class - encoded as 3-digit numbers
 // first digit is mind, second is body, third is soul
@@ -55,7 +55,6 @@ export class playerClasses {
         this.lastAbilityUse = 0; // haven't used any abilities yet
 
         // only get special abilities and base stats if you're level 5 or higher
-        // gotta earn those cool powers
         if (level >= 5) {
             if (userChoice == "Language") {
                 const stats = decodeMBS(ClassBaseStats.Language);
@@ -68,20 +67,20 @@ export class playerClasses {
                 player.mind = stats.mind;
                 player.body = stats.body;
                 player.soul = stats.soul;
-                this.specialAbility = "Construct"; // build walls and stuff
+                this.specialAbility = "Construct"; // build walls
             } else if (userChoice == "Sports") {
                 const stats = decodeMBS(ClassBaseStats.Sports);
                 player.mind = stats.mind;
                 player.body = stats.body;
                 player.soul = stats.soul;
-                this.specialAbility = "Bash"; // punch things really hard
+                this.specialAbility = "Bash"; // punch things
             } else {
-                // if you pick something weird you get a free stat point instead
+                // if you pick up items, you get a free stat point instead
                 player.extraStatPoints = 1;
                 this.specialAbility = "none";
             }
         } else {
-            // too low level for fancy abilities
+            // too low level for abilities
             this.specialAbility = "none";
         }
 
@@ -109,7 +108,7 @@ export class playerClasses {
         return Math.max(0, this.abilityCooldown - elapsed);
     }
 
-    // the main ability system - each class does something different
+    // main ability system, each class does something different
     useAbility(player: Player, mobs: Mob[], bosses: boss[]): boolean {
         if (!this.canUseAbility()) return false; // still cooling down
         if (player.stamina < 25) return false;   // not enough energy
