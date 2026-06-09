@@ -31,8 +31,16 @@ export function withPassages(pattern: number[]): number[] {
 
 // this is our basic room layout - walls around the outside, floor in the middle
 // the decimal numbers probably map to different wall/floor textures
-export const defaultPattern = withPassages([
-    0.9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2.36,0,0,0.9,
+export const defaultPattern = [
+    0.9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.9,
+    0.18,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0.18,
+    0.18,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0.18,
+    0.9,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0.9,
+    0.9,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0.9,
+    0.27,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0.27,
+    0.18,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0.18,
+    0.9,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0.9,
+    0.9,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0.9,
     2.36,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2.36,
     0.18,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0.18,
     0.9,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0.9,
@@ -43,16 +51,8 @@ export const defaultPattern = withPassages([
     0.9,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0.9,
     0.27,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0.27,
     0.18,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0.18,
-    0.9,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0.9,
-    0.9,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0.9,
-    0.27,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0.27,
-    0.18,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0.18,
-    0.9,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0.9,
-    0.9,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0.9,
-    0.27,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0.27,
-    0.18,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0.18,
     0.9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.9,
-]);
+];
 
 export const roomPattern = defaultPattern;
 
@@ -99,9 +99,9 @@ export function drawTrisect(ctx: CanvasRenderingContext2D, x: number, y: number,
     return { roomIds: [id1, id2, id3] };
 }
 
-// makes a hallway pattern - basically just walls around the edges and floor inside
+// makes a hallway pattern basically just walls around the edges and floor inside
 // good for connecting rooms together
-export const hallwayPattern: number[] = withPassages(
+export const hallwayPattern: number[] =
     defaultPattern.map((tile, i) => {
         const row = Math.floor(i / cols);
         const col = i % cols;
@@ -111,8 +111,7 @@ export const hallwayPattern: number[] = withPassages(
         if (col === 0 || col === cols - 1) return tile;
         // everything else becomes floor
         return 1;
-    })
-);
+    });
 
 export interface HallwayResult {
     roomId: number;

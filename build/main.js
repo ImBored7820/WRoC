@@ -54,7 +54,7 @@ function buildMap() {
     const trisect2X = trisect1Room3
         ? trisect1Room3.roomX + trisect1Room3.cols * 36 - 36
         : 2052;
-    const trisect2 = drawTrisect(mapCtx, trisect2X, 720, roomPattern, undefined, hallwayPattern, undefined, roomPattern, undefined, TRISECT_TYPES);
+    const trisect2 = drawTrisect(mapCtx, trisect2X, 720 / 2, roomPattern, undefined, hallwayPattern, undefined, roomPattern, undefined, TRISECT_TYPES);
     const hallway1 = getRoomById(trisect1.roomIds[1]);
     const room3t1 = getRoomById(trisect1.roomIds[2]);
     const inkRoom = hallway1;

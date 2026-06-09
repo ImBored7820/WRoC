@@ -14,8 +14,16 @@ export function withPassages(pattern) {
         return tile;
     });
 }
-export const defaultPattern = withPassages([
-    0.9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2.36, 0, 0, 0.9,
+export const defaultPattern = [
+    0.9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.9,
+    0.18, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.18,
+    0.18, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.18,
+    0.9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.9,
+    0.9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.9,
+    0.27, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.27,
+    0.18, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.18,
+    0.9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.9,
+    0.9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.9,
     2.36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2.36,
     0.18, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.18,
     0.9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.9,
@@ -26,16 +34,8 @@ export const defaultPattern = withPassages([
     0.9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.9,
     0.27, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.27,
     0.18, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.18,
-    0.9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.9,
-    0.9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.9,
-    0.27, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.27,
-    0.18, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.18,
-    0.9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.9,
-    0.9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.9,
-    0.27, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.27,
-    0.18, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.18,
     0.9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.9,
-]);
+];
 export const roomPattern = defaultPattern;
 export function drawTrisect(ctx, x, y, roomOnePattern, roomOneColors, roomTwoPattern, roomTwoColors, roomThreePattern, roomThreeColors, roomTypes) {
     const roomOneX = x;
@@ -56,7 +56,7 @@ export function drawTrisect(ctx, x, y, roomOnePattern, roomOneColors, roomTwoPat
     const id3 = registerRoom(roomThreeX, y, cols, rows, patternThree, types[2]);
     return { roomIds: [id1, id2, id3] };
 }
-export const hallwayPattern = withPassages(defaultPattern.map((tile, i) => {
+export const hallwayPattern = defaultPattern.map((tile, i) => {
     const row = Math.floor(i / cols);
     const col = i % cols;
     if (row === 0 || row === rows - 1)
@@ -64,7 +64,7 @@ export const hallwayPattern = withPassages(defaultPattern.map((tile, i) => {
     if (col === 0 || col === cols - 1)
         return tile;
     return 1;
-}));
+});
 export function drawHallway(ctx, x, y, widthTiles, heightTiles = 5) {
     const pattern = [];
     for (let row = 0; row < heightTiles; row++) {

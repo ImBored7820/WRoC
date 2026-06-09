@@ -99,7 +99,7 @@ function buildMap() {
         ? trisect1Room3.roomX + trisect1Room3.cols * 36 - 36 // Share a wall
         : 2052; // Fallback position
     const trisect2 = drawTrisect(
-        mapCtx, trisect2X, 720,
+        mapCtx, trisect2X, 720 / 2,
         roomPattern, undefined,
         hallwayPattern, undefined,
         roomPattern, undefined,
